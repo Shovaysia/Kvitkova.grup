@@ -12,8 +12,7 @@
   --dark:#0F0F14;--dark-2:#1A1A2E;--gray:#6B7280;--gray-light:#F3F4F6;
   --border:#E5E7EB;--white:#FFFFFF;--green:#10B981;--green-light:#ECFDF5;
   --amber:#F59E0B;--amber-light:#FFFBEB;--red:#EF4444;--red-light:#FEF2F2;
-  --radius:16px;--radius-sm:10px;
-  --shadow-card:0 1px 8px rgba(0,0,0,0.06);
+  --radius:16px;--radius-sm:10px;--shadow:0 1px 8px rgba(0,0,0,0.06);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F9FB;color:var(--dark-2);min-height:100vh;overflow-x:hidden}
@@ -30,8 +29,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .auth-tab.active{background:var(--white);color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .field{margin-bottom:16px}
 .field label{font-size:11px;font-weight:700;color:var(--gray);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.5px}
-.field input,.field select{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--white);color:var(--dark);outline:none;transition:border .2s,box-shadow .2s}
-.field input:focus,.field select:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(232,84,122,.1)}
+.field input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--white);color:var(--dark);outline:none;transition:border .2s}
+.field input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(232,84,122,.1)}
 .btn-primary{width:100%;padding:15px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-primary:active{background:var(--pink-dark);transform:scale(.98)}
 .btn-primary:disabled{opacity:.5}
@@ -43,10 +42,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 #app{display:none;flex-direction:column;min-height:100vh}
 .topbar{background:var(--white);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .topbar-inner{display:flex;align-items:center;justify-content:space-between}
-.topbar-brand{display:flex;flex-direction:column}
 .brand-name{font-size:15px;font-weight:800;color:var(--dark);letter-spacing:-.3px}
 .brand-sub{font-size:10px;color:var(--gray);letter-spacing:.3px;text-transform:uppercase}
-.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--pink-mid);cursor:pointer;flex-shrink:0}
+.user-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--pink-mid);flex-shrink:0}
 .store-pill{font-size:11px;color:var(--gray);background:var(--gray-light);padding:3px 10px;border-radius:20px;margin-top:5px;display:inline-flex;align-items:center;gap:4px}
 
 /* NAV */
@@ -57,32 +55,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-label{font-size:10px;font-weight:500}
 
 /* PAGES */
-.page{display:none;padding:16px 16px 90px;animation:pageIn .25s ease}
+.page{display:none;padding:16px 16px 90px;animation:pgIn .25s ease}
 .page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTION */
 .section-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;margin-top:20px;display:flex;align-items:center;justify-content:space-between}
 .section-title:first-child{margin-top:0}
-.section-action{font-size:12px;color:var(--pink);font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;border:none;background:none;padding:0}
+.section-btn{font-size:12px;color:var(--pink);font-weight:600;cursor:pointer;border:none;background:none;padding:0;text-transform:none;letter-spacing:0}
 
-/* DATE BAR (тільки адмін) */
+/* DATE */
 .date-bar{margin-bottom:16px}
-.date-header{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
-.date-today-big{font-size:17px;font-weight:700}
-.date-weekday{font-size:13px;color:var(--gray)}
-.week-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-.week-scroll::-webkit-scrollbar{display:none}
-.day-pill{min-width:42px;padding:7px 4px;border-radius:12px;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;flex-shrink:0}
-.day-pill.active{background:var(--pink);border-color:var(--pink);color:white}
-.day-pill.today-mark{border-color:var(--pink)}
-.day-name-s{font-size:10px;font-weight:600;opacity:.7}
-.day-num-s{font-size:15px;font-weight:700}
-
-/* TODAY LABEL (для звичайних) */
-.today-label{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow-card);display:flex;align-items:center;gap:10px}
-.today-label-date{font-size:16px;font-weight:700}
-.today-label-day{font-size:13px;color:var(--gray)}
+.date-hdr{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+.date-big{font-size:17px;font-weight:700}
+.date-day{font-size:13px;color:var(--gray)}
+.week-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.week-row::-webkit-scrollbar{display:none}
+.d-pill{min-width:42px;padding:7px 4px;border-radius:12px;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;flex-shrink:0}
+.d-pill.active{background:var(--pink);border-color:var(--pink);color:white}
+.d-pill.today{border-color:var(--pink)}
+.d-pill-name{font-size:10px;font-weight:600;opacity:.7}
+.d-pill-num{font-size:15px;font-weight:700}
+.today-box{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px}
+.today-box-date{font-size:16px;font-weight:700}
+.today-box-day{font-size:13px;color:var(--gray)}
 
 /* TABS */
 .type-tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
@@ -92,85 +87,98 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .type-tab.active{background:var(--pink);color:white;border-color:var(--pink);box-shadow:0 4px 12px rgba(232,84,122,.25)}
 
 /* PROGRESS */
-.progress-wrap{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow-card)}
-.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.progress-label{font-size:13px;color:var(--gray)}
-.progress-pct{font-size:17px;font-weight:800;color:var(--pink)}
-.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-dark));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.prog-wrap{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-lbl{font-size:13px;color:var(--gray)}
+.prog-pct{font-size:17px;font-weight:800;color:var(--pink)}
+.prog-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-dark));border-radius:3px;transition:width .5s}
 
 /* TASKS */
-.task-card{background:var(--white);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow-card);overflow:hidden}
+.task-card{background:var(--white);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden}
 .task-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .1s}
 .task-row:active{background:var(--gray-light)}
-.task-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
-.task-check.done{background:var(--green);border-color:var(--green);animation:pop .3s ease}
+.chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.chk.done{background:var(--green);border-color:var(--green);animation:pop .3s ease}
 @keyframes pop{0%{transform:scale(.8)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
 .task-info{flex:1;min-width:0}
-.task-title{font-size:15px;line-height:1.3}
-.task-title.done{text-decoration:line-through;color:var(--gray)}
-.task-meta{font-size:11px;color:var(--gray);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.task-ttl{font-size:15px;line-height:1.3}
+.task-ttl.done{text-decoration:line-through;color:var(--gray)}
+.task-meta{font-size:11px;color:var(--gray);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap}
 .task-who{color:var(--green);font-weight:600}
-.task-time{color:var(--gray)}
 .icon-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--gray)}
 .icon-btn:active{background:var(--gray-light)}
-
-/* ADD TASK */
-.add-task-btn{width:100%;padding:13px;background:var(--white);border:2px dashed var(--pink-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--pink);cursor:pointer;text-align:center;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
-.add-task-btn:active{background:var(--pink-light)}
+.add-btn{width:100%;padding:13px;background:var(--white);border:2px dashed var(--pink-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--pink);cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-btn:active{background:var(--pink-light)}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));width:100%;max-width:500px;animation:slideUp .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+.modal-sh{background:var(--white);border-radius:24px 24px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));width:100%;max-width:500px;animation:slideUp .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:16px}
-.modal-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;margin-top:12px}
-.modal-input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;transition:border .2s;background:var(--white);color:var(--dark)}
-.modal-input:focus{border-color:var(--pink)}
-.day-cbs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
-.day-cb{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s;user-select:none}
+.m-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.m-title{font-size:18px;font-weight:700;margin-bottom:16px}
+.m-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;margin-top:12px}
+.m-input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;transition:border .2s;background:var(--white);color:var(--dark)}
+.m-input:focus{border-color:var(--pink)}
+.day-cbs{display:flex;gap:6px;flex-wrap:wrap}
+.day-cb{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--white);color:var(--gray);user-select:none;transition:all .2s}
 .day-cb.sel{background:var(--pink);color:white;border-color:var(--pink)}
-.modal-actions{display:flex;gap:10px;margin-top:16px}
+.m-actions{display:flex;gap:10px;margin-top:16px}
 .btn-cancel{flex:1;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--white);cursor:pointer;font-weight:500}
 .btn-save{flex:2;padding:14px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer}
 
 /* PHOTO */
-.photo-zone{border:2px dashed var(--pink-mid);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin-top:4px}
+.photo-zone{border:2px dashed var(--pink-mid);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;margin-top:4px;transition:all .2s}
 .photo-zone:active{background:var(--pink-light)}
 .photo-zone input{display:none}
-.photo-preview{width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-top:8px;display:none}
+#photo-prev{width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-top:8px;display:none}
 
 /* TEAM */
-.emp-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow-card);display:flex;align-items:center;gap:12px}
-.emp-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.emp-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.emp-av2{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .emp-name{font-size:15px;font-weight:600}
 .emp-sub{font-size:12px;color:var(--gray);margin-top:1px}
 .badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
-.badge-admin{background:rgba(232,84,122,.12);color:var(--pink)}
-.badge-manager{background:var(--amber-light);color:var(--amber)}
-.badge-staff{background:var(--green-light);color:var(--green)}
-
-/* PENDING */
+.b-admin{background:rgba(232,84,122,.12);color:var(--pink)}
+.b-manager{background:var(--amber-light);color:var(--amber)}
+.b-staff{background:var(--green-light);color:var(--green)}
 .pending-card{background:var(--amber-light);border:1.5px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
 .pending-name{font-size:14px;font-weight:600;margin-bottom:10px}
 .assign-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.assign-select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
+.a-sel{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
 .btn-assign{width:100%;padding:10px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer}
 
 /* ONBOARDING */
-.ob-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow-card);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .1s}
-.ob-card:active{background:var(--gray-light)}
-.ob-num{width:28px;height:28px;border-radius:50%;background:var(--pink-light);color:var(--pink);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.ob-num.done{background:var(--green);color:white}
-.ob-title{font-size:14px;font-weight:600;flex:1}
-.ob-title.done{text-decoration:line-through;color:var(--gray)}
+.ob-nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:2px}
+.ob-nav::-webkit-scrollbar{display:none}
+.ob-day-btn{min-width:60px;padding:8px 6px;border-radius:12px;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;flex-shrink:0;position:relative}
+.ob-day-btn.current{border-color:var(--green);background:var(--green-light)}
+.ob-day-btn.done-all{border-color:var(--green);background:var(--green);color:white}
+.ob-day-btn.active{border-color:var(--pink);background:var(--pink);color:white}
+.ob-day-btn-name{font-size:10px;font-weight:600;opacity:.8}
+.ob-day-btn-num{font-size:13px;font-weight:700}
+.ob-current-dot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid white}
+.ob-day-info{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.ob-day-title{font-size:17px;font-weight:700;margin-bottom:4px}
+.ob-day-time{font-size:12px;color:var(--gray);margin-bottom:8px}
+.ob-day-desc{font-size:14px;color:var(--dark-2);line-height:1.5}
+.ob-section{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
+.ob-item{background:var(--white);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:6px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .1s}
+.ob-item:active{background:var(--gray-light)}
+.ob-item.hw{background:var(--amber-light);border-left:3px solid var(--amber)}
+.ob-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.ob-chk.done{background:var(--green);border-color:var(--green)}
+.ob-item-title{font-size:14px;flex:1;line-height:1.3}
+.ob-item-title.done{text-decoration:line-through;color:var(--gray)}
+.mentor-bar{background:var(--blue-light,#EFF6FF);border:1.5px solid #BFDBFE;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.mentor-info{flex:1;font-size:13px}
+.mentor-name{font-weight:600}
 
 /* OVERVIEW */
-.ov-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-card)}
-.ov-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ov-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.ov-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .ov-name{font-size:15px;font-weight:700}
 .ov-pct{font-size:22px;font-weight:800}
 .mini-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px}
@@ -181,30 +189,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-l{font-size:10px;color:var(--gray);font-weight:500}
 
 /* SETTINGS */
-.set-section{background:var(--white);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow-card)}
+.set-sec{background:var(--white);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow)}
 .set-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);gap:12px}
 .set-row:last-child{border-bottom:none}
 .set-label{font-size:15px;flex:1}
 .set-sub{font-size:12px;color:var(--gray);margin-top:2px}
-.set-input{border:none;font-size:15px;font-weight:600;outline:none;background:transparent;color:var(--dark);flex:1;padding:0}
-.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
-.toggle.on{background:var(--pink)}
-.toggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle.on::after{left:22px}
-.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px}
-.tag{padding:6px 12px;border-radius:20px;font-size:13px;font-weight:500;border:1.5px solid var(--border);display:flex;align-items:center;gap:6px;background:var(--white)}
-.tag-x{color:var(--gray);cursor:pointer;font-size:16px;line-height:1;border:none;background:none;padding:0}
+.set-input{border:none;font-size:15px;font-weight:600;outline:none;background:transparent;color:var(--dark);flex:1}
+.tog{width:44px;height:24px;border-radius:12px;background:var(--border);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--pink)}
+.tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{left:22px}
+.pos-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.pos-header{display:flex;align-items:center;margin-bottom:12px}
+.pos-name{font-size:15px;font-weight:700;flex:1}
+.pos-del{border:none;background:none;cursor:pointer;color:var(--gray);font-size:20px;padding:0}
+.pos-toggles{display:flex;gap:16px}
+.tog-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray)}
 
 /* WAITING */
-.waiting-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:24px}
+.waiting{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:24px}
 .waiting-icon{color:var(--pink);margin-bottom:16px;animation:float 3s ease-in-out infinite}
-.waiting-title{font-size:20px;font-weight:700;margin-bottom:8px}
-.waiting-sub{font-size:14px;color:var(--gray);line-height:1.6}
 
 /* EMPTY */
 .empty{text-align:center;padding:40px 20px;color:var(--gray)}
 .empty svg{opacity:.3;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto}
-.empty-text{font-size:15px}
 
 /* TOAST */
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:white;padding:12px 20px;border-radius:20px;font-size:14px;z-index:300;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
@@ -222,7 +230,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="auth-screen">
   <svg class="auth-logo" width="60" height="60" viewBox="0 0 60 60" fill="none">
     <circle cx="30" cy="30" r="30" fill="#FFF0F4"/>
@@ -252,26 +259,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="topbar-brand">
-        <span class="brand-name">KVITKOVA Grup</span>
-        <span class="brand-sub">Твій провідник</span>
+      <div>
+        <div class="brand-name">KVITKOVA Grup</div>
+        <div class="brand-sub">Твій провідник</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        <div class="user-avatar" id="user-initials">?</div>
+        <div class="user-av" id="user-ini">?</div>
         <button onclick="signOut()" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px;display:flex">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
       </div>
     </div>
-    <div id="store-pill-wrap"></div>
+    <div id="store-pill"></div>
   </div>
 
   <div class="page active" id="page-checklist">
-    <!-- date bar — заповнюється JS -->
     <div id="date-area"></div>
     <div class="type-tabs">
       <div class="type-tab active" onclick="setType('open',this)">
@@ -287,15 +292,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         Щоденні
       </div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-top">
-        <span class="progress-label" id="prog-text">0 з 0 виконано</span>
-        <span class="progress-pct" id="prog-pct">0%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-wrap">
+      <div class="prog-top"><span class="prog-lbl" id="prog-txt">0 з 0</span><span class="prog-pct" id="prog-pct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
     <div id="task-list"><div class="spinner"></div></div>
-    <button class="add-task-btn" onclick="openAddTask()" id="add-btn" style="display:none">
+    <button class="add-btn" onclick="openAddTask()" id="add-task-btn" style="display:none">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Додати задачу
     </button>
@@ -310,11 +312,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="page" id="page-overview">
-    <div id="overview-body"><div class="spinner"></div></div>
+    <div id="ov-body"><div class="spinner"></div></div>
   </div>
 
   <div class="page" id="page-settings">
-    <div id="settings-body"><div class="spinner"></div></div>
+    <div id="set-body"><div class="spinner"></div></div>
   </div>
 
   <div class="bottom-nav" id="bottom-nav">
@@ -341,15 +343,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- ADD TASK MODAL -->
-<div class="modal-overlay" id="modal-task" onclick="closeMod('modal-task',event)">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Нова задача</div>
-    <label class="modal-label">Назва</label>
-    <input class="modal-input" id="task-title" placeholder="Назва задачі...">
-    <label class="modal-label">Дні тижня (порожньо = щодня)</label>
-    <div class="day-cbs">
+<!-- TASK MODAL -->
+<div class="modal-ov" id="modal-task" onclick="closeMod('modal-task',event)">
+  <div class="modal-sh">
+    <div class="m-handle"></div>
+    <div class="m-title">Нова задача</div>
+    <span class="m-label">Назва</span>
+    <input class="m-input" id="t-title" placeholder="Назва задачі...">
+    <span class="m-label">Дні тижня (порожньо = щодня)</span>
+    <div class="day-cbs" style="margin-bottom:12px">
       <div class="day-cb" data-d="1" onclick="this.classList.toggle('sel')">Пн</div>
       <div class="day-cb" data-d="2" onclick="this.classList.toggle('sel')">Вт</div>
       <div class="day-cb" data-d="3" onclick="this.classList.toggle('sel')">Ср</div>
@@ -358,9 +360,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="day-cb" data-d="6" onclick="this.classList.toggle('sel')">Сб</div>
       <div class="day-cb" data-d="0" onclick="this.classList.toggle('sel')">Нд</div>
     </div>
-    <label class="modal-label">Або конкретна дата</label>
-    <input class="modal-input" id="task-date" type="date">
-    <div class="modal-actions">
+    <span class="m-label">Або конкретна дата</span>
+    <input class="m-input" id="t-date" type="date">
+    <div class="m-actions">
       <button class="btn-cancel" onclick="closeMod('modal-task')">Скасувати</button>
       <button class="btn-save" onclick="addTask()">Додати</button>
     </div>
@@ -368,22 +370,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <!-- COMPLETE MODAL -->
-<div class="modal-overlay" id="modal-complete" onclick="closeMod('modal-complete',event)">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="comp-title">Виконати</div>
-    <label class="modal-label">Фото звіт</label>
+<div class="modal-ov" id="modal-comp" onclick="closeMod('modal-comp',event)">
+  <div class="modal-sh">
+    <div class="m-handle"></div>
+    <div class="m-title" id="comp-title">Виконати задачу</div>
+    <span class="m-label">Фото звіт</span>
     <div class="photo-zone" onclick="document.getElementById('photo-inp').click()">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="1.5" style="margin-bottom:6px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <div style="font-size:13px;color:var(--gray)">Натисни щоб зробити фото</div>
-      <input type="file" id="photo-inp" accept="image/*" capture="environment" onchange="previewPh(this)">
-      <img id="photo-prev" class="photo-preview">
+      <input type="file" id="photo-inp" accept="image/*" capture="environment" onchange="prevPhoto(this)">
+      <img id="photo-prev">
     </div>
-    <label class="modal-label">Примітка</label>
-    <input class="modal-input" id="comp-note" placeholder="Необов'язково...">
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeMod('modal-complete')">Скасувати</button>
-      <button class="btn-save" onclick="confirmComplete()">Виконано ✓</button>
+    <span class="m-label">Примітка</span>
+    <input class="m-input" id="comp-note" placeholder="Необов'язково...">
+    <div class="m-actions">
+      <button class="btn-cancel" onclick="closeMod('modal-comp')">Скасувати</button>
+      <button class="btn-save" onclick="confirmComp()">Виконано ✓</button>
     </div>
   </div>
 </div>
@@ -391,42 +393,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL='https://acouflypsopzzsocozhu.supabase.co';
-const SUPABASE_KEY='sb_publishable_bJa7B0FOO-oEvbiucn2pEQ_nvAEHi-S';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SB_URL='https://acouflypsopzzsocozhu.supabase.co';
+const SB_KEY='sb_publishable_bJa7B0FOO-oEvbiucn2pEQ_nvAEHi-S';
+const sb=supabase.createClient(SB_URL,SB_KEY);
 
-let currentUser=null,currentProfile=null,currentPosition=null,currentType='open',tasks=[],selectedDate=new Date(),pendingTaskId=null;
+let U=null,P=null,POS=null,type='open',tasks=[],selDate=new Date(),pendId=null;
+let obDays=[],obSelDay=null,traineeData=null;
+
 const DAYS=['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
-const DAYS_FULL=['неділя','понеділок','вівторок','середа','четвер','п\'ятниця','субота'];
-const MONTHS=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+const DAYS_F=['неділя','понеділок','вівторок','середа','четвер','п\'ятниця','субота'];
+const MON=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
 
-// ── ROLES ──
-const isAdmin=()=>currentProfile?.role==='admin';
-const isManager=()=>currentProfile?.role==='manager';
-const isPower=()=>isAdmin()||isManager();
-const canSeeOnboarding=()=>isPower()||(currentPosition?.show_onboarding===true);
-const canSeeTeam=()=>isPower();
-const canSeeOverview=()=>isPower();
-const canSeeSettings=()=>isAdmin();
-const canEdit=()=>isPower();
+const isAdmin=()=>P?.role==='admin';
+const isMgr=()=>P?.role==='manager';
+const isPow=()=>isAdmin()||isMgr();
+const canOb=()=>isPow()||(POS?.show_onboarding===true);
+const canTeam=()=>isPow();
+const canOv=()=>isPow();
+const canSet=()=>isAdmin();
+const canEdit=()=>isPow();
 
-// ── AUTH ──
-function switchTab(tab,el){
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+// AUTH
+function switchTab(t,el){
+  document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('tab-login').style.display=tab==='login'?'block':'none';
-  document.getElementById('tab-register').style.display=tab==='register'?'block':'none';
+  document.getElementById('tab-login').style.display=t==='login'?'block':'none';
+  document.getElementById('tab-register').style.display=t==='register'?'block':'none';
   document.getElementById('auth-msg').style.display='none';
 }
-function showMsg(m,t){const e=document.getElementById('auth-msg');e.textContent=m;e.className='auth-msg '+t;e.style.display='block';}
+function msg(m,t){const e=document.getElementById('auth-msg');e.textContent=m;e.className='auth-msg '+t;e.style.display='block';}
 
 async function signIn(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value;
-  if(!email||!pass){showMsg('Введіть email та пароль','error');return;}
+  if(!email||!pass){msg('Введіть email та пароль','error');return;}
   const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='Вхід...';
   const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){showMsg('Невірний email або пароль','error');btn.disabled=false;btn.textContent='Увійти';return;}
+  if(error){msg('Невірний email або пароль','error');btn.disabled=false;btn.textContent='Увійти';return;}
   await loadUser(data.user);
 }
 
@@ -434,40 +437,31 @@ async function signUp(){
   const name=document.getElementById('reg-name').value.trim();
   const email=document.getElementById('reg-email').value.trim();
   const pass=document.getElementById('reg-pass').value;
-  if(!name||!email||!pass){showMsg('Заповніть всі поля','error');return;}
-  if(pass.length<6){showMsg('Пароль мінімум 6 символів','error');return;}
+  if(!name||!email||!pass){msg('Заповніть всі поля','error');return;}
+  if(pass.length<6){msg('Пароль мінімум 6 символів','error');return;}
   const btn=document.getElementById('reg-btn');btn.disabled=true;btn.textContent='Реєстрація...';
   const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
-  if(error){showMsg(error.message,'error');btn.disabled=false;btn.textContent='Зареєструватись';return;}
+  if(error){msg(error.message,'error');btn.disabled=false;btn.textContent='Зареєструватись';return;}
   if(data.user) await sb.from('profiles').upsert({id:data.user.id,full_name:name,role:'pending',started_at:new Date().toISOString().split('T')[0]});
-  showMsg('Акаунт створено! Очікуй призначення від адміна.','success');
+  msg('Акаунт створено! Очікуй призначення від адміна.','success');
   btn.disabled=false;btn.textContent='Зареєструватись';
 }
 
 async function signOut(){await sb.auth.signOut();location.reload();}
 
 async function loadUser(user){
-  currentUser=user;
+  U=user;
   const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).single();
-  currentProfile=profile;
-  if(!profile||profile.role==='pending'){showWaiting();return;}
-  // завантажуємо посаду
-  if(profile.position_id){
-    const {data:pos}=await sb.from('positions').select('*').eq('id',profile.position_id).single();
-    currentPosition=pos;
-  }
+  P=profile;
+  if(!P||P.role==='pending'){showWaiting();return;}
+  if(P.position_id){const {data:pos}=await sb.from('positions').select('*').eq('id',P.position_id).single();POS=pos;}
   initApp();
 }
 
 function showWaiting(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app').style.display='flex';
-  document.getElementById('page-checklist').innerHTML=`<div class="waiting-screen">
-    <div class="waiting-icon"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg></div>
-    <div class="waiting-title">Очікуй призначення</div>
-    <div class="waiting-sub">Твій акаунт створено!<br>Адмін скоро призначить тобі заклад і роль.</div>
-    <button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="signOut()">Вийти</button>
-  </div>`;
+  document.getElementById('page-checklist').innerHTML=`<div class="waiting"><div class="waiting-icon"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg></div><div style="font-size:20px;font-weight:700;margin-bottom:8px">Очікуй призначення</div><div style="font-size:14px;color:var(--gray);line-height:1.6">Твій акаунт створено!<br>Адмін скоро призначить тобі заклад і роль.</div><button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="signOut()">Вийти</button></div>`;
   document.getElementById('bottom-nav').style.display='none';
   document.querySelector('.topbar').style.display='none';
 }
@@ -475,121 +469,87 @@ function showWaiting(){
 function initApp(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app').style.display='flex';
-  const ini=(currentProfile?.full_name||currentUser.email).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('user-initials').textContent=ini;
-  const sName=currentProfile?.store_name||'Заклад';
-  document.getElementById('store-pill-wrap').innerHTML=`<span class="store-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> ${sName}</span>`;
-
-  // показуємо вкладки по ролі/посаді
-  if(canSeeOnboarding()) document.getElementById('nav-onboarding').style.display='flex';
-  if(canSeeTeam()) document.getElementById('nav-team').style.display='flex';
-  if(canSeeOverview()) document.getElementById('nav-overview').style.display='flex';
-  if(canSeeSettings()) document.getElementById('nav-settings').style.display='flex';
-  if(canEdit()) document.getElementById('add-btn').style.display='flex';
-
-  // дата — адмін бачить календар, працівник тільки сьогодні
+  const ini=(P?.full_name||U.email).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('user-ini').textContent=ini;
+  document.getElementById('store-pill').innerHTML=`<span class="store-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> ${P?.store_name||'Заклад'}</span>`;
+  if(canOb()) document.getElementById('nav-onboarding').style.display='flex';
+  if(canTeam()) document.getElementById('nav-team').style.display='flex';
+  if(canOv()) document.getElementById('nav-overview').style.display='flex';
+  if(canSet()) document.getElementById('nav-settings').style.display='flex';
+  if(canEdit()) document.getElementById('add-task-btn').style.display='flex';
   buildDateArea();
   loadTasks();
-  if(canSeeOnboarding()) loadOnboarding();
-  if(canSeeTeam()) loadTeam();
+  if(canOb()) loadOnboarding();
+  if(canTeam()) loadTeam();
 }
 
-// ── DATE AREA ──
+// DATE
 function buildDateArea(){
   const today=new Date();
-  if(isPower()){
-    // повний тижневий скролл
-    document.getElementById('date-area').innerHTML=`
-      <div class="date-bar">
-        <div class="date-header">
-          <div class="date-today-big" id="dt-big">${today.getDate()} ${MONTHS[today.getMonth()]}</div>
-          <div class="date-weekday" id="dt-day">${DAYS_FULL[today.getDay()]}</div>
-        </div>
-        <div class="week-scroll" id="week-scroll"></div>
-      </div>`;
-    buildWeek(today);
+  if(isPow()){
+    document.getElementById('date-area').innerHTML=`<div class="date-bar"><div class="date-hdr"><div class="date-big" id="dt-big">${today.getDate()} ${MON[today.getMonth()]}</div><div class="date-day" id="dt-day">${DAYS_F[today.getDay()]}</div></div><div class="week-row" id="week-row"></div></div>`;
+    const row=document.getElementById('week-row');
+    for(let i=-3;i<=3;i++){
+      const d=new Date(today);d.setDate(today.getDate()+i);
+      const pill=document.createElement('div');
+      pill.className='d-pill'+(i===0?' active':'');
+      if(d.toDateString()===today.toDateString()) pill.classList.add('today');
+      pill.innerHTML=`<div class="d-pill-name">${DAYS[d.getDay()]}</div><div class="d-pill-num">${d.getDate()}</div>`;
+      pill.onclick=()=>{
+        document.querySelectorAll('.d-pill').forEach(p=>p.classList.remove('active'));
+        pill.classList.add('active');selDate=d;
+        document.getElementById('dt-big').textContent=`${d.getDate()} ${MON[d.getMonth()]}`;
+        document.getElementById('dt-day').textContent=DAYS_F[d.getDay()];
+        loadTasks();
+      };
+      row.appendChild(pill);
+    }
+    selDate=today;
   } else {
-    // тільки сьогодні
-    document.getElementById('date-area').innerHTML=`
-      <div class="today-label">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <div>
-          <div class="today-label-date">${today.getDate()} ${MONTHS[today.getMonth()]}</div>
-          <div class="today-label-day">${DAYS_FULL[today.getDay()]}</div>
-        </div>
-      </div>`;
-    selectedDate=today;
+    selDate=today;
+    document.getElementById('date-area').innerHTML=`<div class="today-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div><div class="today-box-date">${today.getDate()} ${MON[today.getMonth()]}</div><div class="today-box-day">${DAYS_F[today.getDay()]}</div></div></div>`;
   }
 }
 
-function buildWeek(today){
-  const scroll=document.getElementById('week-scroll');
-  if(!scroll) return;
-  scroll.innerHTML='';
-  for(let i=-3;i<=3;i++){
-    const d=new Date(today);d.setDate(today.getDate()+i);
-    const pill=document.createElement('div');
-    pill.className='day-pill'+(i===0?' active':'');
-    if(d.toDateString()===today.toDateString()) pill.classList.add('today-mark');
-    pill.innerHTML=`<div class="day-name-s">${DAYS[d.getDay()]}</div><div class="day-num-s">${d.getDate()}</div>`;
-    pill.onclick=()=>{
-      document.querySelectorAll('.day-pill').forEach(p=>p.classList.remove('active'));
-      pill.classList.add('active');
-      selectedDate=d;
-      document.getElementById('dt-big').textContent=`${d.getDate()} ${MONTHS[d.getMonth()]}`;
-      document.getElementById('dt-day').textContent=DAYS_FULL[d.getDay()];
-      loadTasks();
-    };
-    scroll.appendChild(pill);
-  }
-  selectedDate=today;
-}
-
-// ── TASKS ──
+// TASKS
 async function loadTasks(){
-  const storeId=currentProfile?.store_id;
-  if(!storeId){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div class="empty-text">Заклад не призначено</div></div>';return;}
-
-  // для звичайного працівника завжди сьогодні
-  const refDate=isPower()?selectedDate:new Date();
-  const dow=refDate.getDay();
-  const dateStr=refDate.toISOString().split('T')[0];
-
-  const {data:all}=await sb.from('tasks').select('*').eq('store_id',storeId).eq('type',currentType).eq('is_active',true).order('sort_order');
-
+  const storeId=P?.store_id;
+  if(!storeId){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div style="font-size:15px">Заклад не призначено</div></div>';return;}
+  const ref=isPow()?selDate:new Date();
+  const dow=ref.getDay();
+  const ds=ref.toISOString().split('T')[0];
+  const {data:all}=await sb.from('tasks').select('*').eq('store_id',storeId).eq('type',type).eq('is_active',true).order('sort_order');
   tasks=(all||[]).filter(t=>{
-    if(t.scheduled_date) return t.scheduled_date===dateStr;
+    if(t.scheduled_date) return t.scheduled_date===ds;
     if(t.day_of_week&&t.day_of_week.length>0) return t.day_of_week.includes(dow);
     return true;
   });
-
   if(tasks.length>0){
-    const {data:comps}=await sb.from('completions').select('*,profiles(full_name)').in('task_id',tasks.map(t=>t.id)).gte('completed_at',dateStr).lt('completed_at',dateStr+'T23:59:59');
+    const {data:comps}=await sb.from('completions').select('*,profiles(full_name)').in('task_id',tasks.map(t=>t.id)).gte('completed_at',ds).lt('completed_at',ds+'T23:59:59');
     tasks=tasks.map(t=>{const c=comps?.find(c=>c.task_id===t.id);return{...t,done:!!c,comp:c||null};});
   }
-
-  renderTasks(tasks);
+  renderTasks();
 }
 
-function renderTasks(list){
-  const done=list.filter(t=>t.done).length,total=list.length;
+function renderTasks(){
+  const done=tasks.filter(t=>t.done).length,total=tasks.length;
   const pct=total?Math.round(done/total*100):0;
-  document.getElementById('prog-text').textContent=`${done} з ${total} виконано`;
+  document.getElementById('prog-txt').textContent=`${done} з ${total} виконано`;
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-fill').style.width=pct+'%';
-  if(!list.length){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div class="empty-text">Немає задач на цей день</div></div>';return;}
-  document.getElementById('task-list').innerHTML=list.map(t=>{
+  if(!tasks.length){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div style="font-size:15px">Немає задач на цей день</div></div>';return;}
+  document.getElementById('task-list').innerHTML=tasks.map(t=>{
     const who=t.comp?.profiles?.full_name;
     const time=t.comp?.completed_at?new Date(t.comp.completed_at).toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}):'';
     const photo=t.comp?.photo_url;
     return `<div class="task-card">
       <div class="task-row" onclick="tapTask(${t.id},${t.done})">
-        <div class="task-check${t.done?' done':''}">
+        <div class="chk${t.done?' done':''}">
           ${t.done?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
         </div>
         <div class="task-info">
-          <div class="task-title${t.done?' done':''}">${t.title}</div>
-          ${who?`<div class="task-meta"><span class="task-who">${who}</span><span class="task-time">${time}</span>${t.comp?.note?`<span>· ${t.comp.note}</span>`:''}</div>`:''}
+          <div class="task-ttl${t.done?' done':''}">${t.title}</div>
+          ${who?`<div class="task-meta"><span class="task-who">${who}</span><span>${time}</span>${t.comp?.note?`<span>· ${t.comp.note}</span>`:''}</div>`:''}
         </div>
         ${canEdit()?`<button class="icon-btn" onclick="event.stopPropagation();delTask(${t.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}
       </div>
@@ -599,56 +559,53 @@ function renderTasks(list){
 }
 
 function tapTask(id,isDone){
-  if(isDone){unComplete(id);return;}
-  pendingTaskId=id;
+  if(isDone){unComp(id);return;}
+  pendId=id;
   const t=tasks.find(t=>t.id===id);
   document.getElementById('comp-title').textContent=t?.title||'Виконати';
   document.getElementById('comp-note').value='';
   document.getElementById('photo-prev').style.display='none';
   document.getElementById('photo-inp').value='';
-  document.getElementById('modal-complete').classList.add('open');
+  document.getElementById('modal-comp').classList.add('open');
 }
 
-async function unComplete(taskId){
-  const t=tasks.find(t=>t.id===taskId);
+async function unComp(id){
+  const t=tasks.find(t=>t.id===id);
   if(t?.comp?.id) await sb.from('completions').delete().eq('id',t.comp.id);
   loadTasks();
 }
 
-function previewPh(input){
-  const f=input.files[0];if(!f)return;
+function prevPhoto(inp){
+  const f=inp.files[0];if(!f)return;
   const r=new FileReader();
   r.onload=e=>{const img=document.getElementById('photo-prev');img.src=e.target.result;img.style.display='block';};
   r.readAsDataURL(f);
 }
 
-async function confirmComplete(){
-  if(!pendingTaskId)return;
+async function confirmComp(){
+  if(!pendId)return;
   const note=document.getElementById('comp-note').value.trim();
   const file=document.getElementById('photo-inp').files[0];
   let photoUrl=null;
   if(file){
-    const fn=`${currentUser.id}/${pendingTaskId}_${Date.now()}.jpg`;
+    const fn=`${U.id}/${pendId}_${Date.now()}.jpg`;
     const {data:up}=await sb.storage.from('task-photos').upload(fn,file,{upsert:true});
     if(up){const {data:url}=sb.storage.from('task-photos').getPublicUrl(fn);photoUrl=url.publicUrl;}
   }
-  await sb.from('completions').insert({task_id:pendingTaskId,user_id:currentUser.id,completed_at:new Date().toISOString(),photo_url:photoUrl,note:note||null});
-  closeMod('modal-complete');pendingTaskId=null;
+  await sb.from('completions').insert({task_id:pendId,user_id:U.id,completed_at:new Date().toISOString(),photo_url:photoUrl,note:note||null});
+  closeMod('modal-comp');pendId=null;
   loadTasks();
-  const rem=tasks.filter(t=>!t.done).length;
-  if(rem<=1) showToast('Всі задачі виконано!');
 }
 
 async function addTask(){
-  const title=document.getElementById('task-title').value.trim();
-  if(!title)return;
+  const title=document.getElementById('t-title').value.trim();if(!title)return;
   const days=[...document.querySelectorAll('.day-cb.sel')].map(el=>parseInt(el.dataset.d));
-  const date=document.getElementById('task-date').value;
-  await sb.from('tasks').insert({title,store_id:currentProfile.store_id,type:currentType,is_active:true,sort_order:tasks.length,day_of_week:days.length>0?days:null,scheduled_date:date||null,created_by:currentUser.id});
+  const date=document.getElementById('t-date').value;
+  await sb.from('tasks').insert({title,store_id:P.store_id,type,is_active:true,sort_order:tasks.length,day_of_week:days.length>0?days:null,scheduled_date:date||null,created_by:U.id});
   closeMod('modal-task');
-  document.getElementById('task-title').value='';
+  document.getElementById('t-title').value='';
   document.querySelectorAll('.day-cb').forEach(el=>el.classList.remove('sel'));
-  document.getElementById('task-date').value='';
+  document.getElementById('t-date').value='';
   loadTasks();showToast('Задачу додано');
 }
 
@@ -657,54 +614,187 @@ async function delTask(id){
   loadTasks();showToast('Видалено');
 }
 
-function setType(type,el){
-  currentType=type;
-  document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  loadTasks();
+function setType(t,el){
+  type=t;
+  document.querySelectorAll('.type-tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');loadTasks();
 }
+function openAddTask(){document.getElementById('modal-task').classList.add('open');setTimeout(()=>document.getElementById('t-title').focus(),300);}
 
-function openAddTask(){
-  document.getElementById('modal-task').classList.add('open');
-  setTimeout(()=>document.getElementById('task-title').focus(),300);
-}
-
-// ── ONBOARDING ──
+// ONBOARDING
 async function loadOnboarding(){
-  const storeId=currentProfile?.store_id;
-  const {data:steps}=await sb.from('onboarding_steps').select('*,onboarding_progress(id,completed_at,user_id)').eq('store_id',storeId).eq('is_active',true).order('sort_order');
-  if(!steps||steps.length===0){
-    document.getElementById('ob-body').innerHTML=`<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><div class="empty-text">Кроки онбордингу не налаштовані</div></div>
-    ${isPower()?'<button class="add-task-btn" onclick="addObStep()" style="margin-top:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Додати крок</button>':''}`;
+  // завантажуємо дні
+  const {data:days}=await sb.from('onboarding_days').select('*').eq('network','kvitkova').order('sort_order');
+  obDays=days||[];
+
+  // дані стажера
+  const {data:trainee}=await sb.from('onboarding_trainee').select('*,profiles!mentor_id(full_name)').eq('user_id',U.id).single();
+  traineeData=trainee;
+
+  // якщо немає запису стажера і це звичайний працівник — створюємо
+  if(!traineeData&&!isPow()){
+    const {data:newT}=await sb.from('onboarding_trainee').insert({user_id:U.id,start_date:P.started_at||new Date().toISOString().split('T')[0],current_day:0}).select().single();
+    traineeData=newT;
+  }
+
+  // визначаємо поточний день
+  let currentDay=0;
+  if(traineeData){
+    currentDay=traineeData.current_day;
+    // авто: якщо куратор не пересував — рахуємо від дати початку
+    if(traineeData.start_date){
+      const start=new Date(traineeData.start_date);
+      const today=new Date();
+      const diff=Math.floor((today-start)/(1000*60*60*24));
+      // беремо максимум між авто і поточним
+      if(diff>currentDay) currentDay=Math.min(diff,5);
+    }
+  }
+
+  if(!obSelDay) obSelDay=obDays.find(d=>d.day_number===currentDay)||obDays[0];
+
+  renderOnboarding(currentDay);
+}
+
+async function renderOnboarding(currentDayNum){
+  if(!obDays.length){
+    document.getElementById('ob-body').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg><div style="font-size:15px">Онбординг не налаштований</div></div>';
     return;
   }
-  const done=(steps||[]).filter(s=>s.onboarding_progress?.some(p=>p.user_id===currentUser.id)).length;
-  const pct=steps.length?Math.round(done/steps.length*100):0;
-  let html=`<div class="progress-wrap"><div class="progress-top"><span class="progress-label">${done} з ${steps.length} кроків</span><span class="progress-pct">${pct}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
-  steps.forEach((s,i)=>{
-    const isDone=s.onboarding_progress?.some(p=>p.user_id===currentUser.id);
-    html+=`<div class="ob-card" onclick="togOb(${s.id},${isDone})">
-      <div class="ob-num${isDone?' done':''}">${isDone?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':i+1}</div>
-      <div class="ob-title${isDone?' done':''}">${s.title}</div>
+
+  // навігація по днях
+  let navHtml='<div class="ob-nav">';
+  obDays.forEach(d=>{
+    const isCurrent=d.day_number===currentDayNum;
+    const isActive=obSelDay?.id===d.id;
+    const label=d.day_number===0?'Ознайом.':'День '+d.day_number;
+    navHtml+=`<div class="ob-day-btn${isActive?' active':isCurrent?' current':''}" onclick="selectObDay(${d.id},${currentDayNum})">
+      ${isCurrent&&!isActive?'<div class="ob-current-dot"></div>':''}
+      <div class="ob-day-btn-name">${d.day_number===0?'Ознайом.':'День '}</div>
+      <div class="ob-day-btn-num">${d.day_number===0?'•':d.day_number}</div>
     </div>`;
   });
-  if(isPower()) html+=`<button class="add-task-btn" onclick="addObStep()" style="margin-top:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Додати крок</button>`;
+  navHtml+='</div>';
+
+  // інфо про поточний день
+  const day=obSelDay;
+  let html=navHtml;
+
+  // ментор бар (якщо є куратор)
+  if(traineeData?.profiles?.full_name){
+    html+=`<div class="mentor-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue,#3B82F6)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <div class="mentor-info">Куратор: <span class="mentor-name">${traineeData.profiles.full_name}</span></div>
+      ${isPow()?`<button class="icon-btn" onclick="moveDay(${currentDayNum})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}
+    </div>`;
+  } else if(isPow()&&traineeData){
+    html+=`<div class="mentor-bar" style="background:var(--amber-light);border-color:rgba(245,158,11,.2)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="mentor-info" style="flex:1">Куратор не призначений</div>
+      <button class="icon-btn" onclick="moveDayPrompt()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>`;
+  }
+
+  html+=`<div class="ob-day-info">
+    <div class="ob-day-title">${day?.title||''}</div>
+    <div class="ob-day-time">${day?.time_range||''}</div>
+    <div class="ob-day-desc">${day?.description||''}</div>
+  </div>`;
+
+  // завантажуємо пункти дня
+  if(day){
+    const {data:items}=await sb.from('onboarding_items').select('*').eq('day_id',day.id).order('sort_order');
+    const tasks2=(items||[]).filter(i=>i.item_type==='task');
+    const hw=(items||[]).filter(i=>i.item_type==='homework');
+
+    // виконані пункти
+    let doneIds=new Set();
+    if(traineeData){
+      const {data:doneItems}=await sb.from('onboarding_item_done').select('item_id').eq('trainee_id',traineeData.id);
+      doneIds=new Set((doneItems||[]).map(x=>x.item_id));
+    }
+
+    if(tasks2.length>0){
+      const doneCnt=tasks2.filter(i=>doneIds.has(i.id)).length;
+      html+=`<div class="ob-section"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Задачі дня (${doneCnt}/${tasks2.length})</div>`;
+      tasks2.forEach(item=>{
+        const done=doneIds.has(item.id);
+        html+=`<div class="ob-item${done?'':''}" onclick="togObItem(${item.id})">
+          <div class="ob-chk${done?' done':''}">${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
+          <div class="ob-item-title${done?' done':''}">${item.title}</div>
+        </div>`;
+      });
+    }
+
+    if(hw.length>0){
+      const doneCnt=hw.filter(i=>doneIds.has(i.id)).length;
+      html+=`<div class="ob-section" style="color:var(--amber)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Домашнє завдання (${doneCnt}/${hw.length})</div>`;
+      hw.forEach(item=>{
+        const done=doneIds.has(item.id);
+        html+=`<div class="ob-item hw" onclick="togObItem(${item.id})">
+          <div class="ob-chk${done?' done':''}">${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
+          <div class="ob-item-title${done?' done':''}">${item.title}</div>
+        </div>`;
+      });
+    }
+  }
+
+  if(isPow()){
+    html+=`<button class="add-btn" onclick="addObItem()" style="margin-top:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Додати пункт</button>`;
+  }
+
   document.getElementById('ob-body').innerHTML=html;
 }
 
-async function togOb(id,isDone){
-  if(isDone) await sb.from('onboarding_progress').delete().eq('step_id',id).eq('user_id',currentUser.id);
-  else await sb.from('onboarding_progress').upsert({step_id:id,user_id:currentUser.id,completed_at:new Date().toISOString()});
-  loadOnboarding();
+function selectObDay(dayId,currentDay){
+  obSelDay=obDays.find(d=>d.id===dayId);
+  renderOnboarding(currentDay);
 }
 
-async function addObStep(){
-  const title=prompt('Назва кроку:');if(!title)return;
-  await sb.from('onboarding_steps').insert({title,store_id:currentProfile.store_id,sort_order:99,is_active:true});
-  loadOnboarding();showToast('Крок додано');
+async function togObItem(itemId){
+  if(!traineeData)return;
+  const {data:existing}=await sb.from('onboarding_item_done').select('id').eq('trainee_id',traineeData.id).eq('item_id',itemId).single().catch(()=>({data:null}));
+  if(existing) await sb.from('onboarding_item_done').delete().eq('id',existing.id);
+  else await sb.from('onboarding_item_done').insert({trainee_id:traineeData.id,item_id:itemId});
+  const currentDay=traineeData?.current_day||0;
+  renderOnboarding(currentDay);
 }
 
-// ── TEAM ──
+async function moveDay(currentDay){
+  const next=Math.min(currentDay+1,5);
+  await sb.from('onboarding_trainee').update({current_day:next}).eq('id',traineeData.id);
+  traineeData={...traineeData,current_day:next};
+  obSelDay=obDays.find(d=>d.day_number===next)||obSelDay;
+  renderOnboarding(next);
+  showToast(`Переміщено до Дня ${next}`);
+}
+
+async function moveDayPrompt(){
+  const days=obDays.map(d=>`${d.day_number}: ${d.title}`).join('\n');
+  const input=prompt(`Вибери день (введи номер 0-5):\n${days}`);
+  if(input===null)return;
+  const n=parseInt(input);
+  if(isNaN(n)||n<0||n>5)return;
+  if(traineeData){
+    await sb.from('onboarding_trainee').update({current_day:n}).eq('id',traineeData.id);
+    traineeData={...traineeData,current_day:n};
+  }
+  obSelDay=obDays.find(d=>d.day_number===n)||obSelDay;
+  renderOnboarding(n);
+  showToast(`День встановлено: ${n}`);
+}
+
+async function addObItem(){
+  if(!obSelDay)return;
+  const title=prompt('Назва пункту:');if(!title)return;
+  const type=confirm('Це домашнє завдання?')?'homework':'task';
+  await sb.from('onboarding_items').insert({day_id:obSelDay.id,title,item_type:type,sort_order:99});
+  const currentDay=traineeData?.current_day||0;
+  renderOnboarding(currentDay);
+  showToast('Пункт додано');
+}
+
+// TEAM
 async function loadTeam(){
   const {data:profs}=await sb.from('profiles').select('*,stores(name,display_name),positions(name)').order('full_name');
   const pending=(profs||[]).filter(p=>p.role==='pending'||!p.store_id);
@@ -718,11 +808,11 @@ async function loadTeam(){
       html+=`<div class="pending-card">
         <div class="pending-name">${p.full_name||'Новий'}</div>
         <div class="assign-grid">
-          <select class="assign-select" id="s-${p.id}"><option value="">Заклад...</option>${(stores||[]).map(s=>`<option value="${s.id}">${s.display_name||s.name}</option>`).join('')}</select>
-          <select class="assign-select" id="r-${p.id}"><option value="staff">Працівник</option><option value="manager">Менеджер</option><option value="admin">Адмін</option></select>
-          <select class="assign-select" id="p-${p.id}"><option value="">Посада...</option>${(positions||[]).map(pos=>`<option value="${pos.id}">${pos.name}</option>`).join('')}</select>
-          <button class="btn-assign" onclick="assignUser('${p.id}')">Призначити ✓</button>
+          <select class="a-sel" id="s-${p.id}"><option value="">Заклад...</option>${(stores||[]).map(s=>`<option value="${s.id}">${s.display_name||s.name}</option>`).join('')}</select>
+          <select class="a-sel" id="r-${p.id}"><option value="staff">Працівник</option><option value="manager">Менеджер</option><option value="admin">Адмін</option></select>
+          <select class="a-sel" id="p-${p.id}" style="grid-column:span 2"><option value="">Посада...</option>${(positions||[]).map(pos=>`<option value="${pos.id}">${pos.name}</option>`).join('')}</select>
         </div>
+        <button class="btn-assign" onclick="assignUser('${p.id}')">Призначити ✓</button>
       </div>`;
     });
   }
@@ -731,18 +821,15 @@ async function loadTeam(){
     active.forEach(p=>{
       const ini=(p.full_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       const rl={admin:'Адмін',manager:'Менеджер',staff:'Працівник'}[p.role]||p.role;
-      const bc={admin:'badge-admin',manager:'badge-manager',staff:'badge-staff'}[p.role]||'';
+      const bc={admin:'b-admin',manager:'b-manager',staff:'b-staff'}[p.role]||'';
       html+=`<div class="emp-card">
-        <div class="emp-av">${ini}</div>
-        <div style="flex:1">
-          <div class="emp-name">${p.full_name||'Без імені'}</div>
-          <div class="emp-sub">${p.positions?.name||'—'} · ${p.stores?.display_name||p.stores?.name||'—'}</div>
-        </div>
+        <div class="emp-av2">${ini}</div>
+        <div style="flex:1"><div class="emp-name">${p.full_name||'Без імені'}</div><div class="emp-sub">${p.positions?.name||'—'} · ${p.stores?.display_name||p.stores?.name||'—'}</div></div>
         <span class="badge ${bc}">${rl}</span>
       </div>`;
     });
   }
-  if(!html) html='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div class="empty-text">Немає працівників</div></div>';
+  if(!html) html='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div style="font-size:15px">Немає працівників</div></div>';
   document.getElementById('team-body').innerHTML=html;
 }
 
@@ -756,102 +843,69 @@ async function assignUser(uid){
   showToast('Призначено!');loadTeam();
 }
 
-// ── OVERVIEW ──
+// OVERVIEW
 async function loadOverview(){
   const today=new Date().toISOString().split('T')[0];
   const {data:stores}=await sb.from('stores').select('id,name,display_name').eq('network','kvitkova');
   if(!stores)return;
-  let html=`<div class="section-title">Сьогодні — ${new Date().getDate()} ${MONTHS[new Date().getMonth()]}</div>`;
+  let html=`<div class="section-title">Сьогодні — ${new Date().getDate()} ${MON[new Date().getMonth()]}</div>`;
   for(const s of stores){
     const {data:all}=await sb.from('tasks').select('id').eq('store_id',s.id).eq('is_active',true);
     const total=all?.length||0;
     const {data:done}=await sb.from('completions').select('task_id').in('task_id',(all||[]).map(t=>t.id)).gte('completed_at',today);
-    const doneN=new Set((done||[]).map(c=>c.task_id)).size;
-    const pct=total?Math.round(doneN/total*100):0;
+    const dn=new Set((done||[]).map(c=>c.task_id)).size;
+    const pct=total?Math.round(dn/total*100):0;
     const col=pct===100?'var(--green)':pct>50?'var(--amber)':'var(--pink)';
-    html+=`<div class="ov-card">
-      <div class="ov-header"><div class="ov-name">${s.display_name||s.name}</div><div class="ov-pct" style="color:${col}">${pct}%</div></div>
-      <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${col}"></div></div>
-      <div class="stats-grid">
-        <div class="stat-box"><div class="stat-n" style="color:var(--green)">${doneN}</div><div class="stat-l">виконано</div></div>
-        <div class="stat-box"><div class="stat-n" style="color:var(--amber)">${total-doneN}</div><div class="stat-l">залишилось</div></div>
-        <div class="stat-box"><div class="stat-n">${total}</div><div class="stat-l">всього</div></div>
-      </div>
-    </div>`;
+    html+=`<div class="ov-card"><div class="ov-hdr"><div class="ov-name">${s.display_name||s.name}</div><div class="ov-pct" style="color:${col}">${pct}%</div></div><div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${col}"></div></div><div class="stats-grid"><div class="stat-box"><div class="stat-n" style="color:var(--green)">${dn}</div><div class="stat-l">виконано</div></div><div class="stat-box"><div class="stat-n" style="color:var(--amber)">${total-dn}</div><div class="stat-l">залишилось</div></div><div class="stat-box"><div class="stat-n">${total}</div><div class="stat-l">всього</div></div></div></div>`;
   }
-  document.getElementById('overview-body').innerHTML=html;
+  document.getElementById('ov-body').innerHTML=html;
 }
 
-// ── SETTINGS ──
+// SETTINGS
 async function loadSettings(){
   const {data:stores}=await sb.from('stores').select('*').eq('network','kvitkova');
   const {data:positions}=await sb.from('positions').select('*').eq('network','kvitkova');
-
   let html=`
   <div class="section-title">Назви закладів</div>
-  <div class="set-section">`;
+  <div class="set-sec">`;
   (stores||[]).forEach(s=>{
     html+=`<div class="set-row">
       <div style="flex:1">
-        <div style="font-size:10px;color:var(--gray);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">Заклад ${s.id}</div>
-        <input class="set-input" value="${s.display_name||s.name}" placeholder="Назва закладу" onchange="saveStoreName(${s.id},this.value)" onblur="saveStoreName(${s.id},this.value)">
+        <div style="font-size:10px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Заклад ${s.id}</div>
+        <input class="set-input" value="${s.display_name||s.name}" placeholder="Назва закладу" onchange="saveStore(${s.id},this.value)" onblur="saveStore(${s.id},this.value)">
       </div>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
     </div>`;
   });
-  html+=`</div>`;
-
-  html+=`<div class="section-title">Посади та доступ <button class="section-action" onclick="addPos()">+ Додати</button></div>
-  <div class="set-section">`;
+  html+=`</div>
+  <div class="section-title">Посади та доступ <button class="section-btn" onclick="addPos()">+ Додати</button></div>`;
   (positions||[]).forEach(p=>{
-    html+=`<div class="set-row" style="flex-direction:column;align-items:flex-start;gap:10px">
-      <div style="display:flex;align-items:center;width:100%;gap:10px">
-        <div style="flex:1;font-size:15px;font-weight:600">${p.name}</div>
-        <button class="tag-x" onclick="delPos(${p.id})" style="font-size:20px">×</button>
+    html+=`<div class="pos-card">
+      <div class="pos-header">
+        <div class="pos-name">${p.name}</div>
+        <button class="pos-del" onclick="delPos(${p.id})">×</button>
       </div>
-      <div style="display:flex;gap:16px;width:100%">
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
-          <button class="toggle${p.show_checklist!==false?' on':''}" onclick="togPos(${p.id},'show_checklist',this)"></button>
+      <div class="pos-toggles">
+        <div class="tog-row">
+          <button class="tog${p.show_checklist!==false?' on':''}" onclick="togPos(${p.id},'show_checklist',this)"></button>
           Чек-ліст
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
-          <button class="toggle${p.show_onboarding?' on':''}" onclick="togPos(${p.id},'show_onboarding',this)"></button>
+        </div>
+        <div class="tog-row">
+          <button class="tog${p.show_onboarding?' on':''}" onclick="togPos(${p.id},'show_onboarding',this)"></button>
           Онбординг
-        </label>
+        </div>
       </div>
     </div>`;
   });
-  html+=`</div>`;
-
-  document.getElementById('settings-body').innerHTML=html;
+  document.getElementById('set-body').innerHTML=html;
 }
 
-async function saveStoreName(id,val){
-  if(!val.trim())return;
-  await sb.from('stores').update({display_name:val.trim()}).eq('id',id);
-  showToast('Збережено');
-}
+async function saveStore(id,val){if(!val.trim())return;await sb.from('stores').update({display_name:val.trim()}).eq('id',id);showToast('Збережено');}
+async function addPos(){const name=prompt('Назва посади:');if(!name)return;await sb.from('positions').insert({name,network:'kvitkova',show_checklist:true,show_onboarding:false});loadSettings();showToast('Посаду додано');}
+async function delPos(id){if(!confirm('Видалити?'))return;await sb.from('positions').delete().eq('id',id);loadSettings();showToast('Видалено');}
+async function togPos(id,field,btn){const on=btn.classList.contains('on');btn.classList.toggle('on');await sb.from('positions').update({[field]:!on}).eq('id',id);showToast(on?'Вимкнено':'Увімкнено');}
 
-async function addPos(){
-  const name=prompt('Назва посади:');if(!name)return;
-  await sb.from('positions').insert({name,network:'kvitkova',show_checklist:true,show_onboarding:false});
-  loadSettings();showToast('Посаду додано');
-}
-
-async function delPos(id){
-  if(!confirm('Видалити посаду?'))return;
-  await sb.from('positions').delete().eq('id',id);
-  loadSettings();showToast('Видалено');
-}
-
-async function togPos(id,field,btn){
-  const isOn=btn.classList.contains('on');
-  btn.classList.toggle('on');
-  await sb.from('positions').update({[field]:!isOn}).eq('id',id);
-  showToast(isOn?'Вимкнено':'Увімкнено');
-}
-
-// ── UI ──
+// UI
 function setPage(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -862,16 +916,8 @@ function setPage(name,el){
   if(name==='settings') loadSettings();
   if(name==='onboarding') loadOnboarding();
 }
-
-function closeMod(id,e){
-  if(!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open');
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+function closeMod(id,e){if(!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open');}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
 sb.auth.getSession().then(({data:{session}})=>{if(session?.user)loadUser(session.user);});
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')signIn();});

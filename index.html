@@ -183,6 +183,93 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ob-item-title{font-size:14px;flex:1;line-height:1.3;color:var(--dark-2)}
 .ob-item-title.done{text-decoration:line-through;color:var(--gray)}
 .ob-hw-badge{font-size:10px;font-weight:600;background:var(--amber-light);color:var(--amber);padding:2px 6px;border-radius:8px;white-space:nowrap}
+
+/* QUIZ */
+.quiz-topic-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .15s}
+.quiz-topic-card:active{transform:scale(.98)}
+.quiz-topic-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.quiz-topic-name{font-size:15px;font-weight:600;flex:1}
+.quiz-topic-count{font-size:12px;color:var(--gray)}
+.quiz-setup{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.quiz-setup-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.quiz-setup-sub{font-size:13px;color:var(--gray);margin-bottom:20px}
+.quiz-setup-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.quiz-setup-row:last-child{border-bottom:none}
+.quiz-setup-label{font-size:14px;font-weight:500}
+.quiz-setup-sub2{font-size:12px;color:var(--gray);margin-top:2px}
+.quiz-num{display:flex;align-items:center;gap:8px}
+.quiz-num-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dark-2);transition:all .15s}
+.quiz-num-btn:active{background:var(--pink-light);border-color:var(--pink)}
+.quiz-num-val{font-size:16px;font-weight:700;min-width:28px;text-align:center}
+.quiz-time-input{width:60px;padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-weight:700;text-align:center;outline:none}
+.quiz-time-input:focus{border-color:var(--pink)}
+
+/* QUIZ ACTIVE */
+.quiz-header{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.quiz-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.quiz-topic-pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;color:white}
+.quiz-timer{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.quiz-timer.urgent{color:var(--red)}
+.quiz-timer svg{flex-shrink:0}
+.quiz-prog-row{display:flex;align-items:center;gap:10px}
+.quiz-prog-txt{font-size:12px;color:var(--gray);white-space:nowrap}
+.quiz-q-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.quiz-q-fill{height:100%;background:var(--pink);border-radius:2px;transition:width .3s}
+
+.quiz-question{background:var(--white);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.quiz-q-type{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.quiz-q-text{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:16px}
+.quiz-option{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .2s}
+.quiz-option:active{transform:scale(.98)}
+.quiz-option.selected{border-color:var(--pink);background:var(--pink-light)}
+.quiz-option.correct{border-color:var(--green);background:var(--green-light)}
+.quiz-option.wrong{border-color:var(--red);background:var(--red-light)}
+.quiz-option-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.quiz-option.selected .quiz-option-circle{border-color:var(--pink);background:var(--pink)}
+.quiz-option.correct .quiz-option-circle{border-color:var(--green);background:var(--green)}
+.quiz-option.wrong .quiz-option-circle{border-color:var(--red);background:var(--red)}
+.quiz-option-text{font-size:14px;flex:1}
+.quiz-text-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;resize:none}
+.quiz-text-input:focus{border-color:var(--pink)}
+.quiz-match{display:flex;flex-direction:column;gap:8px}
+.quiz-match-row{display:flex;gap:8px;align-items:center}
+.quiz-match-left{flex:1;padding:10px 12px;background:var(--gray-light);border-radius:var(--radius-sm);font-size:13px;font-weight:600}
+.quiz-match-select{flex:1;padding:9px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
+.quiz-match-select:focus{border-color:var(--pink)}
+.quiz-explanation{background:var(--green-light);border-radius:var(--radius-sm);padding:12px 14px;margin-top:12px;font-size:13px;color:var(--green);line-height:1.5;border-left:3px solid var(--green)}
+.quiz-btn-next{width:100%;padding:14px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px}
+.quiz-btn-next:active{background:var(--pink-dark)}
+
+/* QUIZ RESULT */
+.quiz-result{text-align:center;padding:24px 16px}
+.quiz-result-circle{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;font-weight:800}
+.quiz-result-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.quiz-result-sub{font-size:14px;color:var(--gray);margin-bottom:24px}
+.quiz-result-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.quiz-stat-card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);text-align:center}
+.quiz-stat-n{font-size:22px;font-weight:800}
+.quiz-stat-l{font-size:12px;color:var(--gray);margin-top:2px}
+.quiz-mistakes{background:var(--white);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);text-align:left;margin-bottom:16px}
+.quiz-mistake-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.quiz-mistake-item:last-child{border-bottom:none}
+.quiz-mistake-q{font-size:13px;font-weight:600;margin-bottom:4px}
+.quiz-mistake-ans{font-size:12px;color:var(--red)}
+.quiz-mistake-correct{font-size:12px;color:var(--green)}
+
+/* QUIZ ADMIN */
+.quiz-admin-tabs{display:flex;gap:8px;margin-bottom:16px}
+.quiz-admin-tab{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s}
+.quiz-admin-tab.active{background:var(--pink);color:white;border-color:var(--pink)}
+.q-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow)}
+.q-card-top{display:flex;align-items:flex-start;gap:10px}
+.q-type-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--pink-light);color:var(--pink);white-space:nowrap;margin-top:2px}
+.q-text{font-size:14px;flex:1;line-height:1.4}
+.q-del{border:none;background:none;cursor:pointer;color:var(--gray);padding:0;display:flex}
+.history-row{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.history-ini{width:36px;height:36px;border-radius:50%;background:var(--pink-light);color:var(--pink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.history-name{font-size:14px;font-weight:600}
+.history-sub{font-size:12px;color:var(--gray);margin-top:2px}
+.history-score{font-size:18px;font-weight:800;margin-left:auto}
 .mentor-bar{background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .mentor-info{flex:1;font-size:13px}
 .mentor-name{font-weight:600}
@@ -426,6 +513,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="ov-body"><div class="spinner"></div></div>
   </div>
 
+  <div class="page" id="page-quiz">
+    <div id="quiz-body"><div class="spinner"></div></div>
+  </div>
+
   <div class="page" id="page-settings">
     <div id="set-body"><div class="spinner"></div></div>
   </div>
@@ -442,6 +533,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="nav-btn" id="nav-onboarding" onclick="setPage('onboarding',this)" style="display:none">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
       <span class="nav-label">Онбординг</span>
+    </button>
+    <button class="nav-btn" id="nav-quiz" onclick="setPage('quiz',this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span class="nav-label">Тест</span>
     </button>
     <button class="nav-btn" id="nav-team" onclick="setPage('team',this)" style="display:none">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
@@ -587,6 +682,7 @@ function initApp(){
   const ini=(P?.full_name||U.email).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('user-ini').textContent=ini;
   document.getElementById('store-pill').innerHTML=`<span class="store-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> ${P?.store_name||'Заклад'}</span>`;
+  document.getElementById('nav-quiz').style.display='flex';
   if(canOb()) document.getElementById('nav-onboarding').style.display='flex';
   if(canTeam()) document.getElementById('nav-team').style.display='flex';
   if(canOv()) document.getElementById('nav-overview').style.display='flex';
@@ -1087,12 +1183,579 @@ function setPage(name,el){
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
   if(name==='overview') loadOverview();
+  if(name==='quiz') loadQuiz();
   if(name==='team') loadTeam();
   if(name==='settings') loadSettings();
   if(name==='onboarding') loadOnboarding();
 }
 function closeMod(id,e){if(!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open');}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ══════════════════════════════════════════════
+// QUIZ MODULE
+// ══════════════════════════════════════════════
+let quizState = null; // null | 'topics' | 'setup' | 'active' | 'result'
+let quizTopics = [];
+let quizSession = null;
+let quizQuestions = [];
+let quizCurrent = 0;
+let quizTimer = null;
+let quizTimeLeft = 0;
+let quizAnswers = {};
+let quizShown = false; // чи показано відповідь
+let quizSetup = { topicId: null, topicName: '', count: 10, timeSec: null, color: '#E8547A' };
+let quizAdminTab = 'questions';
+let quizSelectedTopic = null;
+let visibilityHandler = null;
+
+async function loadQuiz() {
+  if (isPow()) {
+    renderQuizAdmin();
+  } else {
+    renderQuizTopics();
+  }
+}
+
+// ── TOPICS LIST ──────────────────────────────
+async function renderQuizTopics() {
+  const { data: topics } = await sb.from('quiz_topics').select('*, quiz_questions(count)').eq('network', 'kvitkova').order('sort_order');
+  quizTopics = topics || [];
+  let html = '<div class="section-title">Оберіть тему</div>';
+  if (!quizTopics.length) {
+    html += '<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:15px">Тем поки немає</div></div>';
+  } else {
+    quizTopics.forEach(t => {
+      const cnt = t.quiz_questions?.[0]?.count || 0;
+      html += `<div class="quiz-topic-card" onclick="startQuizSetup(${t.id},'${t.name.replace(/'/g,"\'")}','${t.color||"#E8547A"}')">
+        <div class="quiz-topic-dot" style="background:${t.color||'#E8547A'}"></div>
+        <div style="flex:1">
+          <div class="quiz-topic-name">${t.name}</div>
+          ${t.description ? `<div style="font-size:12px;color:var(--gray);margin-top:2px">${t.description}</div>` : ''}
+        </div>
+        <div class="quiz-topic-count">${cnt} пит.</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`;
+    });
+  }
+  // кнопка переглянути результати
+  html += `<button class="add-btn" onclick="renderQuizHistory()" style="margin-top:8px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg>
+    Мої результати
+  </button>`;
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+// ── SETUP ─────────────────────────────────────
+async function startQuizSetup(topicId, topicName, color) {
+  quizSetup = { topicId, topicName, count: 10, timeSec: null, color };
+  const { data: questions } = await sb.from('quiz_questions').select('id').eq('topic_id', topicId).eq('is_active', true);
+  const maxQ = questions?.length || 0;
+  document.getElementById('quiz-body').innerHTML = `
+    <button onclick="renderQuizTopics()" style="border:none;background:none;color:var(--gray);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Назад
+    </button>
+    <div class="quiz-setup">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:12px;height:12px;border-radius:50%;background:${color}"></div>
+        <div class="quiz-setup-title">${topicName}</div>
+      </div>
+      <div class="quiz-setup-row">
+        <div>
+          <div class="quiz-setup-label">Кількість питань</div>
+          <div class="quiz-setup-sub2">Доступно: ${maxQ}</div>
+        </div>
+        <div class="quiz-num">
+          <button class="quiz-num-btn" onclick="changeCount(-5)">−</button>
+          <div class="quiz-num-val" id="q-count">${Math.min(10, maxQ)}</div>
+          <button class="quiz-num-btn" onclick="changeCount(5)">+</button>
+        </div>
+      </div>
+      <div class="quiz-setup-row">
+        <div>
+          <div class="quiz-setup-label">Час (хвилини)</div>
+          <div class="quiz-setup-sub2">0 = без ліміту</div>
+        </div>
+        <input class="quiz-time-input" type="number" id="q-time" min="0" max="60" value="0" placeholder="хв">
+      </div>
+      <button class="btn-primary" onclick="beginQuiz(${maxQ})" style="margin-top:20px">Почати тест →</button>
+    </div>`;
+  quizSetup.count = Math.min(10, maxQ);
+}
+
+function changeCount(delta) {
+  const el = document.getElementById('q-count');
+  if (!el) return;
+  let val = parseInt(el.textContent) + delta;
+  val = Math.max(1, val);
+  el.textContent = val;
+  quizSetup.count = val;
+}
+
+async function beginQuiz(maxQ) {
+  const countEl = document.getElementById('q-count');
+  const timeEl = document.getElementById('q-time');
+  const count = Math.min(parseInt(countEl?.textContent || 10), maxQ);
+  const timeMins = parseInt(timeEl?.value || 0);
+  quizSetup.count = count;
+  quizSetup.timeSec = timeMins > 0 ? timeMins * 60 : null;
+
+  // завантажуємо питання з відповідями
+  const { data: qs } = await sb.from('quiz_questions')
+    .select('*, quiz_answers(*), quiz_pairs(*)')
+    .eq('topic_id', quizSetup.topicId)
+    .eq('is_active', true);
+
+  if (!qs || !qs.length) { showToast('Немає питань у цій темі'); return; }
+
+  // перемішуємо і беремо потрібну кількість
+  const shuffled = [...qs].sort(() => Math.random() - 0.5).slice(0, count);
+  quizQuestions = shuffled;
+  quizCurrent = 0;
+  quizAnswers = {};
+  quizShown = false;
+
+  // створюємо сесію
+  const { data: session } = await sb.from('quiz_sessions').insert({
+    user_id: U.id,
+    topic_id: quizSetup.topicId,
+    topic_name: quizSetup.topicName,
+    total_questions: count,
+    time_limit_sec: quizSetup.timeSec,
+    status: 'active'
+  }).select().single();
+  quizSession = session;
+
+  // таймер
+  if (quizSetup.timeSec) {
+    quizTimeLeft = quizSetup.timeSec;
+    startTimer();
+  }
+
+  // пауза при згортанні
+  if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+  visibilityHandler = () => {
+    if (document.hidden) pauseTimer();
+    else if (quizSetup.timeSec) resumeTimer();
+  };
+  document.addEventListener('visibilitychange', visibilityHandler);
+
+  renderQuizQuestion();
+}
+
+// ── TIMER ──────────────────────────────────────
+function startTimer() {
+  clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    quizTimeLeft--;
+    updateTimerUI();
+    if (quizTimeLeft <= 0) {
+      clearInterval(quizTimer);
+      finishQuiz(true);
+    }
+  }, 1000);
+}
+
+function pauseTimer() { clearInterval(quizTimer); }
+
+function resumeTimer() {
+  if (quizTimeLeft > 0) startTimer();
+}
+
+function updateTimerUI() {
+  const el = document.getElementById('quiz-timer-val');
+  if (!el) return;
+  const mins = Math.floor(quizTimeLeft / 60);
+  const secs = quizTimeLeft % 60;
+  el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  const wrap = document.getElementById('quiz-timer-wrap');
+  if (wrap) wrap.className = 'quiz-timer' + (quizTimeLeft < 60 ? ' urgent' : '');
+}
+
+// ── QUESTION ──────────────────────────────────
+function renderQuizQuestion() {
+  const q = quizQuestions[quizCurrent];
+  if (!q) { finishQuiz(false); return; }
+
+  const typeLabel = { single: 'Одна відповідь', multiple: 'Кілька відповідей', match: 'Знайди відповідності', text: 'Вільна відповідь' }[q.question_type];
+  const pct = Math.round((quizCurrent / quizQuestions.length) * 100);
+
+  let timerHtml = '';
+  if (quizSetup.timeSec) {
+    const mins = Math.floor(quizTimeLeft / 60);
+    const secs = quizTimeLeft % 60;
+    timerHtml = `<div class="quiz-timer${quizTimeLeft < 60 ? ' urgent' : ''}" id="quiz-timer-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="quiz-timer-val">${mins}:${secs.toString().padStart(2, '0')}</span>
+    </div>`;
+  }
+
+  let optionsHtml = '';
+  if (q.question_type === 'single' || q.question_type === 'multiple') {
+    const answers = [...(q.quiz_answers || [])].sort(() => Math.random() - 0.5);
+    optionsHtml = answers.map(a => `
+      <div class="quiz-option" id="opt-${a.id}" onclick="selectOption(${a.id}, '${q.question_type}', ${a.is_correct})">
+        <div class="quiz-option-circle" id="circle-${a.id}">
+          ${q.question_type === 'multiple' ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+        </div>
+        <div class="quiz-option-text">${a.answer_text}</div>
+      </div>`).join('');
+  } else if (q.question_type === 'match') {
+    const pairs = q.quiz_pairs || [];
+    const rights = [...pairs].map(p => p.right_text).sort(() => Math.random() - 0.5);
+    optionsHtml = `<div class="quiz-match">` + pairs.map((p, i) => `
+      <div class="quiz-match-row">
+        <div class="quiz-match-left">${p.left_text}</div>
+        <select class="quiz-match-select" id="match-${p.id}">
+          <option value="">Обери...</option>
+          ${rights.map(r => `<option value="${r}">${r}</option>`).join('')}
+        </select>
+      </div>`).join('') + `</div>`;
+  } else if (q.question_type === 'text') {
+    optionsHtml = `<textarea class="quiz-text-input" id="text-answer" rows="3" placeholder="Введи відповідь..."></textarea>`;
+  }
+
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="quiz-header">
+      <div class="quiz-header-top">
+        <div class="quiz-topic-pill" style="background:${quizSetup.color}">${quizSetup.topicName}</div>
+        ${timerHtml}
+      </div>
+      <div class="quiz-prog-row">
+        <span class="quiz-prog-txt">${quizCurrent + 1} / ${quizQuestions.length}</span>
+        <div class="quiz-q-bar"><div class="quiz-q-fill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <div class="quiz-q-type">${typeLabel}</div>
+      <div class="quiz-q-text">${q.question_text}</div>
+      ${optionsHtml}
+      <div id="quiz-explanation" style="display:none"></div>
+    </div>
+    <button class="quiz-btn-next" id="quiz-next-btn" onclick="checkAnswer()" style="${quizShown ? '' : ''}">
+      ${quizShown ? (quizCurrent < quizQuestions.length - 1 ? 'Наступне питання →' : 'Завершити тест') : 'Перевірити'}
+    </button>`;
+
+  quizShown = false;
+}
+
+function selectOption(answerId, type, isCorrect) {
+  if (quizShown) return;
+  const opt = document.getElementById('opt-' + answerId);
+  if (!opt) return;
+  if (type === 'single') {
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    quizAnswers[quizQuestions[quizCurrent].id] = [answerId];
+  } else {
+    opt.classList.toggle('selected');
+    const selected = [...document.querySelectorAll('.quiz-option.selected')].map(o => parseInt(o.id.replace('opt-', '')));
+    quizAnswers[quizQuestions[quizCurrent].id] = selected;
+  }
+}
+
+async function checkAnswer() {
+  const q = quizQuestions[quizCurrent];
+  if (quizShown) {
+    // переходимо до наступного
+    quizCurrent++;
+    quizShown = false;
+    if (quizCurrent >= quizQuestions.length) finishQuiz(false);
+    else renderQuizQuestion();
+    return;
+  }
+
+  let isCorrect = false;
+  let userAnswer = null;
+
+  if (q.question_type === 'single' || q.question_type === 'multiple') {
+    const selected = quizAnswers[q.id] || [];
+    const correctIds = (q.quiz_answers || []).filter(a => a.is_correct).map(a => a.id);
+    isCorrect = selected.length === correctIds.length && correctIds.every(id => selected.includes(id));
+    userAnswer = selected;
+    // підсвічуємо
+    (q.quiz_answers || []).forEach(a => {
+      const opt = document.getElementById('opt-' + a.id);
+      if (!opt) return;
+      if (a.is_correct) opt.classList.add('correct');
+      else if (selected.includes(a.id)) opt.classList.add('wrong');
+    });
+  } else if (q.question_type === 'match') {
+    const pairs = q.quiz_pairs || [];
+    let allCorrect = true;
+    const ans = {};
+    pairs.forEach(p => {
+      const sel = document.getElementById('match-' + p.id)?.value;
+      ans[p.id] = sel;
+      if (sel !== p.right_text) allCorrect = false;
+    });
+    isCorrect = allCorrect;
+    userAnswer = ans;
+    // підсвічуємо селекти
+    pairs.forEach(p => {
+      const sel = document.getElementById('match-' + p.id);
+      if (!sel) return;
+      sel.style.borderColor = ans[p.id] === p.right_text ? 'var(--green)' : 'var(--red)';
+      sel.style.background = ans[p.id] === p.right_text ? 'var(--green-light)' : 'var(--red-light)';
+      if (ans[p.id] !== p.right_text) {
+        sel.value = p.right_text;
+        sel.style.fontWeight = '600';
+      }
+    });
+  } else if (q.question_type === 'text') {
+    userAnswer = document.getElementById('text-answer')?.value || '';
+    isCorrect = null; // ручна перевірка
+  }
+
+  // зберігаємо відповідь
+  if (quizSession) {
+    await sb.from('quiz_session_answers').insert({
+      session_id: quizSession.id,
+      question_id: q.id,
+      user_answer: userAnswer,
+      is_correct: isCorrect
+    });
+  }
+
+  // показуємо пояснення
+  if (q.explanation) {
+    const expEl = document.getElementById('quiz-explanation');
+    if (expEl) { expEl.innerHTML = q.explanation; expEl.style.display = 'block'; }
+  }
+
+  const btn = document.getElementById('quiz-next-btn');
+  if (btn) btn.textContent = quizCurrent < quizQuestions.length - 1 ? 'Наступне питання →' : 'Завершити тест';
+  quizShown = true;
+}
+
+async function finishQuiz(isTimeout) {
+  clearInterval(quizTimer);
+  if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+
+  // рахуємо результат
+  const { data: answers } = await sb.from('quiz_session_answers').select('is_correct').eq('session_id', quizSession?.id || 0);
+  const correct = (answers || []).filter(a => a.is_correct === true).length;
+  const total = quizQuestions.length;
+  const pct = Math.round((correct / total) * 100);
+
+  if (quizSession) {
+    await sb.from('quiz_sessions').update({
+      finished_at: new Date().toISOString(),
+      score: correct,
+      score_pct: pct,
+      status: isTimeout ? 'timeout' : 'finished'
+    }).eq('id', quizSession.id);
+  }
+
+  // помилки
+  const { data: wrongAnswers } = await sb.from('quiz_session_answers')
+    .select('*, quiz_questions(question_text, quiz_answers(answer_text,is_correct))')
+    .eq('session_id', quizSession?.id || 0)
+    .eq('is_correct', false);
+
+  const scoreColor = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--amber)' : 'var(--red)';
+  const scoreEmoji = pct >= 80 ? '🏆' : pct >= 50 ? '📚' : '💪';
+
+  let mistakesHtml = '';
+  if ((wrongAnswers || []).length > 0) {
+    mistakesHtml = `<div class="section-title">Де є прогалини</div>
+    <div class="quiz-mistakes">`;
+    (wrongAnswers || []).slice(0, 5).forEach(w => {
+      const correctAns = (w.quiz_questions?.quiz_answers || []).find(a => a.is_correct)?.answer_text || '';
+      mistakesHtml += `<div class="quiz-mistake-item">
+        <div class="quiz-mistake-q">${w.quiz_questions?.question_text || ''}</div>
+        ${correctAns ? `<div class="quiz-mistake-correct">✓ ${correctAns}</div>` : ''}
+      </div>`;
+    });
+    mistakesHtml += '</div>';
+  }
+
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-result-circle" style="background:${scoreColor}20;color:${scoreColor}">${scoreEmoji}</div>
+      <div class="quiz-result-title">${isTimeout ? 'Час вийшов!' : pct >= 80 ? 'Відмінний результат!' : pct >= 50 ? 'Непоганий старт!' : 'Є над чим попрацювати!'}</div>
+      <div class="quiz-result-sub">${quizSetup.topicName}</div>
+      <div class="quiz-result-stats">
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:${scoreColor}">${pct}%</div><div class="quiz-stat-l">результат</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:var(--green)">${correct}</div><div class="quiz-stat-l">правильних</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:var(--red)">${total - correct}</div><div class="quiz-stat-l">помилок</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n">${total}</div><div class="quiz-stat-l">всього</div></div>
+      </div>
+    </div>
+    ${mistakesHtml}
+    <button class="btn-primary" onclick="renderQuizTopics()" style="margin-bottom:8px">Пройти ще раз</button>
+    <button class="add-btn" onclick="renderQuizTopics()">← Всі теми</button>`;
+}
+
+// ── HISTORY ───────────────────────────────────
+async function renderQuizHistory() {
+  const { data: sessions } = await sb.from('quiz_sessions')
+    .select('*').eq('user_id', U.id).eq('status', 'finished')
+    .order('finished_at', { ascending: false }).limit(20);
+
+  let html = `<button onclick="renderQuizTopics()" style="border:none;background:none;color:var(--gray);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Назад</button>
+    <div class="section-title">Мої результати</div>`;
+
+  if (!(sessions || []).length) {
+    html += '<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg><div style="font-size:15px">Тестів ще не проходив</div></div>';
+  } else {
+    sessions.forEach(s => {
+      const col = (s.score_pct || 0) >= 80 ? 'var(--green)' : (s.score_pct || 0) >= 50 ? 'var(--amber)' : 'var(--red)';
+      const date = new Date(s.finished_at).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' });
+      html += `<div class="history-row">
+        <div>
+          <div class="history-name">${s.topic_name || 'Тест'}</div>
+          <div class="history-sub">${s.total_questions} питань · ${date}</div>
+        </div>
+        <div class="history-score" style="color:${col}">${s.score_pct}%</div>
+      </div>`;
+    });
+  }
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+// ── ADMIN ─────────────────────────────────────
+async function renderQuizAdmin() {
+  const { data: topics } = await sb.from('quiz_topics').select('*').eq('network', 'kvitkova').order('sort_order');
+  quizTopics = topics || [];
+
+  let html = `<div class="quiz-admin-tabs">
+    <div class="quiz-admin-tab${quizAdminTab === 'questions' ? ' active' : ''}" onclick="switchQuizTab('questions')">Питання</div>
+    <div class="quiz-admin-tab${quizAdminTab === 'history' ? ' active' : ''}" onclick="switchQuizTab('history')">Результати</div>
+    <div class="quiz-admin-tab${quizAdminTab === 'test' ? ' active' : ''}" onclick="renderQuizTopics()">Пройти тест</div>
+  </div>`;
+
+  if (quizAdminTab === 'questions') {
+    // вибір теми
+    html += `<div class="section-title">Тема <button class="section-btn" onclick="addQuizTopic()">+ Тема</button></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:2px">`;
+    quizTopics.forEach(t => {
+      const isSelected = quizSelectedTopic?.id === t.id;
+      html += `<div style="padding:7px 14px;border-radius:20px;border:1.5px solid ${isSelected ? t.color || 'var(--pink)' : 'var(--border)'};background:${isSelected ? (t.color || 'var(--pink)') + '20' : 'var(--white)'};font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;color:${isSelected ? t.color || 'var(--pink)' : 'var(--gray)'}" onclick="selectQuizTopic(${t.id})">${t.name}</div>`;
+    });
+    html += '</div>';
+
+    if (quizSelectedTopic) {
+      const { data: questions } = await sb.from('quiz_questions')
+        .select('*, quiz_answers(count), quiz_pairs(count)')
+        .eq('topic_id', quizSelectedTopic.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      html += `<div class="section-title">${quizSelectedTopic.name} (${(questions || []).length}) <button class="section-btn" onclick="openAddQuestion()">+ Питання</button></div>`;
+      (questions || []).forEach(q => {
+        const typeLabel = { single: 'Одна', multiple: 'Кілька', match: 'Відповідн.', text: 'Текст' }[q.question_type];
+        html += `<div class="q-card">
+          <div class="q-card-top">
+            <div class="q-type-badge">${typeLabel}</div>
+            <div class="q-text">${q.question_text}</div>
+            <button class="q-del" onclick="delQuestion(${q.id})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>`;
+      });
+      html += `<button class="add-btn" onclick="openAddQuestion()" style="margin-top:4px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Додати питання
+      </button>`;
+    } else {
+      html += '<div class="empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:14px">Обери тему щоб побачити питання</div></div>';
+    }
+  } else if (quizAdminTab === 'history') {
+    const { data: sessions } = await sb.from('quiz_sessions')
+      .select('*, profiles(full_name)')
+      .eq('status', 'finished')
+      .order('finished_at', { ascending: false }).limit(50);
+    html += `<div class="section-title">Всі результати</div>`;
+    (sessions || []).forEach(s => {
+      const ini = (s.profiles?.full_name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      const col = (s.score_pct || 0) >= 80 ? 'var(--green)' : (s.score_pct || 0) >= 50 ? 'var(--amber)' : 'var(--red)';
+      const date = new Date(s.finished_at).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      html += `<div class="history-row">
+        <div class="history-ini">${ini}</div>
+        <div style="flex:1">
+          <div class="history-name">${s.profiles?.full_name || '—'}</div>
+          <div class="history-sub">${s.topic_name} · ${s.total_questions} пит. · ${date}</div>
+        </div>
+        <div class="history-score" style="color:${col}">${s.score_pct}%</div>
+      </div>`;
+    });
+    if (!(sessions || []).length) html += '<div class="empty"><div style="font-size:15px">Результатів поки немає</div></div>';
+  }
+
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+function switchQuizTab(tab) {
+  quizAdminTab = tab;
+  renderQuizAdmin();
+}
+
+async function selectQuizTopic(topicId) {
+  quizSelectedTopic = quizTopics.find(t => t.id === topicId);
+  renderQuizAdmin();
+}
+
+async function addQuizTopic() {
+  const name = prompt('Назва теми:');
+  if (!name) return;
+  const desc = prompt('Короткий опис (необов\'язково):') || '';
+  await sb.from('quiz_topics').insert({ name, description: desc, network: 'kvitkova', sort_order: 99 });
+  quizSelectedTopic = null;
+  renderQuizAdmin();
+  showToast('Тему додано');
+}
+
+async function openAddQuestion() {
+  if (!quizSelectedTopic) return;
+  const types = ['single — одна правильна відповідь', 'multiple — кілька правильних', 'match — знайди відповідності', 'text — вільна відповідь'];
+  const typeStr = prompt('Тип питання:\n' + types.map((t, i) => `${i + 1}. ${t}`).join('\n') + '\n\nВведи номер (1-4):');
+  if (!typeStr) return;
+  const typeMap = { '1': 'single', '2': 'multiple', '3': 'match', '4': 'text' };
+  const qType = typeMap[typeStr.trim()];
+  if (!qType) return;
+
+  const qText = prompt('Текст питання:');
+  if (!qText) return;
+  const explanation = prompt('Пояснення після відповіді (необов\'язково):') || null;
+
+  const { data: q } = await sb.from('quiz_questions').insert({
+    topic_id: quizSelectedTopic.id,
+    question_text: qText,
+    question_type: qType,
+    explanation
+  }).select().single();
+
+  if (qType === 'single' || qType === 'multiple') {
+    const count = parseInt(prompt('Скільки варіантів відповіді?') || '4');
+    for (let i = 0; i < count; i++) {
+      const ans = prompt(`Варіант ${i + 1}:`);
+      if (!ans) continue;
+      const isCorrect = confirm(`"${ans}" — правильна відповідь?`);
+      await sb.from('quiz_answers').insert({ question_id: q.id, answer_text: ans, is_correct: isCorrect, sort_order: i });
+    }
+  } else if (qType === 'match') {
+    const count = parseInt(prompt('Скільки пар?') || '3');
+    for (let i = 0; i < count; i++) {
+      const left = prompt(`Пара ${i + 1} — ліва частина:`);
+      const right = prompt(`Пара ${i + 1} — права частина:`);
+      if (!left || !right) continue;
+      await sb.from('quiz_pairs').insert({ question_id: q.id, left_text: left, right_text: right, sort_order: i });
+    }
+  }
+
+  renderQuizAdmin();
+  showToast('Питання додано!');
+}
+
+async function delQuestion(id) {
+  if (!confirm('Видалити питання?')) return;
+  await sb.from('quiz_questions').update({ is_active: false }).eq('id', id);
+  renderQuizAdmin();
+  showToast('Видалено');
+}
 
 sb.auth.getSession().then(({data:{session}})=>{if(session?.user)loadUser(session.user);});
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')signIn();});

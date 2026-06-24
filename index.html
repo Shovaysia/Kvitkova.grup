@@ -48,11 +48,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .store-pill{font-size:11px;color:var(--gray);background:var(--gray-light);padding:3px 10px;border-radius:20px;margin-top:5px;display:inline-flex;align-items:center;gap:4px}
 
 /* NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:flex-end;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;gap:3px;border:none;background:none;cursor:pointer;color:var(--gray);transition:color .15s;position:relative}
 .nav-btn.active{color:var(--pink)}
 .nav-btn.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--pink);border-radius:2px}
 .nav-label{font-size:10px;font-weight:500}
+.nav-fab{display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:0 4px 8px;position:relative;margin-top:-16px}
+.nav-fab-circle{width:52px;height:52px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(232,84,122,.4);transition:transform .2s,box-shadow .2s}
+.nav-fab:active .nav-fab-circle{transform:scale(.92);box-shadow:0 2px 8px rgba(232,84,122,.3)}
+.nav-fab.active .nav-fab-circle{background:var(--pink-dark)}
+.nav-fab-label{font-size:10px;font-weight:500;color:var(--gray)}
+.nav-fab.active .nav-fab-label{color:var(--pink)}
+
+/* MORE DRAWER */
+.more-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;display:none;backdrop-filter:blur(4px)}
+.more-overlay.open{display:block;animation:fadeIn .2s ease}
+.more-drawer{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-radius:24px 24px 0 0;z-index:151;padding:16px 16px calc(16px + env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.4,0,.2,1);max-width:480px;margin:0 auto}
+.more-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.more-title{font-size:13px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.more-item{background:var(--gray-light);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s;border:none}
+.more-item:active{background:var(--border)}
+.more-item-icon{font-size:22px;flex-shrink:0}
+.more-item-label{font-size:13px;font-weight:600;color:var(--dark-2)}
 
 /* PAGES */
 .page{display:none;padding:16px 16px 90px;animation:pgIn .25s ease}
@@ -632,43 +650,40 @@ body.dark #app{background:#0F0F14}
   </div>
 
   <div class="bottom-nav" id="bottom-nav">
-    <button class="nav-btn" id="nav-about" onclick="setPage('about',this)">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-      <span class="nav-label">Про нас</span>
-    </button>
     <button class="nav-btn active" id="nav-home" onclick="setPage('home',this)">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span class="nav-label">Головна</span>
     </button>
-    <button class="nav-btn" id="nav-checklist" onclick="setPage('checklist',this)">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      <span class="nav-label">Чек-лист</span>
-    </button>
     <button class="nav-btn" id="nav-onboarding" onclick="setPage('onboarding',this)" style="display:none">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      <span class="nav-label">Онбординг</span>
+      <span class="nav-label">Навчання</span>
+    </button>
+    <button class="nav-fab" id="nav-checklist" onclick="setPage('checklist',document.getElementById('nav-checklist'))">
+      <div class="nav-fab-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <span class="nav-fab-label">Чек-лист</span>
     </button>
     <button class="nav-btn" id="nav-quiz" onclick="setPage('quiz',this)">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <span class="nav-label">Тест</span>
     </button>
-    <button class="nav-btn" id="nav-team" onclick="setPage('team',this)" style="display:none">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-      <span class="nav-label">Команда</span>
-    </button>
-    <button class="nav-btn" id="nav-overview" onclick="setPage('overview',this)" style="display:none">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      <span class="nav-label">Огляд</span>
-    </button>
-    <button class="nav-btn" id="nav-shop" onclick="setPage('shop',this)">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      <span class="nav-label">Магазин</span>
-    </button>
-    <button class="nav-btn" id="nav-settings" onclick="setPage('settings',this)" style="display:none">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      <span class="nav-label">Керування</span>
+    <button class="nav-btn" id="nav-more" onclick="openMoreDrawer()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+      <span class="nav-label">Ще</span>
     </button>
   </div>
+  <div class="more-overlay" id="more-overlay" onclick="closeMoreDrawer()"></div>
+  <div class="more-drawer" id="more-drawer" style="display:none">
+    <div class="more-handle"></div>
+    <div class="more-title">Розділи</div>
+    <div class="more-grid" id="more-grid"></div>
+  </div>
+  <span id="nav-about" style="display:none"></span>
+  <span id="nav-team" style="display:none"></span>
+  <span id="nav-overview" style="display:none"></span>
+  <span id="nav-shop" style="display:none"></span>
+  <span id="nav-settings" style="display:none"></span>
 </div>
 
 <!-- TASK MODAL -->
@@ -1302,7 +1317,7 @@ async function togPos(id,field,btn){const on=btn.classList.contains('on');btn.cl
 // UI
 function setPage(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn,.nav-fab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
   if(name==='home') loadHome();
@@ -1314,6 +1329,35 @@ function setPage(name,el){
   if(name==='onboarding') loadOnboarding();
 }
 function closeMod(id,e){if(!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open');}
+
+// ── MORE DRAWER ───────────────────────────────
+const MORE_ITEMS = [
+  { icon: '🌸', label: 'Про нас', page: 'about', id: 'nav-about', always: true },
+  { icon: '🛍️', label: 'Магазин', page: 'shop', id: 'nav-shop', always: true },
+  { icon: '👥', label: 'Команда', page: 'team', id: 'nav-team', admin: true },
+  { icon: '📊', label: 'Огляд', page: 'overview', id: 'nav-overview', admin: true },
+  { icon: '⚙️', label: 'Керування', page: 'settings', id: 'nav-settings', admin: true },
+];
+
+function openMoreDrawer() {
+  const grid = document.getElementById('more-grid');
+  const items = MORE_ITEMS.filter(i => i.always || (i.admin && isPow()));
+  grid.innerHTML = items.map(i => `
+    <button class="more-item" onclick="closeMoreDrawer();setPage('${i.page}',document.getElementById('${i.id}'))">
+      <span class="more-item-icon">${i.icon}</span>
+      <span class="more-item-label">${i.label}</span>
+    </button>`).join('');
+  document.getElementById('more-overlay').classList.add('open');
+  const drawer = document.getElementById('more-drawer');
+  drawer.style.display = 'block';
+}
+
+function closeMoreDrawer() {
+  document.getElementById('more-overlay').classList.remove('open');
+  const drawer = document.getElementById('more-drawer');
+  drawer.style.display = 'none';
+}
+
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
 // ══════════════════════════════════════════════

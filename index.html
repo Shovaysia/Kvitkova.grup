@@ -328,28 +328,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
       <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
         <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Цінності</div>
-        ${[
-          ['⚡','Якість','В першу чергу ми робимо, щоб сподобалось нам. Тоді можна сміливо презентувати продукт нашим гостям.'],
-          ['✅','Завжди ТАК','Ми завжди говоримо ТАК. Навіть якщо Ні.'],
-          ['❤️','Турбота','На роботі ми знаходимось велику частину життя — це наш другий дім. Гості — як гості нашої оселі.'],
-          ['🚀','Швидкість','Ми маємо швидко адаптуватись до змін. Швидко вчитись, змінюватись, відповідати запитам.'],
-          ['📈','Розвиток','Per aspera ad astra — крізь терни до зірок. Ми підтримаємо і зацікавлені в особистому зростанні кожного.'],
-        ].map(([icon,title,text])=>`<div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">${icon}</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">${title}</div><div style="font-size:13px;color:var(--gray);line-height:1.5">${text}</div></div>
-        </div>`).join('')}
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">⚡</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Якість</div><div style="font-size:13px;color:var(--gray);line-height:1.5">В першу чергу ми робимо, щоб сподобалось нам. Тоді можна сміливо презентувати продукт нашим гостям.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">✅</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Завжди ТАК</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Ми завжди говоримо ТАК. Навіть якщо Ні.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">❤️</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Турбота</div><div style="font-size:13px;color:var(--gray);line-height:1.5">На роботі ми знаходимось велику частину життя — це наш другий дім. Гості — як гості нашої оселі.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">🚀</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Швидкість</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Ми маємо швидко адаптуватись до змін. Швидко вчитись, змінюватись, відповідати запитам.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="font-size:20px;flex-shrink:0">📈</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Розвиток</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Per aspera ad astra — крізь терни до зірок. Ми підтримаємо і зацікавлені в особистому зростанні кожного.</div></div>
+        </div>
       </div>
 
       <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
         <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Система карток</div>
-        ${[
-          ['🟡','Жовта картка','Попередження. Запізнення, порушення стандартів, залишення позиції без дозволу. Не більше 6 ЖК за 6 місяців = звільнення.'],
-          ['🔴','Червона картка','Звільнення. Хамство до гостя, крадіжки, бійка, вживання алкоголю на зміні. 6 ЖК = 1 ЧК.'],
-          ['🟢','Зелена картка','Заохочення! За відданість роботі, гарні відгуки, ініціативу. Кава, коктейль, сніданок, депозит, кіно, СПА...'],
-        ].map(([icon,title,text])=>`<div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">${icon}</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">${title}</div><div style="font-size:13px;color:var(--gray);line-height:1.5">${text}</div></div>
-        </div>`).join('')}
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">🟡</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Жовта картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Попередження. Запізнення, порушення стандартів, залишення позиції без дозволу. Не більше 6 ЖК за 6 місяців = звільнення.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <div style="font-size:20px;flex-shrink:0">🔴</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Червона картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Звільнення. Хамство до гостя, крадіжки, бійка, вживання алкоголю на зміні. 6 ЖК = 1 ЧК.</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="font-size:20px;flex-shrink:0">🟢</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Зелена картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Заохочення! За відданість роботі, гарні відгуки, ініціативу. Кава, коктейль, сніданок, депозит, кіно, СПА...</div></div>
+        </div>
       </div>
 
       <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">

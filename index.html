@@ -150,29 +150,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .a-sel{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
 .btn-assign{width:100%;padding:10px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer}
 
-/* ONBOARDING */
-.ob-nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:2px}
-.ob-nav::-webkit-scrollbar{display:none}
-.ob-day-btn{min-width:60px;padding:8px 6px;border-radius:12px;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;flex-shrink:0;position:relative}
-.ob-day-btn.current{border-color:var(--green);background:var(--green-light)}
-.ob-day-btn.done-all{border-color:var(--green);background:var(--green);color:white}
-.ob-day-btn.active{border-color:var(--pink);background:var(--pink);color:white}
-.ob-day-btn-name{font-size:10px;font-weight:600;opacity:.8}
-.ob-day-btn-num{font-size:13px;font-weight:700}
-.ob-current-dot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid white}
-.ob-day-info{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
-.ob-day-title{font-size:17px;font-weight:700;margin-bottom:4px}
-.ob-day-time{font-size:12px;color:var(--gray);margin-bottom:8px}
-.ob-day-desc{font-size:14px;color:var(--dark-2);line-height:1.5}
-.ob-section{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;display:flex;align-items:center;gap:6px}
-.ob-item{background:var(--white);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:6px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .1s}
-.ob-item:active{background:var(--gray-light)}
-.ob-item.hw{background:var(--amber-light);border-left:3px solid var(--amber)}
-.ob-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.ob-chk.done{background:var(--green);border-color:var(--green)}
-.ob-item-title{font-size:14px;flex:1;line-height:1.3}
+/* ONBOARDING v3 — прогрес + блоки */
+.ob-prog{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.ob-prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ob-prog-lbl{font-size:13px;color:var(--gray)}
+.ob-prog-pct{font-size:17px;font-weight:800;color:var(--pink)}
+.ob-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.ob-bar-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--pink-dark));border-radius:3px;transition:width .5s}
+.ob-days{display:flex;flex-direction:column;gap:8px}
+.ob-day-block{border-radius:var(--radius);border:1px solid var(--border);background:var(--white);overflow:hidden;transition:border-color .2s}
+.ob-day-block.is-current{border:2px solid var(--green)}
+.ob-day-block.is-done{border-color:var(--green)}
+.ob-day-hdr{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;transition:background .1s}
+.ob-day-hdr:active{background:var(--gray-light)}
+.ob-day-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--gray-light);color:var(--gray);flex-shrink:0;transition:all .2s}
+.ob-day-num.done{background:var(--green);color:white}
+.ob-day-num.current{background:var(--pink);color:white}
+.ob-day-meta{flex:1;min-width:0}
+.ob-day-title{font-size:14px;font-weight:600;color:var(--dark-2)}
+.ob-day-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.ob-today-badge{font-size:10px;font-weight:700;background:var(--green-light);color:var(--green);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.ob-arrow{color:var(--gray);transition:transform .25s;flex-shrink:0}
+.ob-arrow.open{transform:rotate(180deg)}
+.ob-content{padding:0 14px 12px;display:flex;flex-direction:column;gap:6px}
+.ob-section{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center;gap:6px}
+.ob-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
+.ob-item:last-child{border-bottom:none}
+.ob-item:active{opacity:.7}
+.ob-item.hw{background:none}
+.ob-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.ob-chk.done{background:var(--green);border-color:var(--green);animation:pop .3s ease}
+.ob-item-title{font-size:14px;flex:1;line-height:1.3;color:var(--dark-2)}
 .ob-item-title.done{text-decoration:line-through;color:var(--gray)}
-.mentor-bar{background:var(--blue-light,#EFF6FF);border:1.5px solid #BFDBFE;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.ob-hw-badge{font-size:10px;font-weight:600;background:var(--amber-light);color:var(--amber);padding:2px 6px;border-radius:8px;white-space:nowrap}
+.mentor-bar{background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .mentor-info{flex:1;font-size:13px}
 .mentor-name{font-weight:600}
 
@@ -766,30 +777,35 @@ async function renderOnboarding(currentDayNum){
     return;
   }
 
-  // навігація по днях
-  let navHtml='<div class="ob-nav">';
-  obDays.forEach(d=>{
-    const isCurrent=d.day_number===currentDayNum;
-    const isActive=obSelDay?.id===d.id;
-    const label=d.day_number===0?'Ознайом.':'День '+d.day_number;
-    navHtml+=`<div class="ob-day-btn${isActive?' active':isCurrent?' current':''}" onclick="selectObDay(${d.id},${currentDayNum})">
-      ${isCurrent&&!isActive?'<div class="ob-current-dot"></div>':''}
-      <div class="ob-day-btn-name">${d.day_number===0?'Ознайом.':'День '}</div>
-      <div class="ob-day-btn-num">${d.day_number===0?'•':d.day_number}</div>
-    </div>`;
+  // всі виконані пункти стажера
+  let doneIds=new Set();
+  if(traineeData){
+    const {data:doneItems}=await sb.from('onboarding_item_done').select('item_id').eq('trainee_id',traineeData.id);
+    doneIds=new Set((doneItems||[]).map(x=>x.item_id));
+  }
+
+  // рахуємо загальний прогрес
+  const {data:allItems}=await sb.from('onboarding_items').select('id,day_id');
+  const totalItems=(allItems||[]).length;
+  const doneItemsCount=(allItems||[]).filter(i=>doneIds.has(i.id)).length;
+  const pct=totalItems?Math.round(doneItemsCount/totalItems*100):0;
+
+  // підраховуємо виконані пункти по дню для підзаголовку
+  const itemsByDay={};
+  (allItems||[]).forEach(i=>{
+    if(!itemsByDay[i.day_id]) itemsByDay[i.day_id]={total:0,done:0};
+    itemsByDay[i.day_id].total++;
+    if(doneIds.has(i.id)) itemsByDay[i.day_id].done++;
   });
-  navHtml+='</div>';
 
-  // інфо про поточний день
-  const day=obSelDay;
-  let html=navHtml;
+  let html='';
 
-  // ментор бар (якщо є куратор)
+  // КУРАТОР БАР
   if(traineeData?.profiles?.full_name){
     html+=`<div class="mentor-bar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue,#3B82F6)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
       <div class="mentor-info">Куратор: <span class="mentor-name">${traineeData.profiles.full_name}</span></div>
-      ${isPow()?`<button class="icon-btn" onclick="moveDay(${currentDayNum})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}
+      ${isPow()?`<button class="icon-btn" onclick="moveDayPrompt()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}
     </div>`;
   } else if(isPow()&&traineeData){
     html+=`<div class="mentor-bar" style="background:var(--amber-light);border-color:rgba(245,158,11,.2)">
@@ -799,55 +815,109 @@ async function renderOnboarding(currentDayNum){
     </div>`;
   }
 
-  html+=`<div class="ob-day-info">
-    <div class="ob-day-title">${day?.title||''}</div>
-    <div class="ob-day-time">${day?.time_range||''}</div>
-    <div class="ob-day-desc">${day?.description||''}</div>
+  // ПРОГРЕС БАР
+  html+=`<div class="ob-prog">
+    <div class="ob-prog-top">
+      <span class="ob-prog-lbl">${doneItemsCount} з ${totalItems} пунктів</span>
+      <span class="ob-prog-pct">${pct}%</span>
+    </div>
+    <div class="ob-bar"><div class="ob-bar-fill" style="width:${pct}%"></div></div>
   </div>`;
 
-  // завантажуємо пункти дня
-  if(day){
-    const {data:items}=await sb.from('onboarding_items').select('*').eq('day_id',day.id).order('sort_order');
-    const tasks2=(items||[]).filter(i=>i.item_type==='task');
-    const hw=(items||[]).filter(i=>i.item_type==='homework');
+  // БЛОКИ ДНІВ
+  html+='<div class="ob-days">';
+  for(const day of obDays){
+    const isCurrent=day.day_number===currentDayNum;
+    const dayStats=itemsByDay[day.id]||{total:0,done:0};
+    const isDayDone=dayStats.total>0&&dayStats.done===dayStats.total;
+    const isExpanded=isCurrent||(obSelDay?.id===day.id);
 
-    // виконані пункти
-    let doneIds=new Set();
-    if(traineeData){
-      const {data:doneItems}=await sb.from('onboarding_item_done').select('item_id').eq('trainee_id',traineeData.id);
-      doneIds=new Set((doneItems||[]).map(x=>x.item_id));
+    let numClass=isDayDone?'done':isCurrent?'current':'';
+    let numContent=isDayDone
+      ?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'
+      :(day.day_number===0?'•':day.day_number);
+
+    html+=`<div class="ob-day-block${isCurrent?' is-current':isDayDone?' is-done':''}">
+      <div class="ob-day-hdr" onclick="toggleObDay(${day.id},${currentDayNum},this)">
+        <div class="ob-day-num ${numClass}">${numContent}</div>
+        <div class="ob-day-meta">
+          <div class="ob-day-title">${day.title}</div>
+          <div class="ob-day-sub">${day.time_range||''}${dayStats.total>0?' · '+dayStats.done+'/'+dayStats.total+' виконано':''}</div>
+        </div>
+        ${isCurrent?'<span class="ob-today-badge">Сьогодні</span>':''}
+        <svg class="ob-arrow${isExpanded?' open':''}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>`;
+
+    if(isExpanded){
+      // завантажуємо пункти
+      const {data:items}=await sb.from('onboarding_items').select('*').eq('day_id',day.id).order('sort_order');
+      const tasks2=(items||[]).filter(i=>i.item_type==='task');
+      const hw=(items||[]).filter(i=>i.item_type==='homework');
+
+      html+='<div class="ob-content">';
+
+      if(day.description){
+        html+=`<div style="font-size:13px;color:var(--gray);line-height:1.5;padding:4px 0 8px;border-bottom:1px solid var(--border)">${day.description}</div>`;
+      }
+
+      if(tasks2.length>0){
+        html+='<div class="ob-section"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Задачі дня</div>';
+        tasks2.forEach(item=>{
+          const done=doneIds.has(item.id);
+          html+=`<div class="ob-item" onclick="togObItem(${item.id})">
+            <div class="ob-chk${done?' done':''}">
+              ${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>
+            <div class="ob-item-title${done?' done':''}">${item.title}</div>
+          </div>`;
+        });
+      }
+
+      if(hw.length>0){
+        html+='<div class="ob-section" style="color:var(--amber)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Домашнє завдання</div>';
+        hw.forEach(item=>{
+          const done=doneIds.has(item.id);
+          html+=`<div class="ob-item hw" onclick="togObItem(${item.id})">
+            <div class="ob-chk${done?' done':''}">
+              ${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>
+            <div class="ob-item-title${done?' done':''}">${item.title}</div>
+            <span class="ob-hw-badge">Д/З</span>
+          </div>`;
+        });
+      }
+
+      if(isPow()){
+        html+=`<button class="add-btn" onclick="addObItem(${day.id})" style="margin-top:4px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Додати пункт
+        </button>`;
+      }
+
+      html+='</div>';
     }
 
-    if(tasks2.length>0){
-      const doneCnt=tasks2.filter(i=>doneIds.has(i.id)).length;
-      html+=`<div class="ob-section"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Задачі дня (${doneCnt}/${tasks2.length})</div>`;
-      tasks2.forEach(item=>{
-        const done=doneIds.has(item.id);
-        html+=`<div class="ob-item${done?'':''}" onclick="togObItem(${item.id})">
-          <div class="ob-chk${done?' done':''}">${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
-          <div class="ob-item-title${done?' done':''}">${item.title}</div>
-        </div>`;
-      });
-    }
-
-    if(hw.length>0){
-      const doneCnt=hw.filter(i=>doneIds.has(i.id)).length;
-      html+=`<div class="ob-section" style="color:var(--amber)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Домашнє завдання (${doneCnt}/${hw.length})</div>`;
-      hw.forEach(item=>{
-        const done=doneIds.has(item.id);
-        html+=`<div class="ob-item hw" onclick="togObItem(${item.id})">
-          <div class="ob-chk${done?' done':''}">${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
-          <div class="ob-item-title${done?' done':''}">${item.title}</div>
-        </div>`;
-      });
-    }
+    html+='</div>';
   }
-
-  if(isPow()){
-    html+=`<button class="add-btn" onclick="addObItem()" style="margin-top:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Додати пункт</button>`;
-  }
+  html+='</div>';
 
   document.getElementById('ob-body').innerHTML=html;
+}
+
+function toggleObDay(dayId,currentDay,hdr){
+  const block=hdr.closest('.ob-day-block');
+  const arrow=hdr.querySelector('.ob-arrow');
+  const content=block.querySelector('.ob-content');
+  if(content){
+    // закрити
+    block.removeChild(content);
+    arrow.classList.remove('open');
+    obSelDay=null;
+  } else {
+    // відкрити — але треба перерендерити щоб завантажити пункти
+    obSelDay=obDays.find(d=>d.id===dayId);
+    renderOnboarding(currentDay);
+  }
 }
 
 function selectObDay(dayId,currentDay){
@@ -888,11 +958,12 @@ async function moveDayPrompt(){
   showToast(`День встановлено: ${n}`);
 }
 
-async function addObItem(){
-  if(!obSelDay)return;
+async function addObItem(dayId){
+  const dId=dayId||(obSelDay?.id);
+  if(!dId)return;
   const title=prompt('Назва пункту:');if(!title)return;
   const type=confirm('Це домашнє завдання?')?'homework':'task';
-  await sb.from('onboarding_items').insert({day_id:obSelDay.id,title,item_type:type,sort_order:99});
+  await sb.from('onboarding_items').insert({day_id:dId,title,item_type:type,sort_order:99});
   const currentDay=traineeData?.current_day||0;
   renderOnboarding(currentDay);
   showToast('Пункт додано');

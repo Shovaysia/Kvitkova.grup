@@ -635,6 +635,10 @@ body.dark #app{background:#0F0F14}
     <div class="m-title">Нова задача</div>
     <span class="m-label">Назва</span>
     <input class="m-input" id="t-title" placeholder="Назва задачі...">
+    <span class="m-label">Для посади (порожньо = для всіх)</span>
+    <select class="m-input" id="t-position" style="margin-bottom:12px">
+      <option value="">Всі посади</option>
+    </select>
     <span class="m-label">Дні тижня (порожньо = щодня)</span>
     <div class="day-cbs" style="margin-bottom:12px">
       <div class="day-cb" data-d="1" onclick="this.classList.toggle('sel')">Пн</div>
@@ -696,7 +700,12 @@ const canOb=()=>isPow()||(POS?.show_onboarding===true);
 const canTeam=()=>isPow();
 const canOv=()=>isPow();
 const canSet=()=>isAdmin();
-const canEdit=()=>isPow();
+const canEdit=()=>{
+  if(isPow()) return true;
+  // якщо посада є редактором задач для іншої посади
+  if(POS?.task_editor_role==='specific_position') return true;
+  return false;
+};
 
 // AUTH
 function switchTab(t,el){
@@ -891,7 +900,8 @@ async function addTask(){
   const title=document.getElementById('t-title').value.trim();if(!title)return;
   const days=[...document.querySelectorAll('.day-cb.sel')].map(el=>parseInt(el.dataset.d));
   const date=document.getElementById('t-date').value;
-  await sb.from('tasks').insert({title,store_id:P.store_id,type,is_active:true,sort_order:tasks.length,day_of_week:days.length>0?days:null,scheduled_date:date||null,created_by:U.id});
+  const positionVal=document.getElementById('t-position')?.value;
+  await sb.from('tasks').insert({title,store_id:P.store_id,type,is_active:true,sort_order:tasks.length,day_of_week:days.length>0?days:null,scheduled_date:date||null,created_by:U.id,position_id:positionVal?parseInt(positionVal):null});
   closeMod('modal-task');
   document.getElementById('t-title').value='';
   document.querySelectorAll('.day-cb').forEach(el=>el.classList.remove('sel'));
@@ -909,7 +919,20 @@ function setType(t,el){
   document.querySelectorAll('.type-tab').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');loadTasks();
 }
-function openAddTask(){document.getElementById('modal-task').classList.add('open');setTimeout(()=>document.getElementById('t-title').focus(),300);}
+async function openAddTask(){
+  document.getElementById('modal-task').classList.add('open');
+  setTimeout(()=>document.getElementById('t-title').focus(),300);
+  // Завантажуємо посади в select
+  const sel=document.getElementById('t-position');
+  if(sel&&sel.options.length<=1){
+    const {data:positions}=await sb.from('positions').select('id,name').eq('network','kvitkova');
+    (positions||[]).forEach(p=>{
+      const opt=document.createElement('option');
+      opt.value=p.id;opt.textContent=p.name;
+      sel.appendChild(opt);
+    });
+  }
+}
 
 // ONBOARDING
 async function loadOnboarding(){
@@ -1363,6 +1386,83 @@ async function delObDay(id){
   if(!confirm('Видалити цей день онбордингу? Всі пункти також видаляться.'))return;
   await sb.from('onboarding_days').delete().eq('id',id);
   loadSettings();showToast('Видалено');
+}
+
+
+async function updateTaskEditor(posId, role) {
+  await sb.from('positions').update({task_editor_role:role}).eq('id',posId);
+  loadSettings();showToast('Збережено');
+}
+
+async function updateTaskEditorPos(posId, editorPosId) {
+  await sb.from('positions').update({task_editor_position_id:editorPosId?parseInt(editorPosId):null}).eq('id',posId);
+  showToast('Збережено');
+}
+
+// ── MANUAL POINTS ─────────────────────────────
+async function openManualPoints() {
+  const {data:profiles}=await sb.from('profiles').select('id,full_name,total_points,stores(name,display_name)').not('role','eq','pending').order('full_name');
+  
+  let html=`<div class="section-title">Нарахувати бали вручну</div>
+  <div style="background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px">
+    <span class="m-label">Працівник</span>
+    <select class="m-input" id="mp-user" style="margin-bottom:12px">
+      <option value="">Обери працівника...</option>
+      ${(profiles||[]).map(p=>`<option value="${p.id}">${p.full_name||'Без імені'} · ${p.stores?.display_name||p.stores?.name||'—'} (${p.total_points||0} балів)</option>`).join('')}
+    </select>
+    <span class="m-label">Кількість балів</span>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input class="m-input" id="mp-amount" type="number" min="1" max="9999" placeholder="50" style="flex:1">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <button onclick="quickPts(50)" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:12px;font-weight:600">+50</button>
+        <button onclick="quickPts(100)" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:12px;font-weight:600">+100</button>
+      </div>
+    </div>
+    <span class="m-label">Причина</span>
+    <input class="m-input" id="mp-reason" placeholder="Наприклад: за допомогу на зміні" style="margin-bottom:16px">
+    <button class="btn-primary" onclick="submitManualPoints()">Нарахувати бали</button>
+  </div>`;
+
+  // Останні нарахування
+  const {data:log}=await sb.from('points_log').select('*,profiles(full_name)').order('created_at',{ascending:false}).limit(10);
+  if((log||[]).length>0){
+    html+=`<div class="section-title">Останні нарахування</div>`;
+    (log||[]).forEach(l=>{
+      const date=new Date(l.created_at).toLocaleDateString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      html+=`<div style="background:var(--white);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:6px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${l.profiles?.full_name||'—'}</div>
+          <div style="font-size:11px;color:var(--gray)">${l.reason} · ${date}</div>
+        </div>
+        <div style="font-size:15px;font-weight:800;color:var(--green)">+${l.points}</div>
+      </div>`;
+    });
+  }
+
+  document.getElementById('set-body').innerHTML = html;
+}
+
+function quickPts(amount) {
+  const inp = document.getElementById('mp-amount');
+  if(inp) inp.value = amount;
+}
+
+async function submitManualPoints() {
+  const userId = document.getElementById('mp-user')?.value;
+  const amount = parseInt(document.getElementById('mp-amount')?.value);
+  const reason = document.getElementById('mp-reason')?.value?.trim() || 'Нараховано адміном';
+  if(!userId){showToast('Обери працівника');return;}
+  if(!amount||amount<1){showToast('Вкажи кількість балів');return;}
+
+  // Нараховуємо через update (rpc може не мати доступу до чужих записів)
+  const {data:profile}=await sb.from('profiles').select('total_points').eq('id',userId).single();
+  await sb.from('profiles').update({total_points:(profile?.total_points||0)+amount}).eq('id',userId);
+  await sb.from('points_log').insert({user_id:userId,points:amount,reason:'[Адмін] '+reason});
+  
+  showToast(`+${amount} балів нараховано! 🎉`);
+  document.getElementById('mp-amount').value='';
+  document.getElementById('mp-reason').value='';
+  openManualPoints();
 }
 
 async function saveStore(id,val){if(!val.trim())return;await sb.from('stores').update({display_name:val.trim()}).eq('id',id);showToast('Збережено');}

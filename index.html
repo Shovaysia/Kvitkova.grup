@@ -305,6 +305,43 @@ body.dark #app{background:#0F0F14}
 .shop-btn.equipped{background:var(--pink-light);color:var(--pink)}
 .shop-btn.locked{background:var(--gray-light);color:var(--gray);cursor:not-allowed}
 .shop-owned-badge{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:8px}
+
+/* ABOUT MEDIA */
+.about-hero-media{border-radius:var(--radius);overflow:hidden;margin-bottom:16px;position:relative;min-height:200px;background:linear-gradient(135deg,var(--pink),var(--pink-dark))}
+.about-hero-img{width:100%;height:220px;object-fit:cover;display:block}
+.about-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.about-hero-title{color:white;font-size:22px;font-weight:800;letter-spacing:-.3px}
+.about-hero-sub{color:rgba(255,255,255,.8);font-size:13px;margin-top:2px}
+.about-media-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:8px;color:rgba(255,255,255,.7)}
+.about-media-placeholder svg{opacity:.6}
+
+.media-gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.media-gallery-item{border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:1;position:relative;background:var(--gray-light)}
+.media-gallery-item img,.media-gallery-item video{width:100%;height:100%;object-fit:cover;display:block}
+.media-gallery-item .del-media{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:14px}
+
+.about-upload-btn{width:100%;padding:13px;background:var(--white);border:2px dashed var(--pink-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--pink);cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.about-upload-btn input{display:none}
+.about-upload-btn:active{background:var(--pink-light)}
+
+.about-section-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.about-section-label{font-size:11px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.about-value-item{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.about-value-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.about-value-icon{font-size:22px;flex-shrink:0;width:36px;height:36px;border-radius:10px;background:var(--pink-light);display:flex;align-items:center;justify-content:center}
+.about-value-text{flex:1}
+.about-value-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.about-value-desc{font-size:13px;color:var(--gray);line-height:1.5}
+
+.about-card-system{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.about-card-item{border-radius:var(--radius);padding:12px 10px;text-align:center}
+.about-card-emoji{font-size:24px;margin-bottom:6px}
+.about-card-name{font-size:11px;font-weight:700}
+.about-card-desc{font-size:10px;margin-top:3px;opacity:.8;line-height:1.3}
+
+.about-rule-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.about-rule-item:last-child{border-bottom:none}
+.about-rule-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0}
 /* QUIZ */
 .quiz-topic-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .15s}
 .quiz-topic-card:active{transform:scale(.98)}
@@ -530,104 +567,9 @@ body.dark #app{background:#0F0F14}
   </div>
 
   <div class="page" id="page-about">
-    <div id="about-body">
-      <!-- Знайомство — контент з PDF -->
-      <div style="background:linear-gradient(135deg,var(--pink),var(--pink-dark));border-radius:var(--radius);padding:24px 20px;margin-bottom:16px;color:white">
-        <div style="font-size:22px;font-weight:800;margin-bottom:4px">KVITKOVA</div>
-        <div style="font-size:14px;opacity:.85">Квіткова Мафія — наша історія</div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Хто ми?</div>
-        <div style="font-size:14px;line-height:1.7;color:var(--dark-2)">Ми — Квіткова Мафія. Наша історія бере свій початок з 2016 року, коли зародилась ідея <strong>"не продавати квіти, а дарувати радість"</strong>.<br><br>Автівка, квіти та гарний настрій допомогли втілити ідею в дійсність. Так і з'явилась #квітковамафія.<br><br>На даний момент KVITKOVA має 5 закладів Квіткової мафії в Києві.</div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Продукт</div>
-        <div style="font-size:14px;line-height:1.7;color:var(--dark-2)">Квіткова Мафія — це місце, де <strong>Aperol Spritz, квіти та гарний настрій</strong> зливаються в один настрій.<br><br>Авторські коктейлі, фрішка, хот-доги, якісні продукти за чесну ціну та завжди — квітка до напою.</div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Місія</div>
-        <div style="font-size:15px;font-weight:600;color:var(--dark);line-height:1.5;font-style:italic">"Дарувати дівчатам радість, увагу й емоції через прості речі: коктейль, квітку та щирий настрій."</div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Цінності</div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">⚡</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Якість</div><div style="font-size:13px;color:var(--gray);line-height:1.5">В першу чергу ми робимо, щоб сподобалось нам. Тоді можна сміливо презентувати продукт нашим гостям.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">✅</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Завжди ТАК</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Ми завжди говоримо ТАК. Навіть якщо Ні.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">❤️</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Турбота</div><div style="font-size:13px;color:var(--gray);line-height:1.5">На роботі ми знаходимось велику частину життя — це наш другий дім. Гості — як гості нашої оселі.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">🚀</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Швидкість</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Ми маємо швидко адаптуватись до змін. Швидко вчитись, змінюватись, відповідати запитам.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px">
-          <div style="font-size:20px;flex-shrink:0">📈</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Розвиток</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Per aspera ad astra — крізь терни до зірок. Ми підтримаємо і зацікавлені в особистому зростанні кожного.</div></div>
-        </div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Система карток</div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">🟡</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Жовта картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Попередження. Запізнення, порушення стандартів, залишення позиції без дозволу. Не більше 6 ЖК за 6 місяців = звільнення.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:20px;flex-shrink:0">🔴</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Червона картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Звільнення. Хамство до гостя, крадіжки, бійка, вживання алкоголю на зміні. 6 ЖК = 1 ЧК.</div></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:12px">
-          <div style="font-size:20px;flex-shrink:0">🟢</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Зелена картка</div><div style="font-size:13px;color:var(--gray);line-height:1.5">Заохочення! За відданість роботі, гарні відгуки, ініціативу. Кава, коктейль, сніданок, депозит, кіно, СПА...</div></div>
-        </div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Заохочення</div>
-        <div style="font-size:14px;line-height:1.8;color:var(--dark-2)">
-          🎁 Знижка 50% (не діє на алкоголь)<br>
-          💰 Премії за виконання КПД та поставлених задач<br>
-          🎂 Привітання з Днем Народження (конвертик буде)<br>
-          📈 Відкрите кар'єрне зростання
-        </div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Оплата праці</div>
-        <div style="font-size:14px;line-height:1.8;color:var(--dark-2)">
-          Зарплата ділиться на <strong>аванс та зарплату</strong>.<br><br>
-          📅 <strong>Аванс</strong> = ставка за 1–14 числа без %. Виплачується 20–25 числа.<br>
-          📅 <strong>Зарплата</strong> = ставка за 15–31. Виплачується 5–10 числа.
-        </div>
-      </div>
-
-      <div style="background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)">
-        <div style="font-size:13px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Правила зміни</div>
-        <div style="font-size:14px;line-height:1.8;color:var(--dark-2)">
-          ⏰ Прихід на зміну за <strong>20 хвилин</strong> до початку<br>
-          👔 Переодягнутись у робочу форму<br>
-          🚫 Не стояти спиною до гостей<br>
-          🚫 Не спиратись на поверхні<br>
-          🚫 Не сидіти на робочому місці<br>
-          🚫 Не тримати руки в кишенях<br>
-          🚫 Не розголошувати фінансові показники<br>
-          🚫 Не їсти/пити/жувати за баром<br>
-          ✅ Перебувати обличчям до гостя<br>
-          ✅ Стежити за появою брудного посуду
-        </div>
-      </div>
-    </div>
+    <div id="about-body"><div class="spinner"></div></div>
   </div>
+
 
   <div class="page" id="page-onboarding">
     <div id="ob-body"><div class="spinner"></div></div>
@@ -1435,6 +1377,7 @@ function setPage(name,el){
   document.getElementById('page-'+name).classList.add('active');
   if(el) el.classList.add('active');
   if(name==='home') loadHome();
+  if(name==='about') loadAbout();
   if(name==='shop') loadShop();
   if(name==='overview') loadOverview();
   if(name==='quiz') loadQuiz();
@@ -1473,6 +1416,207 @@ function closeMoreDrawer() {
 }
 
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ══════════════════════════════════════════════
+// ABOUT PAGE
+// ══════════════════════════════════════════════
+async function loadAbout() {
+  const { data: heroMedia } = await sb.from('about_media').select('*').eq('network','kvitkova').eq('section','hero').order('sort_order');
+  const { data: placeMedia } = await sb.from('about_media').select('*').eq('network','kvitkova').eq('section','place').order('sort_order');
+  const { data: teamMedia } = await sb.from('about_media').select('*').eq('network','kvitkova').eq('section','team').order('sort_order');
+  const admin = isPow();
+
+  // HERO секція
+  let heroHtml = '';
+  if ((heroMedia||[]).length > 0) {
+    const main = heroMedia[0];
+    heroHtml = `<div class="about-hero-media">
+      ${main.media_type==='video'
+        ? `<video src="${main.url}" autoplay muted loop playsinline class="about-hero-img"></video>`
+        : `<img src="${main.url}" class="about-hero-img" loading="lazy">`}
+      <div class="about-hero-overlay">
+        <div class="about-hero-title">KVITKOVA</div>
+        <div class="about-hero-sub">Квіткова Мафія — наша історія</div>
+      </div>
+      ${admin ? `<button onclick="delAboutMedia(${main.id},'hero')" style="position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);border:none;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center">×</button>` : ''}
+    </div>`;
+  } else {
+    heroHtml = `<div class="about-hero-media">
+      <div class="about-media-placeholder">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div style="font-size:14px;font-weight:600">Головне фото</div>
+        <div style="font-size:12px;opacity:.7">Додай фото або відео закладу</div>
+      </div>
+      <div class="about-hero-overlay">
+        <div class="about-hero-title">KVITKOVA</div>
+        <div class="about-hero-sub">Квіткова Мафія — наша історія</div>
+      </div>
+    </div>`;
+  }
+  if (admin) {
+    heroHtml += `<label class="about-upload-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      ${(heroMedia||[]).length ? 'Замінити головне фото/відео' : 'Додати головне фото/відео'}
+      <input type="file" accept="image/*,video/*" onchange="uploadAboutMedia(this,'hero')">
+    </label>`;
+  }
+
+  // Галерея закладу
+  let placeHtml = '';
+  if ((placeMedia||[]).length > 0 || admin) {
+    placeHtml = `<div class="about-section-card">
+      <div class="about-section-label">Наш заклад</div>
+      <div class="media-gallery">
+        ${(placeMedia||[]).map(m => `
+          <div class="media-gallery-item">
+            ${m.media_type==='video'
+              ? `<video src="${m.url}" muted loop playsinline onclick="this.paused?this.play():this.pause()"></video>`
+              : `<img src="${m.url}" loading="lazy">`}
+            ${admin ? `<button class="del-media" onclick="delAboutMedia(${m.id},'place')">×</button>` : ''}
+          </div>`).join('')}
+        ${admin ? `<label style="display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:var(--radius-sm);border:2px dashed var(--pink-mid);cursor:pointer;color:var(--pink);font-size:12px;font-weight:600;gap:4px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Фото
+          <input type="file" accept="image/*,video/*" style="display:none" onchange="uploadAboutMedia(this,'place')">
+        </label>` : ''}
+      </div>
+    </div>`;
+  }
+
+  // Команда фото
+  let teamHtml = '';
+  if ((teamMedia||[]).length > 0 || admin) {
+    teamHtml = `<div class="about-section-card">
+      <div class="about-section-label">Наша команда</div>
+      <div class="media-gallery">
+        ${(teamMedia||[]).map(m => `
+          <div class="media-gallery-item">
+            <img src="${m.url}" loading="lazy">
+            ${admin ? `<button class="del-media" onclick="delAboutMedia(${m.id},'team')">×</button>` : ''}
+          </div>`).join('')}
+        ${admin ? `<label style="display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:var(--radius-sm);border:2px dashed var(--pink-mid);cursor:pointer;color:var(--pink);font-size:12px;font-weight:600;gap:4px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Фото
+          <input type="file" accept="image/*" style="display:none" onchange="uploadAboutMedia(this,'team')">
+        </label>` : ''}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('about-body').innerHTML = `
+    ${heroHtml}
+
+    <div class="about-section-card">
+      <div class="about-section-label">Хто ми?</div>
+      <div style="font-size:14px;line-height:1.7;color:var(--dark-2)">
+        Ми — Квіткова Мафія. Наша історія бере свій початок з 2016 року, коли зародилась ідея
+        <strong>"не продавати квіти, а дарувати радість"</strong>.<br><br>
+        Aperol Spritz, квіти та гарний настрій — це і є Квіткова Мафія.
+      </div>
+    </div>
+
+    ${placeHtml}
+    ${teamHtml}
+
+    <div class="about-section-card">
+      <div class="about-section-label">Цінності</div>
+      <div class="about-value-item">
+        <div class="about-value-icon">⚡</div>
+        <div class="about-value-text"><div class="about-value-title">Якість</div><div class="about-value-desc">В першу чергу ми робимо, щоб сподобалось нам.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">✅</div>
+        <div class="about-value-text"><div class="about-value-title">Завжди ТАК</div><div class="about-value-desc">Ми завжди говоримо ТАК. Навіть якщо Ні.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">❤️</div>
+        <div class="about-value-text"><div class="about-value-title">Турбота</div><div class="about-value-desc">На роботі ми знаходимось велику частину життя — це наш другий дім.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">🚀</div>
+        <div class="about-value-text"><div class="about-value-title">Швидкість</div><div class="about-value-desc">Швидко вчитись, змінюватись, відповідати запитам.</div></div>
+      </div>
+      <div class="about-value-item" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
+        <div class="about-value-icon">📈</div>
+        <div class="about-value-text"><div class="about-value-title">Розвиток</div><div class="about-value-desc">Per aspera ad astra — крізь терни до зірок.</div></div>
+      </div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Система карток</div>
+      <div class="about-card-system">
+        <div class="about-card-item" style="background:#FFFBEB;color:#92400E">
+          <div class="about-card-emoji">🟡</div>
+          <div class="about-card-name">Жовта</div>
+          <div class="about-card-desc">Попередження. Макс 6 за 6 міс.</div>
+        </div>
+        <div class="about-card-item" style="background:#FEF2F2;color:#991B1B">
+          <div class="about-card-emoji">🔴</div>
+          <div class="about-card-name">Червона</div>
+          <div class="about-card-desc">Звільнення. 6 жовтих = 1 червона.</div>
+        </div>
+        <div class="about-card-item" style="background:#ECFDF5;color:#065F46">
+          <div class="about-card-emoji">🟢</div>
+          <div class="about-card-name">Зелена</div>
+          <div class="about-card-desc">Заохочення! Кава, кіно, СПА...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Правила зміни</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--pink)"></div>Прихід за <strong>20 хвилин</strong> до початку</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--pink)"></div>Переодягнутись у робочу форму</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не стояти спиною до гостей</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не їсти/пити/жувати за баром</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не розголошувати фінансові показники</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--green)"></div>Перебувати обличчям до гостя</div>
+      <div class="about-rule-item" style="border-bottom:none"><div class="about-rule-dot" style="background:var(--green)"></div>Стежити за появою брудного посуду</div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Оплата праці</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--dark-2)">
+        📅 <strong>Аванс</strong> — ставка за 1–14 числа. Виплата 20–25 числа.<br>
+        📅 <strong>Зарплата</strong> — ставка за 15–31. Виплата 5–10 числа.
+      </div>
+    </div>
+
+    <div class="about-section-card" style="margin-bottom:0">
+      <div class="about-section-label">Заохочення</div>
+      <div style="font-size:14px;line-height:1.9;color:var(--dark-2)">
+        🎁 Знижка 50% (не діє на алкоголь)<br>
+        💰 Премії за виконання КПД<br>
+        🎂 Привітання з Днем Народження<br>
+        📈 Відкрите кар'єрне зростання
+      </div>
+    </div>`;
+}
+
+async function uploadAboutMedia(input, section) {
+  const file = input.files[0];
+  if (!file) return;
+  const isVideo = file.type.startsWith('video/');
+  const ext = file.name.split('.').pop();
+  const fn = `${section}/${Date.now()}.${ext}`;
+  showToast('Завантаження...');
+  const { data: up, error } = await sb.storage.from('about-media').upload(fn, file, { upsert: true });
+  if (error) { showToast('Помилка завантаження'); return; }
+  const { data: url } = sb.storage.from('about-media').getPublicUrl(fn);
+  await sb.from('about_media').insert({
+    network: 'kvitkova', section, media_type: isVideo ? 'video' : 'image',
+    url: url.publicUrl, sort_order: Date.now()
+  });
+  showToast('Додано! ✅');
+  loadAbout();
+}
+
+async function delAboutMedia(id, section) {
+  if (!confirm('Видалити?')) return;
+  await sb.from('about_media').delete().eq('id', id);
+  showToast('Видалено');
+  loadAbout();
+}
 
 // ══════════════════════════════════════════════
 // GAMIFICATION + SHOP

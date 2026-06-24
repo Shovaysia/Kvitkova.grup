@@ -7,13 +7,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Квіткова Мафія — HR</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 :root {
   --pink: #E8547A;
   --pink-dark: #C93D62;
   --pink-light: #FFF0F4;
   --pink-mid: #F9C5D1;
-  --dark: #1A1A2E;
+  --dark: #0F0F14;
+  --dark-2: #1A1A2E;
   --gray: #6B7280;
   --gray-light: #F3F4F6;
   --border: #E5E7EB;
@@ -31,11 +33,11 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F9FB;color:var(--dark);min-height:100vh;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F9FB;color:var(--dark-2);min-height:100vh;overflow-x:hidden}
 
 /* ── AUTH ── */
 #auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(160deg,#FFF0F4 0%,#FFF 60%)}
-.auth-logo{font-size:56px;margin-bottom:8px;animation:float 3s ease-in-out infinite}
+.auth-logo{width:64px;height:64px;margin-bottom:12px;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .auth-brand{font-size:24px;font-weight:700;color:var(--dark);margin-bottom:4px;letter-spacing:-.3px}
 .auth-sub{font-size:14px;color:var(--gray);margin-bottom:36px}
@@ -56,22 +58,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* ── APP SHELL ── */
 #app{display:none;flex-direction:column;min-height:100vh}
-.topbar{background:var(--white);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+.topbar{background:var(--white);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .topbar-inner{display:flex;align-items:center;justify-content:space-between}
 .topbar-brand{font-size:17px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px}
+.topbar-brand svg{color:var(--pink)}
 .user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--pink-mid)}
 .store-pill{font-size:11px;color:var(--gray);background:var(--gray-light);padding:3px 10px;border-radius:20px;margin-top:5px;display:inline-flex;align-items:center;gap:4px}
+.logout-btn{border:none;background:none;cursor:pointer;color:var(--gray);display:flex;align-items:center;padding:4px}
 
 /* ── BOTTOM NAV ── */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;gap:2px;border:none;background:none;cursor:pointer;color:var(--gray);transition:color .15s;position:relative}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;gap:3px;border:none;background:none;cursor:pointer;color:var(--gray);transition:color .15s;position:relative}
 .nav-btn.active{color:var(--pink)}
 .nav-btn.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--pink);border-radius:2px}
-.nav-icon{font-size:22px;line-height:1;transition:transform .2s}
-.nav-btn.active .nav-icon{transform:scale(1.1)}
+.nav-btn svg{transition:transform .2s}
+.nav-btn.active svg{transform:scale(1.1)}
 .nav-label{font-size:10px;font-weight:500}
 
-/* ── PAGES & ANIMATIONS ── */
+/* ── PAGES ── */
 .page{display:none;padding:16px 16px 90px;animation:pageIn .25s ease}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -83,7 +87,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ── TYPE TABS ── */
 .type-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .type-tabs::-webkit-scrollbar{display:none}
-.type-tab{padding:9px 18px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s}
+.type-tab{padding:9px 18px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s;display:flex;align-items:center;gap:6px}
+.type-tab svg{width:15px;height:15px}
 .type-tab.active{background:var(--pink);color:white;border-color:var(--pink);box-shadow:0 4px 12px rgba(232,84,122,.25)}
 
 /* ── PROGRESS ── */
@@ -101,14 +106,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .task-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s cubic-bezier(.4,0,.2,1)}
 .task-check.done{background:var(--green);border-color:var(--green);animation:checkPop .3s cubic-bezier(.4,0,.2,1)}
 @keyframes checkPop{0%{transform:scale(.8)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
-.task-check.done::after{content:'✓';color:white;font-size:14px;font-weight:700}
+.task-check svg{width:14px;height:14px;color:white;opacity:0;transition:opacity .2s}
+.task-check.done svg{opacity:1}
 .task-text{font-size:15px;flex:1;line-height:1.4}
 .task-text.done{text-decoration:line-through;color:var(--gray)}
-.task-delete{padding:4px 8px;color:var(--border);font-size:18px;cursor:pointer;transition:color .2s}
+.task-delete{padding:4px 8px;color:var(--border);cursor:pointer;transition:color .2s;display:flex}
 .task-delete:active{color:var(--red)}
+.task-delete svg{width:16px;height:16px}
 
 /* ── ADD TASK ── */
-.add-task-btn{width:100%;padding:14px;background:var(--white);border:2px dashed var(--pink-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--pink);cursor:pointer;text-align:center;margin-top:8px;transition:all .2s}
+.add-task-btn{width:100%;padding:14px;background:var(--white);border:2px dashed var(--pink-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--pink);cursor:pointer;text-align:center;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-task-btn svg{width:16px;height:16px}
 .add-task-btn:active{background:var(--pink-light)}
 
 /* ── MODAL ── */
@@ -130,7 +138,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .emp-card:active{transform:scale(.98)}
 .emp-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--pink-light),var(--pink-mid));color:var(--pink);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .emp-name{font-size:15px;font-weight:600}
-.emp-role{font-size:12px;color:var(--gray);margin-top:2px}
+.emp-role{font-size:12px;color:var(--gray);margin-top:2px;display:flex;align-items:center;gap:4px}
+.emp-role svg{width:11px;height:11px}
 .emp-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-left:auto;white-space:nowrap}
 .badge-admin{background:rgba(232,84,122,.12);color:var(--pink)}
 .badge-manager{background:var(--amber-light);color:var(--amber)}
@@ -140,7 +149,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ── OVERVIEW ── */
 .overview-card{background:var(--white);border-radius:var(--radius);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-card)}
 .overview-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.overview-store{font-size:16px;font-weight:700}
+.overview-store{font-size:16px;font-weight:700;display:flex;align-items:center;gap:6px}
+.overview-store svg{width:14px;height:14px;color:var(--gray)}
 .overview-pct{font-size:24px;font-weight:800}
 .mini-progress{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
 .mini-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
@@ -149,23 +159,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-num{font-size:20px;font-weight:800}
 .stat-lbl{font-size:10px;color:var(--gray);font-weight:500;margin-top:2px}
 
-/* ── PENDING USERS ── */
+/* ── PENDING ── */
 .pending-card{background:var(--amber-light);border:1.5px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:16px;margin-bottom:10px}
-.pending-email{font-size:14px;font-weight:600;margin-bottom:12px}
+.pending-email{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.pending-email svg{width:15px;height:15px;color:var(--amber)}
 .assign-row{display:flex;gap:8px}
 .assign-select{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
 .assign-select:focus{border-color:var(--pink)}
-.btn-assign{padding:10px 16px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-assign{padding:10px 16px;background:var(--pink);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.btn-assign svg{width:14px;height:14px}
 
-/* ── WAITING SCREEN ── */
+/* ── WAITING ── */
 .waiting-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:24px}
-.waiting-icon{font-size:64px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
+.waiting-icon{width:80px;height:80px;margin-bottom:16px;color:var(--pink);animation:float 3s ease-in-out infinite}
 .waiting-title{font-size:20px;font-weight:700;margin-bottom:8px}
 .waiting-sub{font-size:14px;color:var(--gray);line-height:1.6}
 
 /* ── EMPTY ── */
 .empty{text-align:center;padding:40px 20px;color:var(--gray)}
-.empty-icon{font-size:44px;margin-bottom:12px}
+.empty svg{width:44px;height:44px;margin-bottom:12px;opacity:.4}
 .empty-text{font-size:15px}
 
 /* ── TOAST ── */
@@ -176,13 +188,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .spinner{width:32px;height:32px;border:3px solid var(--pink-mid);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;margin:48px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── DESKTOP ── */
 @media(min-width:768px){
   body{background:#F0F2F5}
-  #app{max-width:480px;margin:0 auto;box-shadow:0 0 60px rgba(0,0,0,.1);border-radius:0;min-height:100vh;background:#F8F9FB}
+  #app{max-width:480px;margin:0 auto;box-shadow:0 0 60px rgba(0,0,0,.1);min-height:100vh;background:#F8F9FB}
   .topbar,.bottom-nav{max-width:480px}
   .bottom-nav{left:50%;transform:translateX(-50%)}
-  #auth-screen{background:linear-gradient(160deg,#F0F2F5 0%,#E8EBF0 100%)}
 }
 </style>
 </head>
@@ -190,7 +200,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- AUTH -->
 <div id="auth-screen">
-  <div class="auth-logo">🌸</div>
+  <svg class="auth-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="32" fill="#FFF0F4"/>
+    <path d="M32 14c0 0-10 8-10 16a10 10 0 0020 0c0-8-10-16-10-16z" fill="#E8547A"/>
+    <path d="M20 26c0 0-8 4-8 10a8 8 0 0016 0" stroke="#E8547A" stroke-width="2" fill="none"/>
+    <path d="M44 26c0 0 8 4 8 10a8 8 0 01-16 0" stroke="#E8547A" stroke-width="2" fill="none"/>
+  </svg>
   <div class="auth-brand">Квіткова Мафія</div>
   <div class="auth-sub">HR-портал</div>
   <div class="auth-card">
@@ -217,21 +232,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="app">
   <div class="topbar">
     <div class="topbar-inner">
-      <div class="topbar-brand">🌸 <span>Квіткова Мафія</span></div>
+      <div class="topbar-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6c0 0-4 3-4 6a4 4 0 008 0c0-3-4-6-4-6z" fill="currentColor" stroke="none"/></svg>
+        Квіткова Мафія
+      </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div class="user-avatar" id="user-initials">?</div>
-        <button onclick="signOut()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--gray)">↩</button>
+        <button class="logout-btn" onclick="signOut()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
       </div>
     </div>
     <div id="store-pill-wrap"></div>
   </div>
 
-  <!-- CHECKLIST PAGE -->
   <div class="page active" id="page-checklist">
     <div class="type-tabs">
-      <div class="type-tab active" onclick="setType('open',this)">🌅 Відкриття</div>
-      <div class="type-tab" onclick="setType('close',this)">🌙 Закриття</div>
-      <div class="type-tab" onclick="setType('daily',this)">📋 Щоденні</div>
+      <div class="type-tab active" onclick="setType('open',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Відкриття
+      </div>
+      <div class="type-tab" onclick="setType('close',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        Закриття
+      </div>
+      <div class="type-tab" onclick="setType('daily',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Щоденні
+      </div>
     </div>
     <div class="progress-wrap">
       <div class="progress-top">
@@ -241,33 +269,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
     <div id="task-list"><div class="spinner"></div></div>
-    <button class="add-task-btn" onclick="openAddModal()" id="add-btn" style="display:none">+ Додати задачу</button>
+    <button class="add-task-btn" onclick="openAddModal()" id="add-btn" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Додати задачу
+    </button>
   </div>
 
-  <!-- EMPLOYEES PAGE -->
   <div class="page" id="page-employees">
     <div id="emp-body"><div class="spinner"></div></div>
   </div>
 
-  <!-- OVERVIEW PAGE (admin) -->
   <div class="page" id="page-overview">
     <div id="overview-body"><div class="spinner"></div></div>
   </div>
 
   <div class="bottom-nav">
     <button class="nav-btn active" onclick="setPage('checklist',this)">
-      <span class="nav-icon">✅</span><span class="nav-label">Чек-лист</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span class="nav-label">Чек-лист</span>
     </button>
     <button class="nav-btn" onclick="setPage('employees',this)">
-      <span class="nav-icon">👥</span><span class="nav-label">Команда</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span class="nav-label">Команда</span>
     </button>
     <button class="nav-btn" id="nav-overview" onclick="setPage('overview',this)" style="display:none">
-      <span class="nav-icon">📊</span><span class="nav-label">Огляд</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="nav-label">Огляд</span>
     </button>
   </div>
 </div>
 
-<!-- ADD TASK MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -289,7 +320,17 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null, currentProfile = null, currentType = 'open', tasks = [];
 
-// ── AUTH ──────────────────────────────────────────
+const icons = {
+  check: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
+  x: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  pin: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  clock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  user: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  clipboard: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`,
+  users: `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>`,
+  hourglass: `<svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg>`,
+};
+
 function switchAuthTab(tab, el) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -325,11 +366,10 @@ async function signUp() {
   btn.disabled = true; btn.textContent = 'Реєстрація...';
   const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
   if (error) { showAuthMsg(error.message, 'error'); btn.disabled = false; btn.textContent = 'Зареєструватись'; return; }
-  // create profile manually
   if (data.user) {
     await sb.from('profiles').upsert({ id: data.user.id, full_name: name, role: 'pending' });
   }
-  showAuthMsg('✅ Акаунт створено! Очікуй призначення від адміна.', 'success');
+  showAuthMsg('Акаунт створено! Очікуй призначення від адміна.', 'success');
   btn.disabled = false; btn.textContent = 'Зареєструватись';
 }
 
@@ -348,7 +388,7 @@ function showWaitingScreen() {
   document.getElementById('app').style.display = 'flex';
   document.getElementById('page-checklist').innerHTML = `
     <div class="waiting-screen">
-      <div class="waiting-icon">⏳</div>
+      <div class="waiting-icon">${icons.hourglass}</div>
       <div class="waiting-title">Очікуй призначення</div>
       <div class="waiting-sub">Твій акаунт створено!<br>Адмін скоро призначить тобі заклад і роль.<br><br>Спробуй зайти пізніше.</div>
       <button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="signOut()">Вийти</button>
@@ -363,21 +403,18 @@ function initApp() {
   const initials = (currentProfile?.full_name || currentUser.email).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
   document.getElementById('user-initials').textContent = initials;
   const storeName = currentProfile?.store_name || 'Заклад';
-  document.getElementById('store-pill-wrap').innerHTML = `<span class="store-pill">📍 ${storeName}</span>`;
+  document.getElementById('store-pill-wrap').innerHTML = `<span class="store-pill">${icons.pin.replace('width="11" height="11"','width="11" height="11"')} ${storeName}</span>`;
   const isAdmin = currentProfile?.role === 'admin';
   const isManager = currentProfile?.role === 'manager';
-  if (isAdmin || isManager) {
-    document.getElementById('nav-overview').style.display = 'flex';
-  }
-  document.getElementById('add-btn').style.display = (isAdmin || isManager) ? 'block' : 'none';
+  if (isAdmin || isManager) document.getElementById('nav-overview').style.display = 'flex';
+  document.getElementById('add-btn').style.display = (isAdmin || isManager) ? 'flex' : 'none';
   loadTasks();
   loadEmployees();
 }
 
-// ── TASKS ──────────────────────────────────────────
 async function loadTasks() {
   const storeId = currentProfile?.store_id;
-  if (!storeId) { document.getElementById('task-list').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Заклад не призначено</div></div>'; return; }
+  if (!storeId) { document.getElementById('task-list').innerHTML = `<div class="empty">${icons.clipboard}<div class="empty-text">Заклад не призначено</div></div>`; return; }
   const today = new Date().toISOString().split('T')[0];
   const { data } = await sb.from('tasks').select('*, completions(id,completed_at,user_id)').eq('store_id', storeId).eq('type', currentType).eq('is_active', true).order('sort_order');
   tasks = (data || []).map(t => ({
@@ -395,13 +432,13 @@ function renderTasks(list) {
   document.getElementById('prog-pct').textContent = pct + '%';
   document.getElementById('prog-fill').style.width = pct + '%';
   const canEdit = currentProfile?.role !== 'staff';
-  if (!list.length) { document.getElementById('task-list').innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Задач немає — додайте першу</div></div>'; return; }
+  if (!list.length) { document.getElementById('task-list').innerHTML = `<div class="empty">${icons.clipboard}<div class="empty-text">Задач немає — додайте першу</div></div>`; return; }
   document.getElementById('task-list').innerHTML = list.map(t => `
     <div class="task-card">
       <div class="task-row" onclick="toggleTask(${t.id})">
-        <div class="task-check${t.done ? ' done' : ''}"></div>
+        <div class="task-check${t.done ? ' done' : ''}">${icons.check}</div>
         <span class="task-text${t.done ? ' done' : ''}">${t.title}</span>
-        ${canEdit ? `<span class="task-delete" onclick="event.stopPropagation();deleteTask(${t.id})">×</span>` : ''}
+        ${canEdit ? `<span class="task-delete" onclick="event.stopPropagation();deleteTask(${t.id})">${icons.x}</span>` : ''}
       </div>
     </div>`).join('');
 }
@@ -416,7 +453,7 @@ async function toggleTask(taskId) {
   } else {
     const { data } = await sb.from('completions').insert({ task_id: taskId, user_id: currentUser.id, completed_at: new Date().toISOString() }).select().single();
     task.done = true; task.completion_id = data?.id;
-    if (tasks.every(t => t.done)) showToast('🎉 Всі задачі виконано!');
+    if (tasks.every(t => t.done)) showToast('Всі задачі виконано!');
   }
   renderTasks(tasks);
 }
@@ -432,7 +469,7 @@ async function addTask() {
   const title = document.getElementById('task-input').value.trim();
   if (!title) return;
   const { data, error } = await sb.from('tasks').insert({ title, store_id: currentProfile.store_id, type: currentType, is_active: true, sort_order: tasks.length, created_by: currentUser.id }).select().single();
-  if (!error) { closeModal(); tasks.push({ ...data, done: false }); renderTasks(tasks); showToast('Задачу додано ✅'); }
+  if (!error) { closeModal(); tasks.push({ ...data, done: false }); renderTasks(tasks); showToast('Задачу додано'); }
 }
 
 function setType(type, el) {
@@ -443,30 +480,22 @@ function setType(type, el) {
   loadTasks();
 }
 
-// ── EMPLOYEES ──────────────────────────────────────
 async function loadEmployees() {
   const isAdmin = currentProfile?.role === 'admin';
   const isManager = currentProfile?.role === 'manager';
   const body = document.getElementById('emp-body');
-
   let query = sb.from('profiles').select('*, stores(name)');
-  if (!isAdmin && !isManager) {
-    query = query.eq('store_id', currentProfile?.store_id);
-  }
+  if (!isAdmin && !isManager) query = query.eq('store_id', currentProfile?.store_id);
   const { data: profiles } = await query.order('full_name');
-
-  // pending users (no store assigned)
   const pending = (profiles || []).filter(p => p.role === 'pending' || !p.store_id);
   const active = (profiles || []).filter(p => p.role !== 'pending' && p.store_id);
-
   let html = '';
-
   if (isAdmin && pending.length > 0) {
-    html += `<div class="section-title">⏳ Очікують призначення (${pending.length})</div>`;
+    html += `<div class="section-title">Очікують призначення (${pending.length})</div>`;
     const { data: stores } = await sb.from('stores').select('id,name').eq('network', 'kvitkova');
     pending.forEach(p => {
       html += `<div class="pending-card">
-        <div class="pending-email">${p.full_name || p.id}<br><span style="font-size:12px;color:var(--gray);font-weight:400">${p.full_name ? '' : 'Новий користувач'}</span></div>
+        <div class="pending-email">${icons.clock} ${p.full_name || 'Новий користувач'}</div>
         <div class="assign-row">
           <select class="assign-select" id="store-${p.id}">
             <option value="">Оберіть заклад</option>
@@ -477,12 +506,11 @@ async function loadEmployees() {
             <option value="manager">Менеджер</option>
             <option value="admin">Адмін</option>
           </select>
-          <button class="btn-assign" onclick="assignUser('${p.id}')">✓</button>
+          <button class="btn-assign" onclick="assignUser('${p.id}')">${icons.check} OK</button>
         </div>
       </div>`;
     });
   }
-
   if (active.length > 0) {
     html += `<div class="section-title">Команда</div>`;
     active.forEach(p => {
@@ -493,14 +521,13 @@ async function loadEmployees() {
         <div class="emp-avatar">${initials}</div>
         <div style="flex:1">
           <div class="emp-name">${p.full_name || 'Без імені'}</div>
-          <div class="emp-role">📍 ${p.stores?.name || p.store_id || '—'}</div>
+          <div class="emp-role">${icons.pin} ${p.stores?.name || p.store_id || '—'}</div>
         </div>
         <span class="emp-badge ${badgeClass}">${roleLabel}</span>
       </div>`;
     });
   }
-
-  if (!html) html = '<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">Немає працівників</div></div>';
+  if (!html) html = `<div class="empty">${icons.users}<div class="empty-text">Немає працівників</div></div>`;
   body.innerHTML = html;
 }
 
@@ -510,11 +537,10 @@ async function assignUser(userId) {
   if (!storeId) { showToast('Оберіть заклад!'); return; }
   const { data: store } = await sb.from('stores').select('name').eq('id', storeId).single();
   await sb.from('profiles').update({ store_id: parseInt(storeId), store_name: store?.name, role }).eq('id', userId);
-  showToast('✅ Призначено!');
+  showToast('Призначено!');
   loadEmployees();
 }
 
-// ── OVERVIEW ──────────────────────────────────────
 async function loadOverview() {
   const today = new Date().toISOString().split('T')[0];
   const { data: stores } = await sb.from('stores').select('id,name').eq('network', 'kvitkova');
@@ -529,7 +555,7 @@ async function loadOverview() {
     const color = pct === 100 ? 'var(--green)' : pct > 50 ? 'var(--amber)' : 'var(--pink)';
     html += `<div class="overview-card">
       <div class="overview-header">
-        <div class="overview-store">📍 ${store.name}</div>
+        <div class="overview-store">${icons.pin} ${store.name}</div>
         <div class="overview-pct" style="color:${color}">${pct}%</div>
       </div>
       <div class="mini-progress"><div class="mini-fill" style="width:${pct}%;background:${color}"></div></div>
@@ -543,7 +569,6 @@ async function loadOverview() {
   document.getElementById('overview-body').innerHTML = html;
 }
 
-// ── UI HELPERS ──────────────────────────────────────
 function setPage(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -569,7 +594,6 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ── INIT ──────────────────────────────────────────
 sb.auth.getSession().then(({ data: { session } }) => {
   if (session?.user) loadUser(session.user);
 });

@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Сицилійський Дворик</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --terra:#C8845A;--terra-dark:#A8623A;--terra-light:#F5EDE0;--terra-mid:#E8C4A0;
+  --dark:#0F0F14;--dark-2:#1A1A2E;--gray:#6B7280;--gray-light:#F3F4F6;
+  --border:#E5E7EB;--white:#FFFFFF;--green:#10B981;--green-light:#ECFDF5;
+  --amber:#F59E0B;--amber-light:#FFFBEB;--red:#EF4444;--red-light:#FEF2F2;
+  --radius:16px;--radius-sm:10px;--shadow:0 1px 8px rgba(0,0,0,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#FAF7F4;color:var(--dark-2);min-height:100vh;overflow-x:hidden}
+
+/* AUTH */
+#auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(160deg,#FFF0F4 0%,#FFF 60%)}
+.auth-logo{margin-bottom:12px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.auth-brand{font-size:22px;font-weight:800;color:var(--dark);margin-bottom:2px;letter-spacing:-.5px}
+.auth-sub{font-size:13px;color:var(--gray);margin-bottom:36px}
+.auth-card{background:var(--white);border-radius:24px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 8px 40px rgba(200,132,90,0.15)}
+.auth-tabs{display:flex;background:var(--gray-light);border-radius:var(--radius-sm);padding:3px;margin-bottom:24px}
+.auth-tab{flex:1;padding:9px;text-align:center;font-size:14px;font-weight:500;border-radius:8px;cursor:pointer;color:var(--gray);transition:all .2s}
+.auth-tab.active{background:var(--white);color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.field{margin-bottom:16px}
+.field label{font-size:11px;font-weight:700;color:var(--gray);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.5px}
+.field input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--white);color:var(--dark);outline:none;transition:border .2s}
+.field input:focus{border-color:var(--terra);box-shadow:0 0 0 3px rgba(232,84,122,.1)}
+.btn-primary{width:100%;padding:15px;background:var(--terra);color:white;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary:active{background:var(--terra-dark);transform:scale(.98)}
+.btn-primary:disabled{opacity:.5}
+.auth-msg{font-size:13px;margin-top:12px;text-align:center;padding:10px;border-radius:var(--radius-sm)}
+.auth-msg.error{background:var(--red-light);color:var(--red)}
+.auth-msg.success{background:var(--green-light);color:var(--green)}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--white);padding:14px 16px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between}
+.brand-name{font-size:15px;font-weight:800;color:var(--dark);letter-spacing:-.3px}
+.brand-sub{font-size:10px;color:var(--gray);letter-spacing:.3px;text-transform:uppercase}
+.user-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--terra-light),var(--terra-mid));color:var(--terra);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--terra-mid);flex-shrink:0}
+.store-pill{font-size:11px;color:var(--gray);background:var(--gray-light);padding:3px 10px;border-radius:20px;margin-top:5px;display:inline-flex;align-items:center;gap:4px}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;align-items:flex-end;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;gap:3px;border:none;background:none;cursor:pointer;color:var(--gray);transition:color .15s;position:relative}
+.nav-btn.active{color:var(--terra)}
+.nav-btn.active::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--terra);border-radius:2px}
+.nav-label{font-size:10px;font-weight:500}
+.nav-fab{display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:0 4px 8px;position:relative;margin-top:-16px}
+.nav-fab-circle{width:52px;height:52px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(232,84,122,.4);transition:transform .2s,box-shadow .2s}
+.nav-fab:active .nav-fab-circle{transform:scale(.92);box-shadow:0 2px 8px rgba(232,84,122,.3)}
+.nav-fab.active .nav-fab-circle{background:var(--terra-dark)}
+.nav-fab-label{font-size:10px;font-weight:500;color:var(--gray)}
+.nav-fab.active .nav-fab-label{color:var(--terra)}
+
+/* MORE DRAWER */
+.more-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;display:none;backdrop-filter:blur(4px)}
+.more-overlay.open{display:block;animation:fadeIn .2s ease}
+.more-drawer{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-radius:24px 24px 0 0;z-index:151;padding:16px 16px calc(16px + env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.4,0,.2,1);max-width:480px;margin:0 auto}
+.more-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.more-title{font-size:13px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.more-item{background:var(--gray-light);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s;border:none}
+.more-item:active{background:var(--border)}
+.more-item-icon{font-size:22px;flex-shrink:0}
+.more-item-label{font-size:13px;font-weight:600;color:var(--dark-2)}
+
+/* PAGES */
+.page{display:none;padding:16px 16px 90px;animation:pgIn .25s ease}
+.page.active{display:block}
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.section-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;margin-top:20px;display:flex;align-items:center;justify-content:space-between}
+.section-title:first-child{margin-top:0}
+.section-btn{font-size:12px;color:var(--terra);font-weight:600;cursor:pointer;border:none;background:none;padding:0;text-transform:none;letter-spacing:0}
+
+/* DATE */
+.date-bar{margin-bottom:16px}
+.date-hdr{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+.date-big{font-size:17px;font-weight:700}
+.date-day{font-size:13px;color:var(--gray)}
+.week-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.week-row::-webkit-scrollbar{display:none}
+.d-pill{min-width:42px;padding:7px 4px;border-radius:12px;text-align:center;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;flex-shrink:0}
+.d-pill.active{background:var(--terra);border-color:var(--terra);color:white}
+.d-pill.today{border-color:var(--terra)}
+.d-pill-name{font-size:10px;font-weight:600;opacity:.7}
+.d-pill-num{font-size:15px;font-weight:700}
+.today-box{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px}
+.today-box-date{font-size:16px;font-weight:700}
+.today-box-day{font-size:13px;color:var(--gray)}
+
+/* TABS */
+.type-tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.type-tabs::-webkit-scrollbar{display:none}
+.type-tab{padding:8px 16px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s;display:flex;align-items:center;gap:6px}
+.type-tab svg{width:14px;height:14px}
+.type-tab.active{background:var(--terra);color:white;border-color:var(--terra);box-shadow:0 4px 12px rgba(232,84,122,.25)}
+
+/* PROGRESS */
+.prog-wrap{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-lbl{font-size:13px;color:var(--gray)}
+.prog-pct{font-size:17px;font-weight:800;color:var(--terra)}
+.prog-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--terra),var(--terra-dark));border-radius:3px;transition:width .5s}
+
+/* TASKS */
+.task-card{background:var(--white);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden}
+.task-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .1s}
+.task-row:active{background:var(--gray-light)}
+.chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.chk.done{background:var(--green);border-color:var(--green);animation:pop .3s ease}
+@keyframes pop{0%{transform:scale(.8)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+.task-info{flex:1;min-width:0}
+.task-ttl{font-size:15px;line-height:1.3}
+.task-ttl.done{text-decoration:line-through;color:var(--gray)}
+.task-meta{font-size:11px;color:var(--gray);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap}
+.task-who{color:var(--green);font-weight:600}
+.icon-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--gray)}
+.icon-btn:active{background:var(--gray-light)}
+.add-btn{width:100%;padding:13px;background:var(--white);border:2px dashed var(--terra-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--terra);cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-btn:active{background:var(--terra-light)}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-sh{background:var(--white);border-radius:24px 24px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));width:100%;max-width:500px;animation:slideUp .3s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.m-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.m-title{font-size:18px;font-weight:700;margin-bottom:16px}
+.m-label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block;margin-top:12px}
+.m-input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;transition:border .2s;background:var(--white);color:var(--dark)}
+.m-input:focus{border-color:var(--terra)}
+.day-cbs{display:flex;gap:6px;flex-wrap:wrap}
+.day-cb{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--white);color:var(--gray);user-select:none;transition:all .2s}
+.day-cb.sel{background:var(--terra);color:white;border-color:var(--terra)}
+.m-actions{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:var(--white);cursor:pointer;font-weight:500}
+.btn-save{flex:2;padding:14px;background:var(--terra);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer}
+
+/* PHOTO */
+.photo-zone{border:2px dashed var(--terra-mid);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;margin-top:4px;transition:all .2s}
+.photo-zone:active{background:var(--terra-light)}
+.photo-zone input{display:none}
+#photo-prev{width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-sm);margin-top:8px;display:none}
+
+/* TEAM */
+.emp-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.emp-av2{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--terra-light),var(--terra-mid));color:var(--terra);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.emp-name{font-size:15px;font-weight:600}
+.emp-sub{font-size:12px;color:var(--gray);margin-top:1px}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.b-admin{background:rgba(232,84,122,.12);color:var(--terra)}
+.b-manager{background:var(--amber-light);color:var(--amber)}
+.b-staff{background:var(--green-light);color:var(--green)}
+.pending-card{background:var(--amber-light);border:1.5px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
+.pending-name{font-size:14px;font-weight:600;margin-bottom:10px}
+.assign-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.a-sel{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
+.btn-assign{width:100%;padding:10px;background:var(--terra);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer}
+
+/* ONBOARDING v3 — прогрес + блоки */
+.ob-prog{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.ob-prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ob-prog-lbl{font-size:13px;color:var(--gray)}
+.ob-prog-pct{font-size:17px;font-weight:800;color:var(--terra)}
+.ob-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.ob-bar-fill{height:100%;background:linear-gradient(90deg,var(--terra),var(--terra-dark));border-radius:3px;transition:width .5s}
+.ob-days{display:flex;flex-direction:column;gap:8px}
+.ob-day-block{border-radius:var(--radius);border:1px solid var(--border);background:var(--white);overflow:hidden;transition:border-color .2s}
+.ob-day-block.is-current{border:2px solid var(--green)}
+.ob-day-block.is-done{border-color:var(--green)}
+.ob-day-hdr{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;transition:background .1s}
+.ob-day-hdr:active{background:var(--gray-light)}
+.ob-day-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--gray-light);color:var(--gray);flex-shrink:0;transition:all .2s}
+.ob-day-num.done{background:var(--green);color:white}
+.ob-day-num.current{background:var(--terra);color:white}
+.ob-day-meta{flex:1;min-width:0}
+.ob-day-title{font-size:14px;font-weight:600;color:var(--dark-2)}
+.ob-day-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.ob-today-badge{font-size:10px;font-weight:700;background:var(--green-light);color:var(--green);padding:3px 8px;border-radius:20px;white-space:nowrap}
+.ob-arrow{color:var(--gray);transition:transform .25s;flex-shrink:0}
+.ob-arrow.open{transform:rotate(180deg)}
+.ob-content{padding:0 14px 12px;display:flex;flex-direction:column;gap:6px}
+.ob-section{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px;display:flex;align-items:center;gap:6px}
+.ob-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
+.ob-item:last-child{border-bottom:none}
+.ob-item:active{opacity:.7}
+.ob-item.hw{background:none}
+.ob-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s}
+.ob-chk.done{background:var(--green);border-color:var(--green);animation:pop .3s ease}
+.ob-item-title{font-size:14px;flex:1;line-height:1.3;color:var(--dark-2)}
+.ob-item-title.done{text-decoration:line-through;color:var(--gray)}
+.ob-hw-badge{font-size:10px;font-weight:600;background:var(--amber-light);color:var(--amber);padding:2px 6px;border-radius:8px;white-space:nowrap}
+
+
+/* GAMIFICATION */
+.home-hero{background:linear-gradient(135deg,var(--terra),var(--terra-dark));border-radius:var(--radius);padding:20px 16px;margin-bottom:14px;color:white;position:relative;overflow:hidden}
+.home-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)}
+.home-hero::after{content:'';position:absolute;bottom:-30px;right:20px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.08)}
+.home-greeting{font-size:13px;opacity:.85;margin-bottom:4px}
+.home-name{font-size:22px;font-weight:800;margin-bottom:12px;letter-spacing:-.3px}
+.home-stats{display:flex;gap:12px}
+.home-stat{background:rgba(255,255,255,.15);border-radius:10px;padding:8px 12px;text-align:center;flex:1}
+.home-stat-n{font-size:18px;font-weight:800}
+.home-stat-l{font-size:10px;opacity:.8;margin-top:1px}
+.streak-fire{font-size:16px;margin-right:4px}
+
+.badges-wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:16px}
+.badges-wrap::-webkit-scrollbar{display:none}
+.badge-pill{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);white-space:nowrap;font-size:12px;font-weight:600;color:var(--gray);transition:all .2s}
+.badge-pill.earned{border-color:var(--terra);background:var(--terra-light);color:var(--terra)}
+.badge-icon{font-size:16px}
+
+.leaderboard-row{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;transition:transform .15s}
+.lb-rank{font-size:16px;font-weight:800;width:24px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:#F59E0B}
+.lb-rank.silver{color:#9CA3AF}
+.lb-rank.bronze{color:#CD7C3A}
+.lb-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--terra-light),var(--terra-mid));color:var(--terra);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lb-name{font-size:14px;font-weight:600;flex:1}
+.lb-sub{font-size:11px;color:var(--gray);margin-top:1px}
+.lb-pts{font-size:16px;font-weight:800;color:var(--terra)}
+.lb-streak{font-size:12px;color:var(--amber);font-weight:600}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;animation:confettiFall 1.2s ease-in forwards;pointer-events:none;z-index:9999}
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+
+/* CHECK ANIMATION */
+@keyframes checkBounce{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.4)}
+  60%{transform:scale(0.9)}
+  100%{transform:scale(1)}
+}
+.chk.done{animation:checkBounce .4s ease,pop .3s ease}
+
+/* POINTS POPUP */
+.pts-popup{position:fixed;font-size:16px;font-weight:800;color:var(--terra);pointer-events:none;z-index:9998;animation:ptsFloat 1.5s ease forwards}
+@keyframes ptsFloat{
+  0%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(-60px)}
+}
+
+/* DARK THEME */
+body.dark{background:#0F0F14;color:#E5E7EB}
+body.dark .topbar,body.dark .bottom-nav,body.dark .auth-card{background:#1A1A2E;border-color:#2D2D44}
+body.dark .task-card,body.dark .card,body.dark .prog-wrap,body.dark .ob-day-block,
+body.dark .ob-prog,body.dark .ov-card,body.dark .emp-card,body.dark .quiz-question,
+body.dark .quiz-header,body.dark .quiz-setup,body.dark .set-sec,body.dark .pos-card,
+body.dark .history-row,body.dark .q-card,body.dark .ob-day-info,body.dark .today-box,
+body.dark .pending-card{background:#1A1A2E;border-color:#2D2D44}
+body.dark .type-tab,body.dark .d-pill,body.dark .quiz-topic-card{background:#1A1A2E;border-color:#2D2D44;color:#9CA3AF}
+body.dark .type-tab.active{background:var(--terra);color:white}
+body.dark .gray-light,body.dark .v1-detail,body.dark .modal-sh{background:#252538}
+body.dark .field input,body.dark .m-input,body.dark .modal-sh{background:#1A1A2E;border-color:#2D2D44;color:#E5E7EB}
+body.dark .task-ttl,body.dark .ob-item-title,body.dark .ob-day-title,body.dark .emp-name,
+body.dark .brand-name,body.dark .date-big,body.dark .today-box-date{color:#E5E7EB}
+body.dark .prog-bar,body.dark .ob-bar,body.dark .mini-bar,body.dark .quiz-q-bar{background:#2D2D44}
+body.dark .section-title{color:#9CA3AF}
+body.dark #app{background:#0F0F14}
+
+/* NAME ANIMATIONS */
+@keyframes namePulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes nameRainbow{0%{color:#E8547A}25%{color:#F59E0B}50%{color:#10B981}75%{color:#3B82F6}100%{color:#E8547A}}
+@keyframes nameSparkle{0%,100%{text-shadow:none}50%{text-shadow:0 0 8px currentColor,0 0 16px currentColor}}
+.name-anim-pulse{animation:namePulse 2s ease-in-out infinite}
+.name-anim-rainbow{animation:nameRainbow 3s linear infinite}
+.name-anim-sparkle{animation:nameSparkle 1.5s ease-in-out infinite}
+
+/* AVATAR FRAMES */
+.av-frame-gold{box-shadow:0 0 0 3px #F59E0B,0 0 0 5px #FCD34D}
+.av-frame-neon{box-shadow:0 0 0 3px #E8547A,0 0 8px #E8547A}
+.av-frame-flower{box-shadow:0 0 0 3px var(--terra-mid),0 0 0 6px var(--terra-light)}
+
+/* SHOP */
+.shop-cat-title{font-size:13px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.shop-cat-title:first-child{margin-top:0}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.shop-item{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;position:relative;border:1.5px solid var(--border);transition:all .2s}
+.shop-item.owned{border-color:var(--green)}
+.shop-item.equipped{border-color:var(--terra);background:var(--terra-light)}
+.shop-icon{font-size:28px;line-height:1}
+.shop-name{font-size:13px;font-weight:700;color:var(--dark-2);line-height:1.2}
+.shop-desc{font-size:11px;color:var(--gray);line-height:1.3}
+.shop-price{font-size:12px;font-weight:700;color:var(--terra);display:flex;align-items:center;gap:4px}
+.shop-price.cant-afford{color:var(--gray)}
+.shop-btn{width:100%;padding:8px;border-radius:var(--radius-sm);border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.shop-btn.buy{background:var(--terra);color:white}
+.shop-btn.buy:active{background:var(--terra-dark)}
+.shop-btn.equip{background:var(--green);color:white}
+.shop-btn.equipped{background:var(--terra-light);color:var(--terra)}
+.shop-btn.locked{background:var(--gray-light);color:var(--gray);cursor:not-allowed}
+.shop-owned-badge{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:8px}
+
+/* ABOUT MEDIA */
+.about-hero-media{border-radius:var(--radius);overflow:hidden;margin-bottom:16px;position:relative;min-height:200px;background:linear-gradient(135deg,var(--terra),var(--terra-dark))}
+.about-hero-img{width:100%;height:220px;object-fit:cover;display:block}
+.about-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.about-hero-title{color:white;font-size:22px;font-weight:800;letter-spacing:-.3px}
+.about-hero-sub{color:rgba(255,255,255,.8);font-size:13px;margin-top:2px}
+.about-media-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:8px;color:rgba(255,255,255,.7)}
+.about-media-placeholder svg{opacity:.6}
+
+.media-gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.media-gallery-item{border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:1;position:relative;background:var(--gray-light)}
+.media-gallery-item img,.media-gallery-item video{width:100%;height:100%;object-fit:cover;display:block}
+.media-gallery-item .del-media{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:14px}
+
+.about-upload-btn{width:100%;padding:13px;background:var(--white);border:2px dashed var(--terra-mid);border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--terra);cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.about-upload-btn input{display:none}
+.about-upload-btn:active{background:var(--terra-light)}
+
+.about-section-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.about-section-label{font-size:11px;font-weight:700;color:var(--terra);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.about-value-item{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.about-value-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.about-value-icon{font-size:22px;flex-shrink:0;width:36px;height:36px;border-radius:10px;background:var(--terra-light);display:flex;align-items:center;justify-content:center}
+.about-value-text{flex:1}
+.about-value-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.about-value-desc{font-size:13px;color:var(--gray);line-height:1.5}
+
+.about-card-system{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.about-card-item{border-radius:var(--radius);padding:12px 10px;text-align:center}
+.about-card-emoji{font-size:24px;margin-bottom:6px}
+.about-card-name{font-size:11px;font-weight:700}
+.about-card-desc{font-size:10px;margin-top:3px;opacity:.8;line-height:1.3}
+
+.about-rule-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.about-rule-item:last-child{border-bottom:none}
+.about-rule-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0}
+/* QUIZ */
+.quiz-topic-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .15s}
+.quiz-topic-card:active{transform:scale(.98)}
+.quiz-topic-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.quiz-topic-name{font-size:15px;font-weight:600;flex:1}
+.quiz-topic-count{font-size:12px;color:var(--gray)}
+.quiz-setup{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.quiz-setup-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.quiz-setup-sub{font-size:13px;color:var(--gray);margin-bottom:20px}
+.quiz-setup-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.quiz-setup-row:last-child{border-bottom:none}
+.quiz-setup-label{font-size:14px;font-weight:500}
+.quiz-setup-sub2{font-size:12px;color:var(--gray);margin-top:2px}
+.quiz-num{display:flex;align-items:center;gap:8px}
+.quiz-num-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dark-2);transition:all .15s}
+.quiz-num-btn:active{background:var(--terra-light);border-color:var(--terra)}
+.quiz-num-val{font-size:16px;font-weight:700;min-width:28px;text-align:center}
+.quiz-time-input{width:60px;padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-weight:700;text-align:center;outline:none}
+.quiz-time-input:focus{border-color:var(--terra)}
+
+/* QUIZ ACTIVE */
+.quiz-header{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.quiz-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.quiz-topic-pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;color:white}
+.quiz-timer{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.quiz-timer.urgent{color:var(--red)}
+.quiz-timer svg{flex-shrink:0}
+.quiz-prog-row{display:flex;align-items:center;gap:10px}
+.quiz-prog-txt{font-size:12px;color:var(--gray);white-space:nowrap}
+.quiz-q-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.quiz-q-fill{height:100%;background:var(--terra);border-radius:2px;transition:width .3s}
+
+.quiz-question{background:var(--white);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.quiz-q-type{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.quiz-q-text{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:16px}
+.quiz-option{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .2s}
+.quiz-option:active{transform:scale(.98)}
+.quiz-option.selected{border-color:var(--terra);background:var(--terra-light)}
+.quiz-option.correct{border-color:var(--green);background:var(--green-light)}
+.quiz-option.wrong{border-color:var(--red);background:var(--red-light)}
+.quiz-option-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.quiz-option.selected .quiz-option-circle{border-color:var(--terra);background:var(--terra)}
+.quiz-option.correct .quiz-option-circle{border-color:var(--green);background:var(--green)}
+.quiz-option.wrong .quiz-option-circle{border-color:var(--red);background:var(--red)}
+.quiz-option-text{font-size:14px;flex:1}
+.quiz-text-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;outline:none;resize:none}
+.quiz-text-input:focus{border-color:var(--terra)}
+.quiz-match{display:flex;flex-direction:column;gap:8px}
+.quiz-match-row{display:flex;gap:8px;align-items:center}
+.quiz-match-left{flex:1;padding:10px 12px;background:var(--gray-light);border-radius:var(--radius-sm);font-size:13px;font-weight:600}
+.quiz-match-select{flex:1;padding:9px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--white);outline:none}
+.quiz-match-select:focus{border-color:var(--terra)}
+.quiz-explanation{background:var(--green-light);border-radius:var(--radius-sm);padding:12px 14px;margin-top:12px;font-size:13px;color:var(--green);line-height:1.5;border-left:3px solid var(--green)}
+.quiz-btn-next{width:100%;padding:14px;background:var(--terra);color:white;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px}
+.quiz-btn-next:active{background:var(--terra-dark)}
+
+/* QUIZ RESULT */
+.quiz-result{text-align:center;padding:24px 16px}
+.quiz-result-circle{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;font-weight:800}
+.quiz-result-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.quiz-result-sub{font-size:14px;color:var(--gray);margin-bottom:24px}
+.quiz-result-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.quiz-stat-card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);text-align:center}
+.quiz-stat-n{font-size:22px;font-weight:800}
+.quiz-stat-l{font-size:12px;color:var(--gray);margin-top:2px}
+.quiz-mistakes{background:var(--white);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow);text-align:left;margin-bottom:16px}
+.quiz-mistake-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.quiz-mistake-item:last-child{border-bottom:none}
+.quiz-mistake-q{font-size:13px;font-weight:600;margin-bottom:4px}
+.quiz-mistake-ans{font-size:12px;color:var(--red)}
+.quiz-mistake-correct{font-size:12px;color:var(--green)}
+
+/* QUIZ ADMIN */
+.quiz-admin-tabs{display:flex;gap:8px;margin-bottom:16px}
+.quiz-admin-tab{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;font-weight:600;cursor:pointer;background:var(--white);color:var(--gray);transition:all .2s}
+.quiz-admin-tab.active{background:var(--terra);color:white;border-color:var(--terra)}
+.q-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;box-shadow:var(--shadow)}
+.q-card-top{display:flex;align-items:flex-start;gap:10px}
+.q-type-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--terra-light);color:var(--terra);white-space:nowrap;margin-top:2px}
+.q-text{font-size:14px;flex:1;line-height:1.4}
+.q-del{border:none;background:none;cursor:pointer;color:var(--gray);padding:0;display:flex}
+.history-row{background:var(--white);border-radius:var(--radius);padding:12px 16px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.history-ini{width:36px;height:36px;border-radius:50%;background:var(--terra-light);color:var(--terra);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.history-name{font-size:14px;font-weight:600}
+.history-sub{font-size:12px;color:var(--gray);margin-top:2px}
+.history-score{font-size:18px;font-weight:800;margin-left:auto}
+.mentor-bar{background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.mentor-info{flex:1;font-size:13px}
+.mentor-name{font-weight:600}
+
+/* OVERVIEW */
+.ov-card{background:var(--white);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.ov-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ov-name{font-size:15px;font-weight:700}
+.ov-pct{font-size:22px;font-weight:800}
+.mini-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.mini-fill{height:100%;border-radius:3px;transition:width .5s}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-box{background:var(--gray-light);border-radius:var(--radius-sm);padding:10px;text-align:center}
+.stat-n{font-size:18px;font-weight:800}
+.stat-l{font-size:10px;color:var(--gray);font-weight:500}
+
+/* SETTINGS */
+.set-sec{background:var(--white);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow)}
+.set-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);gap:12px}
+.set-row:last-child{border-bottom:none}
+.set-label{font-size:15px;flex:1}
+.set-sub{font-size:12px;color:var(--gray);margin-top:2px}
+.set-input{border:none;font-size:15px;font-weight:600;outline:none;background:transparent;color:var(--dark);flex:1}
+.tog{width:44px;height:24px;border-radius:12px;background:var(--border);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--terra)}
+.tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on::after{left:22px}
+.pos-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.pos-header{display:flex;align-items:center;margin-bottom:12px}
+.pos-name{font-size:15px;font-weight:700;flex:1}
+.pos-del{border:none;background:none;cursor:pointer;color:var(--gray);font-size:20px;padding:0}
+.pos-toggles{display:flex;gap:16px}
+.tog-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray)}
+
+/* WAITING */
+.waiting{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:24px}
+.waiting-icon{color:var(--terra);margin-bottom:16px;animation:float 3s ease-in-out infinite}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--gray)}
+.empty svg{opacity:.3;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark);color:white;padding:12px 20px;border-radius:20px;font-size:14px;z-index:300;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.spinner{width:28px;height:28px;border:3px solid var(--terra-mid);border-top-color:var(--terra);border-radius:50%;animation:spin .7s linear infinite;margin:48px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(min-width:768px){
+  body{background:#F0F2F5}
+  #app{max-width:480px;margin:0 auto;background:#FAF7F4;min-height:100vh}
+  .topbar,.bottom-nav{max-width:480px}
+  .bottom-nav{left:50%;transform:translateX(-50%)}
+}
+</style>
+</head>
+<body>
+
+<div id="auth-screen">
+  <svg class="auth-logo" width="60" height="60" viewBox="0 0 60 60" fill="none">
+    <circle cx="30" cy="30" r="30" fill="#FFF0F4"/>
+    <path d="M30 12c0 0-12 9-12 18a12 12 0 0024 0c0-9-12-18-12-18z" fill="#E8547A"/>
+    <path d="M18 28c-4 0-8 4-8 8s4 6 8 6" stroke="#E8547A" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M42 28c4 0 8 4 8 8s-4 6-8 6" stroke="#E8547A" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div class="auth-brand">Сицилійський Дворик</div>
+  <div class="auth-sub" style="font-style:italic">Il portale del personale</div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchTab('login',this)">Вхід</div>
+      <div class="auth-tab" onclick="switchTab('register',this)">Реєстрація</div>
+    </div>
+    <div id="tab-login">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Пароль</label><input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')signIn()"></div>
+      <button class="btn-primary" onclick="signIn()" id="login-btn">Увійти</button>
+    </div>
+    <div id="tab-register" style="display:none">
+      <div class="field"><label>Ім'я та прізвище</label><input type="text" id="reg-name" placeholder="Марія Петренко"></div>
+      <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="your@email.com"></div>
+      <div class="field"><label>Пароль</label><input type="password" id="reg-pass" placeholder="Мінімум 6 символів" onkeydown="if(event.key==='Enter')signUp()"></div>
+      <button class="btn-primary" onclick="signUp()" id="reg-btn">Зареєструватись</button>
+    </div>
+    <div id="auth-msg" class="auth-msg" style="display:none"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <div class="brand-name">KVITKOVA Grup</div>
+        <div class="brand-sub">Твій провідник</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-av" id="user-ini">?</div>
+        <button onclick="signOut()" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px;display:flex">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="store-pill"></div>
+  </div>
+
+  <div class="page active" id="page-home">
+    <div id="home-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="page" id="page-shop">
+    <div id="shop-body"><div class="spinner"></div></div>
+  </div>
+  <div class="page" id="page-checklist">
+    <div id="date-area"></div>
+    <div class="type-tabs">
+      <div class="type-tab active" onclick="setType('open',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        Відкриття
+      </div>
+      <div class="type-tab" onclick="setType('close',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        Закриття
+      </div>
+      <div class="type-tab" onclick="setType('daily',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Щоденні
+      </div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-top"><span class="prog-lbl" id="prog-txt">0 з 0</span><span class="prog-pct" id="prog-pct">0%</span></div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div id="task-list"><div class="spinner"></div></div>
+    <button class="add-btn" onclick="openAddTask()" id="add-task-btn" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Додати задачу
+    </button>
+  </div>
+
+  <div class="page" id="page-about">
+    <div id="about-body"><div class="spinner"></div></div>
+  </div>
+
+
+  <div class="page" id="page-onboarding">
+    <div id="ob-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="page" id="page-team">
+    <div id="team-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="page" id="page-overview">
+    <div id="ov-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="page" id="page-quiz">
+    <div id="quiz-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="page" id="page-settings">
+    <div id="set-body"><div class="spinner"></div></div>
+  </div>
+
+  <div class="bottom-nav" id="bottom-nav">
+    <button class="nav-btn active" id="nav-home" onclick="setPage('home',this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Головна</span>
+    </button>
+    <button class="nav-btn" id="nav-onboarding" onclick="setPage('onboarding',this)" style="display:none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      <span class="nav-label">Навчання</span>
+    </button>
+    <button class="nav-fab" id="nav-checklist" onclick="setPage('checklist',document.getElementById('nav-checklist'))">
+      <div class="nav-fab-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <span class="nav-fab-label">Чек-ліст</span>
+    </button>
+    <button class="nav-btn" id="nav-quiz" onclick="setPage('quiz',this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span class="nav-label">Тест</span>
+    </button>
+    <button class="nav-btn" id="nav-more" onclick="openMoreDrawer()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+      <span class="nav-label">Ще</span>
+    </button>
+  </div>
+  <div class="more-overlay" id="more-overlay" onclick="closeMoreDrawer()"></div>
+  <div class="more-drawer" id="more-drawer" style="display:none">
+    <div class="more-handle"></div>
+    <div class="more-title">Розділи</div>
+    <div class="more-grid" id="more-grid"></div>
+  </div>
+  <span id="nav-about" style="display:none"></span>
+  <span id="nav-team" style="display:none"></span>
+  <span id="nav-overview" style="display:none"></span>
+  <span id="nav-shop" style="display:none"></span>
+  <span id="nav-settings" style="display:none"></span>
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal-ov" id="modal-task" onclick="closeMod('modal-task',event)">
+  <div class="modal-sh">
+    <div class="m-handle"></div>
+    <div class="m-title">Нова задача</div>
+    <span class="m-label">Назва</span>
+    <input class="m-input" id="t-title" placeholder="Назва задачі...">
+    <span class="m-label">Для посади (порожньо = для всіх)</span>
+    <select class="m-input" id="t-position" style="margin-bottom:12px">
+      <option value="">Всі посади</option>
+    </select>
+    <span class="m-label">Дні тижня (порожньо = щодня)</span>
+    <div class="day-cbs" style="margin-bottom:12px">
+      <div class="day-cb" data-d="1" onclick="this.classList.toggle('sel')">Пн</div>
+      <div class="day-cb" data-d="2" onclick="this.classList.toggle('sel')">Вт</div>
+      <div class="day-cb" data-d="3" onclick="this.classList.toggle('sel')">Ср</div>
+      <div class="day-cb" data-d="4" onclick="this.classList.toggle('sel')">Чт</div>
+      <div class="day-cb" data-d="5" onclick="this.classList.toggle('sel')">Пт</div>
+      <div class="day-cb" data-d="6" onclick="this.classList.toggle('sel')">Сб</div>
+      <div class="day-cb" data-d="0" onclick="this.classList.toggle('sel')">Нд</div>
+    </div>
+    <span class="m-label">Або конкретна дата</span>
+    <input class="m-input" id="t-date" type="date">
+    <div class="m-actions">
+      <button class="btn-cancel" onclick="closeMod('modal-task')">Скасувати</button>
+      <button class="btn-save" onclick="addTask()">Додати</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLETE MODAL -->
+<div class="modal-ov" id="modal-comp" onclick="closeMod('modal-comp',event)">
+  <div class="modal-sh">
+    <div class="m-handle"></div>
+    <div class="m-title" id="comp-title">Виконати задачу</div>
+    <span class="m-label">Фото звіт</span>
+    <div class="photo-zone" onclick="document.getElementById('photo-inp').click()">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--terra)" stroke-width="1.5" style="margin-bottom:6px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <div style="font-size:13px;color:var(--gray)">Натисни щоб зробити фото</div>
+      <input type="file" id="photo-inp" accept="image/*" capture="environment" onchange="prevPhoto(this)">
+      <img id="photo-prev">
+    </div>
+    <span class="m-label">Примітка</span>
+    <input class="m-input" id="comp-note" placeholder="Необов'язково...">
+    <div class="m-actions">
+      <button class="btn-cancel" onclick="closeMod('modal-comp')">Скасувати</button>
+      <button class="btn-save" onclick="confirmComp()">Виконано ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL='https://acouflypsopzzsocozhu.supabase.co';
+const SB_KEY='sb_publishable_bJa7B0FOO-oEvbiucn2pEQ_nvAEHi-S';
+const NETWORK='sicilian';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+
+let U=null,P=null,POS=null,type='open',tasks=[],selDate=new Date(),pendId=null;
+let obDays=[],obSelDay=null,traineeData=null;
+
+const DAYS=['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+const DAYS_F=['неділя','понеділок','вівторок','середа','четвер','п\'ятниця','субота'];
+const MON=['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+
+const isAdmin=()=>P?.role==='admin';
+const isMgr=()=>P?.role==='manager';
+const isPow=()=>isAdmin()||isMgr();
+const canOb=()=>isPow()||(POS?.show_onboarding===true);
+const canTeam=()=>isPow();
+const canOv=()=>isPow();
+const canSet=()=>isAdmin();
+const canEdit=()=>{
+  if(isPow()) return true;
+  // якщо посада є редактором задач для іншої посади
+  if(POS?.task_editor_role==='specific_position') return true;
+  return false;
+};
+
+// AUTH
+function switchTab(t,el){
+  document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-login').style.display=t==='login'?'block':'none';
+  document.getElementById('tab-register').style.display=t==='register'?'block':'none';
+  document.getElementById('auth-msg').style.display='none';
+}
+function msg(m,t){const e=document.getElementById('auth-msg');e.textContent=m;e.className='auth-msg '+t;e.style.display='block';}
+
+async function signIn(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  if(!email||!pass){msg('Введіть email та пароль','error');return;}
+  const btn=document.getElementById('login-btn');btn.disabled=true;btn.textContent='Вхід...';
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){msg('Невірний email або пароль','error');btn.disabled=false;btn.textContent='Увійти';return;}
+  await loadUser(data.user);
+}
+
+async function signUp(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!name||!email||!pass){msg('Заповніть всі поля','error');return;}
+  if(pass.length<6){msg('Пароль мінімум 6 символів','error');return;}
+  const btn=document.getElementById('reg-btn');btn.disabled=true;btn.textContent='Реєстрація...';
+  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+  if(error){msg(error.message,'error');btn.disabled=false;btn.textContent='Зареєструватись';return;}
+  if(data.user) await sb.from('profiles').upsert({id:data.user.id,full_name:name,role:'pending',started_at:new Date().toISOString().split('T')[0]});
+  msg('Акаунт створено! Очікуй призначення від адміна.','success');
+  btn.disabled=false;btn.textContent='Зареєструватись';
+}
+
+async function signOut(){await sb.auth.signOut();location.reload();}
+
+async function loadUser(user){
+  U=user;
+  const {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).single();
+  P=profile;
+  if(!P||P.role==='pending'){showWaiting();return;}
+  if(P.position_id){const {data:pos}=await sb.from('positions').select('*').eq('id',P.position_id).single();POS=pos;}
+  initApp();
+}
+
+function showWaiting(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('page-checklist').innerHTML=`<div class="waiting"><div style="font-size:64px;margin-bottom:16px">🍕</div><div class="dummy width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg></div><div style="font-size:20px;font-weight:700;margin-bottom:8px">Очікуй призначення</div><div style="font-size:14px;color:var(--gray);line-height:1.6">Твій акаунт створено!<br>Адмін скоро призначить тобі заклад і роль.</div><button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="signOut()">Вийти</button></div>`;
+  document.getElementById('bottom-nav').style.display='none';
+  document.querySelector('.topbar').style.display='none';
+}
+
+function initApp(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  const ini=(P?.full_name||U.email).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('user-ini').textContent=ini;
+  document.getElementById('store-pill').innerHTML=`<span class="store-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> ${P?.store_name||'Заклад'}</span>`;
+  document.getElementById('nav-home').style.display='flex';
+  document.getElementById('nav-shop').style.display='flex';
+  document.getElementById('nav-quiz').style.display='flex';
+  if(canOb()) document.getElementById('nav-onboarding').style.display='flex';
+  if(canTeam()) document.getElementById('nav-team').style.display='flex';
+  if(canOv()) document.getElementById('nav-overview').style.display='flex';
+  if(canSet()) document.getElementById('nav-settings').style.display='flex';
+  if(canEdit()) document.getElementById('add-task-btn').style.display='flex';
+  buildDateArea();
+  loadTasks();
+  loadHome();
+  applyCustomization();
+  if(canOb()) loadOnboarding();
+  if(canTeam()) loadTeam();
+}
+
+// DATE
+function buildDateArea(){
+  const today=new Date();
+  if(isPow()){
+    document.getElementById('date-area').innerHTML=`<div class="date-bar"><div class="date-hdr"><div class="date-big" id="dt-big">${today.getDate()} ${MON[today.getMonth()]}</div><div class="date-day" id="dt-day">${DAYS_F[today.getDay()]}</div></div><div class="week-row" id="week-row"></div></div>`;
+    const row=document.getElementById('week-row');
+    for(let i=-3;i<=3;i++){
+      const d=new Date(today);d.setDate(today.getDate()+i);
+      const pill=document.createElement('div');
+      pill.className='d-pill'+(i===0?' active':'');
+      if(d.toDateString()===today.toDateString()) pill.classList.add('today');
+      pill.innerHTML=`<div class="d-pill-name">${DAYS[d.getDay()]}</div><div class="d-pill-num">${d.getDate()}</div>`;
+      pill.onclick=()=>{
+        document.querySelectorAll('.d-pill').forEach(p=>p.classList.remove('active'));
+        pill.classList.add('active');selDate=d;
+        document.getElementById('dt-big').textContent=`${d.getDate()} ${MON[d.getMonth()]}`;
+        document.getElementById('dt-day').textContent=DAYS_F[d.getDay()];
+        loadTasks();
+      };
+      row.appendChild(pill);
+    }
+    selDate=today;
+  } else {
+    selDate=today;
+    document.getElementById('date-area').innerHTML=`<div class="today-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--terra)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div><div class="today-box-date">${today.getDate()} ${MON[today.getMonth()]}</div><div class="today-box-day">${DAYS_F[today.getDay()]}</div></div></div>`;
+  }
+}
+
+// TASKS
+async function loadTasks(){
+  const storeId=P?.store_id;
+  if(!storeId){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div style="font-size:15px">Заклад не призначено</div></div>';return;}
+  const ref=isPow()?selDate:new Date();
+  const dow=ref.getDay();
+  const ds=ref.toISOString().split('T')[0];
+  const {data:all}=await sb.from('tasks').select('*').eq('store_id',storeId).eq('type',type).eq('is_active',true).order('sort_order');
+  tasks=(all||[]).filter(t=>{
+    if(t.scheduled_date) return t.scheduled_date===ds;
+    if(t.day_of_week&&t.day_of_week.length>0) return t.day_of_week.includes(dow);
+    return true;
+  });
+  if(tasks.length>0){
+    const {data:comps}=await sb.from('completions').select('*,profiles(full_name)').in('task_id',tasks.map(t=>t.id)).gte('completed_at',ds).lt('completed_at',ds+'T23:59:59');
+    tasks=tasks.map(t=>{const c=comps?.find(c=>c.task_id===t.id);return{...t,done:!!c,comp:c||null};});
+  }
+  renderTasks();
+}
+
+function renderTasks(){
+  const done=tasks.filter(t=>t.done).length,total=tasks.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('prog-txt').textContent=`${done} з ${total} виконано`;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  if(!tasks.length){document.getElementById('task-list').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><div style="font-size:15px">Немає задач на цей день</div></div>';return;}
+  document.getElementById('task-list').innerHTML=tasks.map(t=>{
+    const who=t.comp?.profiles?.full_name;
+    const time=t.comp?.completed_at?new Date(t.comp.completed_at).toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}):'';
+    const photo=t.comp?.photo_url;
+    return `<div class="task-card">
+      <div class="task-row" onclick="tapTask(${t.id},${t.done})">
+        <div class="chk${t.done?' done':''}">
+          ${t.done?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+        </div>
+        <div class="task-info">
+          <div class="task-ttl${t.done?' done':''}">${t.title}</div>
+          ${who?`<div class="task-meta"><span class="task-who">${who}</span><span>${time}</span>${t.comp?.note?`<span>· ${t.comp.note}</span>`:''}</div>`:''}
+        </div>
+        ${canEdit()?`<button class="icon-btn" onclick="event.stopPropagation();delTask(${t.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}
+      </div>
+      ${photo?`<img src="${photo}" style="width:100%;max-height:160px;object-fit:cover;display:block" loading="lazy">`:''}
+    </div>`;
+  }).join('');
+}
+
+function tapTask(id,isDone){
+  if(isDone){unComp(id);return;}
+  pendId=id;
+  const t=tasks.find(t=>t.id===id);
+  document.getElementById('comp-title').textContent=t?.title||'Виконати';
+  document.getElementById('comp-note').value='';
+  document.getElementById('photo-prev').style.display='none';
+  document.getElementById('photo-inp').value='';
+  document.getElementById('modal-comp').classList.add('open');
+}
+
+async function unComp(id){
+  const t=tasks.find(t=>t.id===id);
+  if(t?.comp?.id) await sb.from('completions').delete().eq('id',t.comp.id);
+  loadTasks();
+}
+
+function prevPhoto(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{const img=document.getElementById('photo-prev');img.src=e.target.result;img.style.display='block';};
+  r.readAsDataURL(f);
+}
+
+async function confirmComp(){
+  if(!pendId)return;
+  const note=document.getElementById('comp-note').value.trim();
+  const file=document.getElementById('photo-inp').files[0];
+  let photoUrl=null;
+  if(file){
+    const fn=`${U.id}/${pendId}_${Date.now()}.jpg`;
+    const {data:up}=await sb.storage.from('task-photos').upload(fn,file,{upsert:true});
+    if(up){const {data:url}=sb.storage.from('task-photos').getPublicUrl(fn);photoUrl=url.publicUrl;}
+  }
+  await sb.from('completions').insert({task_id:pendId,user_id:U.id,completed_at:new Date().toISOString(),photo_url:photoUrl,note:note||null});
+  closeMod('modal-comp');pendId=null;
+  loadTasks();
+}
+
+async function addTask(){
+  const title=document.getElementById('t-title').value.trim();if(!title)return;
+  const days=[...document.querySelectorAll('.day-cb.sel')].map(el=>parseInt(el.dataset.d));
+  const date=document.getElementById('t-date').value;
+  const positionVal=document.getElementById('t-position')?.value;
+  await sb.from('tasks').insert({title,store_id:P.store_id,type,is_active:true,sort_order:tasks.length,day_of_week:days.length>0?days:null,scheduled_date:date||null,created_by:U.id,position_id:positionVal?parseInt(positionVal):null});
+  closeMod('modal-task');
+  document.getElementById('t-title').value='';
+  document.querySelectorAll('.day-cb').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('t-date').value='';
+  loadTasks();showToast('Задачу додано');
+}
+
+async function delTask(id){
+  await sb.from('tasks').update({is_active:false}).eq('id',id);
+  loadTasks();showToast('Видалено');
+}
+
+function setType(t,el){
+  type=t;
+  document.querySelectorAll('.type-tab').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');loadTasks();
+}
+async function openAddTask(){
+  document.getElementById('modal-task').classList.add('open');
+  setTimeout(()=>document.getElementById('t-title').focus(),300);
+  // Завантажуємо посади в select
+  const sel=document.getElementById('t-position');
+  if(sel&&sel.options.length<=1){
+    const {data:positions}=await sb.from('positions').select('id,name').eq('network',NETWORK);
+    (positions||[]).forEach(p=>{
+      const opt=document.createElement('option');
+      opt.value=p.id;opt.textContent=p.name;
+      sel.appendChild(opt);
+    });
+  }
+}
+
+// ONBOARDING
+async function loadOnboarding(){
+  // завантажуємо дні по посаді (або загальні якщо positionId не заданий)
+  const positionId = P?.position_id || null;
+  let daysQuery = sb.from('onboarding_days').select('*').eq('network',NETWORK);
+  if (positionId) {
+    // беремо дні цієї посади АБО загальні (position_id is null)
+    daysQuery = sb.from('onboarding_days').select('*').eq('network',NETWORK).or(`position_id.eq.${positionId},position_id.is.null`);
+  }
+  const {data:days}=await daysQuery.order('sort_order');
+  obDays=days||[];
+
+  // дані стажера
+  const {data:trainee}=await sb.from('onboarding_trainee').select('*,profiles!mentor_id(full_name)').eq('user_id',U.id).single();
+  traineeData=trainee;
+
+  // якщо немає запису стажера і це звичайний працівник — створюємо
+  if(!traineeData&&!isPow()){
+    const {data:newT}=await sb.from('onboarding_trainee').insert({user_id:U.id,start_date:P.started_at||new Date().toISOString().split('T')[0],current_day:0}).select().single();
+    traineeData=newT;
+  }
+
+  // визначаємо поточний день
+  let currentDay=0;
+  if(traineeData){
+    currentDay=traineeData.current_day;
+    // авто: якщо куратор не пересував — рахуємо від дати початку
+    if(traineeData.start_date){
+      const start=new Date(traineeData.start_date);
+      const today=new Date();
+      const diff=Math.floor((today-start)/(1000*60*60*24));
+      // беремо максимум між авто і поточним
+      if(diff>currentDay) currentDay=Math.min(diff,5);
+    }
+  }
+
+  if(!obSelDay) obSelDay=obDays.find(d=>d.day_number===currentDay)||obDays[0];
+
+  renderOnboarding(currentDay);
+}
+
+async function renderOnboarding(currentDayNum){
+  if(!obDays.length){
+    document.getElementById('ob-body').innerHTML='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg><div style="font-size:15px">Онбординг не налаштований</div></div>';
+    return;
+  }
+
+  // всі виконані пункти стажера
+  let doneIds=new Set();
+  if(traineeData){
+    const {data:doneItems}=await sb.from('onboarding_item_done').select('item_id').eq('trainee_id',traineeData.id);
+    doneIds=new Set((doneItems||[]).map(x=>x.item_id));
+  }
+
+  // рахуємо загальний прогрес
+  const {data:allItems}=await sb.from('onboarding_items').select('id,day_id');
+  const totalItems=(allItems||[]).length;
+  const doneItemsCount=(allItems||[]).filter(i=>doneIds.has(i.id)).length;
+  const pct=totalItems?Math.round(doneItemsCount/totalItems*100):0;
+
+  // підраховуємо виконані пункти по дню для підзаголовку
+  const itemsByDay={};
+  (allItems||[]).forEach(i=>{
+    if(!itemsByDay[i.day_id]) itemsByDay[i.day_id]={total:0,done:0};
+    itemsByDay[i.day_id].total++;
+    if(doneIds.has(i.id)) itemsByDay[i.day_id].done++;
+  });
+
+  let html='';
+
+  // КУРАТОР БАР
+  if(traineeData?.profiles?.full_name){
+    html+=`<div class="mentor-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <div class="mentor-info">Куратор: <span class="mentor-name">${traineeData.profiles.full_name}</span></div>
+      ${isPow()?`<button class="icon-btn" onclick="moveDayPrompt()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>`:''}
+    </div>`;
+  } else if(isPow()&&traineeData){
+    html+=`<div class="mentor-bar" style="background:var(--amber-light);border-color:rgba(245,158,11,.2)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="mentor-info" style="flex:1">Куратор не призначений</div>
+      <button class="icon-btn" onclick="moveDayPrompt()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>`;
+  }
+
+  // ПРОГРЕС БАР
+  html+=`<div class="ob-prog">
+    <div class="ob-prog-top">
+      <span class="ob-prog-lbl">${doneItemsCount} з ${totalItems} пунктів</span>
+      <span class="ob-prog-pct">${pct}%</span>
+    </div>
+    <div class="ob-bar"><div class="ob-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+
+  // БЛОКИ ДНІВ
+  html+='<div class="ob-days">';
+  for(const day of obDays){
+    const isCurrent=day.day_number===currentDayNum;
+    const dayStats=itemsByDay[day.id]||{total:0,done:0};
+    const isDayDone=dayStats.total>0&&dayStats.done===dayStats.total;
+    const isExpanded=isCurrent||(obSelDay?.id===day.id);
+
+    let numClass=isDayDone?'done':isCurrent?'current':'';
+    let numContent=isDayDone
+      ?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'
+      :(day.day_number===0?'•':day.day_number);
+
+    html+=`<div class="ob-day-block${isCurrent?' is-current':isDayDone?' is-done':''}">
+      <div class="ob-day-hdr" onclick="toggleObDay(${day.id},${currentDayNum},this)">
+        <div class="ob-day-num ${numClass}">${numContent}</div>
+        <div class="ob-day-meta">
+          <div class="ob-day-title">${day.title}</div>
+          <div class="ob-day-sub">${day.time_range||''}${dayStats.total>0?' · '+dayStats.done+'/'+dayStats.total+' виконано':''}</div>
+        </div>
+        ${isCurrent?'<span class="ob-today-badge">Сьогодні</span>':''}
+        <svg class="ob-arrow${isExpanded?' open':''}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>`;
+
+    if(isExpanded){
+      // завантажуємо пункти
+      const {data:items}=await sb.from('onboarding_items').select('*').eq('day_id',day.id).order('sort_order');
+      const tasks2=(items||[]).filter(i=>i.item_type==='task');
+      const hw=(items||[]).filter(i=>i.item_type==='homework');
+
+      html+='<div class="ob-content">';
+
+      if(day.description){
+        html+=`<div style="font-size:13px;color:var(--gray);line-height:1.5;padding:4px 0 8px;border-bottom:1px solid var(--border)">${day.description}</div>`;
+      }
+
+      if(tasks2.length>0){
+        html+='<div class="ob-section"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Задачі дня</div>';
+        tasks2.forEach(item=>{
+          const done=doneIds.has(item.id);
+          html+=`<div class="ob-item" onclick="togObItem(${item.id})">
+            <div class="ob-chk${done?' done':''}">
+              ${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>
+            <div class="ob-item-title${done?' done':''}">${item.title}</div>
+          </div>`;
+        });
+      }
+
+      if(hw.length>0){
+        html+='<div class="ob-section" style="color:var(--amber)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Домашнє завдання</div>';
+        hw.forEach(item=>{
+          const done=doneIds.has(item.id);
+          html+=`<div class="ob-item hw" onclick="togObItem(${item.id})">
+            <div class="ob-chk${done?' done':''}">
+              ${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+            </div>
+            <div class="ob-item-title${done?' done':''}">${item.title}</div>
+            <span class="ob-hw-badge">Д/З</span>
+          </div>`;
+        });
+      }
+
+      if(isPow()){
+        html+=`<button class="add-btn" onclick="addObItem(${day.id})" style="margin-top:4px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Додати пункт
+        </button>`;
+      }
+
+      html+='</div>';
+    }
+
+    html+='</div>';
+  }
+  html+='</div>';
+
+  document.getElementById('ob-body').innerHTML=html;
+}
+
+function toggleObDay(dayId,currentDay,hdr){
+  const block=hdr.closest('.ob-day-block');
+  const arrow=hdr.querySelector('.ob-arrow');
+  const content=block.querySelector('.ob-content');
+  if(content){
+    // закрити
+    block.removeChild(content);
+    arrow.classList.remove('open');
+    obSelDay=null;
+  } else {
+    // відкрити — але треба перерендерити щоб завантажити пункти
+    obSelDay=obDays.find(d=>d.id===dayId);
+    renderOnboarding(currentDay);
+  }
+}
+
+function selectObDay(dayId,currentDay){
+  obSelDay=obDays.find(d=>d.id===dayId);
+  renderOnboarding(currentDay);
+}
+
+async function togObItem(itemId){
+  if(!traineeData)return;
+  const {data:existing}=await sb.from('onboarding_item_done').select('id').eq('trainee_id',traineeData.id).eq('item_id',itemId).single().catch(()=>({data:null}));
+  if(existing) await sb.from('onboarding_item_done').delete().eq('id',existing.id);
+  else await sb.from('onboarding_item_done').insert({trainee_id:traineeData.id,item_id:itemId});
+  const currentDay=traineeData?.current_day||0;
+  renderOnboarding(currentDay);
+}
+
+async function moveDay(currentDay){
+  const next=Math.min(currentDay+1,5);
+  await sb.from('onboarding_trainee').update({current_day:next}).eq('id',traineeData.id);
+  traineeData={...traineeData,current_day:next};
+  obSelDay=obDays.find(d=>d.day_number===next)||obSelDay;
+  renderOnboarding(next);
+  showToast(`Переміщено до Дня ${next}`);
+}
+
+async function moveDayPrompt(){
+  const days=obDays.map(d=>`${d.day_number}: ${d.title}`).join('\n');
+  const input=prompt(`Вибери день (введи номер 0-5):\n${days}`);
+  if(input===null)return;
+  const n=parseInt(input);
+  if(isNaN(n)||n<0||n>5)return;
+  if(traineeData){
+    await sb.from('onboarding_trainee').update({current_day:n}).eq('id',traineeData.id);
+    traineeData={...traineeData,current_day:n};
+  }
+  obSelDay=obDays.find(d=>d.day_number===n)||obSelDay;
+  renderOnboarding(n);
+  showToast(`День встановлено: ${n}`);
+}
+
+async function addObItem(dayId){
+  const dId=dayId||(obSelDay?.id);
+  if(!dId)return;
+  const title=prompt('Назва пункту:');if(!title)return;
+  const type=confirm('Це домашнє завдання?')?'homework':'task';
+  await sb.from('onboarding_items').insert({day_id:dId,title,item_type:type,sort_order:99});
+  const currentDay=traineeData?.current_day||0;
+  renderOnboarding(currentDay);
+  showToast('Пункт додано');
+}
+
+// TEAM
+async function loadTeam(){
+  const {data:profs}=await sb.from('profiles').select('*,stores(name,display_name),positions(name)').order('full_name');
+  const pending=(profs||[]).filter(p=>p.role==='pending'||!p.store_id);
+  const active=(profs||[]).filter(p=>p.role!=='pending'&&p.store_id);
+  let html='';
+  if(isAdmin()&&pending.length>0){
+    const {data:stores}=await sb.from('stores').select('id,name,display_name').eq('network',NETWORK);
+    const {data:positions}=await sb.from('positions').select('id,name').eq('network',NETWORK);
+    html+=`<div class="section-title">Очікують призначення (${pending.length})</div>`;
+    pending.forEach(p=>{
+      html+=`<div class="pending-card">
+        <div class="pending-name">${p.full_name||'Новий'}</div>
+        <div class="assign-grid">
+          <select class="a-sel" id="s-${p.id}"><option value="">Заклад...</option>${(stores||[]).map(s=>`<option value="${s.id}">${s.display_name||s.name}</option>`).join('')}</select>
+          <select class="a-sel" id="r-${p.id}"><option value="staff">Працівник</option><option value="manager">Менеджер</option><option value="admin">Адмін</option></select>
+          <select class="a-sel" id="p-${p.id}" style="grid-column:span 2"><option value="">Посада...</option>${(positions||[]).map(pos=>`<option value="${pos.id}">${pos.name}</option>`).join('')}</select>
+        </div>
+        <button class="btn-assign" onclick="assignUser('${p.id}')">Призначити ✓</button>
+      </div>`;
+    });
+  }
+  if(active.length>0){
+    html+=`<div class="section-title">Команда</div>`;
+    active.forEach(p=>{
+      const ini=(p.full_name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const rl={admin:'Адмін',manager:'Менеджер',staff:'Працівник'}[p.role]||p.role;
+      const bc={admin:'b-admin',manager:'b-manager',staff:'b-staff'}[p.role]||'';
+      html+=`<div class="emp-card">
+        <div class="emp-av2">${ini}</div>
+        <div style="flex:1"><div class="emp-name">${p.full_name||'Без імені'}</div><div class="emp-sub">${p.positions?.name||'—'} · ${p.stores?.display_name||p.stores?.name||'—'}</div></div>
+        <span class="badge ${bc}">${rl}</span>
+      </div>`;
+    });
+  }
+  if(!html) html='<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><div style="font-size:15px">Немає працівників</div></div>';
+  document.getElementById('team-body').innerHTML=html;
+}
+
+async function assignUser(uid){
+  const storeId=document.getElementById('s-'+uid)?.value;
+  const role=document.getElementById('r-'+uid)?.value||'staff';
+  const posId=document.getElementById('p-'+uid)?.value;
+  if(!storeId){showToast('Оберіть заклад!');return;}
+  const {data:store}=await sb.from('stores').select('name,display_name').eq('id',storeId).single();
+  await sb.from('profiles').update({store_id:parseInt(storeId),store_name:store?.display_name||store?.name,role,position_id:posId?parseInt(posId):null,started_at:new Date().toISOString().split('T')[0]}).eq('id',uid);
+  // оновлюємо або створюємо запис стажера з прив'язкою до посади
+  if(posId){
+    const {data:existing}=await sb.from('onboarding_trainee').select('id').eq('user_id',uid).single().catch(()=>({data:null}));
+    if(existing){
+      await sb.from('onboarding_trainee').update({position_id:parseInt(posId)}).eq('user_id',uid);
+    } else {
+      await sb.from('onboarding_trainee').insert({user_id:uid,start_date:new Date().toISOString().split('T')[0],current_day:0,position_id:parseInt(posId)});
+    }
+  }
+  showToast('Призначено!');loadTeam();
+}
+
+// OVERVIEW
+async function loadOverview(){
+  const today=new Date().toISOString().split('T')[0];
+  const {data:stores}=await sb.from('stores').select('id,name,display_name').eq('network',NETWORK);
+  if(!stores)return;
+  let html=`<div class="section-title">Сьогодні — ${new Date().getDate()} ${MON[new Date().getMonth()]}</div>`;
+  for(const s of stores){
+    const {data:all}=await sb.from('tasks').select('id').eq('store_id',s.id).eq('is_active',true);
+    const total=all?.length||0;
+    const {data:done}=await sb.from('completions').select('task_id').in('task_id',(all||[]).map(t=>t.id)).gte('completed_at',today);
+    const dn=new Set((done||[]).map(c=>c.task_id)).size;
+    const pct=total?Math.round(dn/total*100):0;
+    const col=pct===100?'var(--green)':pct>50?'var(--amber)':'var(--terra)';
+    html+=`<div class="ov-card"><div class="ov-hdr"><div class="ov-name">${s.display_name||s.name}</div><div class="ov-pct" style="color:${col}">${pct}%</div></div><div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${col}"></div></div><div class="stats-grid"><div class="stat-box"><div class="stat-n" style="color:var(--green)">${dn}</div><div class="stat-l">виконано</div></div><div class="stat-box"><div class="stat-n" style="color:var(--amber)">${total-dn}</div><div class="stat-l">залишилось</div></div><div class="stat-box"><div class="stat-n">${total}</div><div class="stat-l">всього</div></div></div></div>`;
+  }
+  const lbHtml = await loadLeaderboard();
+  document.getElementById('ov-body').innerHTML=html+lbHtml;
+}
+
+// SETTINGS
+async function loadSettings(tab){
+  tab = tab || 'main';
+  const {data:stores}=await sb.from('stores').select('*').eq('network',NETWORK);
+  const {data:positions}=await sb.from('positions').select('*').eq('network',NETWORK);
+
+  // Вкладки
+  const tabs = [
+    {id:'main', label:'Заклади'},
+    {id:'positions', label:'Посади'},
+    {id:'checklist', label:'Чек-лісти'},
+    {id:'onboarding', label:'Онбординг'},
+    {id:'points', label:'🪙 Бали'},
+  ];
+
+  let html = `<div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:2px">
+    ${tabs.map(t=>`<div style="padding:7px 14px;border-radius:20px;border:1.5px solid ${tab===t.id?'var(--terra)':'var(--border)'};background:${tab===t.id?'var(--terra)':'var(--white)'};color:${tab===t.id?'white':'var(--gray)'};font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;flex-shrink:0" onclick="loadSettings('${t.id}')">${t.label}</div>`).join('')}
+  </div>`;
+
+  if(tab==='main'){
+    // Назви закладів
+    html+=`<div class="section-title">Назви закладів</div><div class="set-sec">`;
+    (stores||[]).forEach(s=>{
+      html+=`<div class="set-row">
+        <div style="flex:1">
+          <div style="font-size:10px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Заклад ${s.id}</div>
+          <input class="set-input" value="${s.display_name||s.name}" placeholder="Назва закладу" onchange="saveStore(${s.id},this.value)" onblur="saveStore(${s.id},this.value)">
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  else if(tab==='positions'){
+    html+=`<div class="section-title">Посади <button class="section-btn" onclick="addPos()">+ Додати</button></div>`;
+    (positions||[]).forEach(p=>{
+      html+=`<div class="pos-card">
+        <div class="pos-header">
+          <div class="pos-name">${p.name}</div>
+          <button class="pos-del" onclick="delPos(${p.id})">×</button>
+        </div>
+        <div class="pos-toggles">
+          <div class="tog-row">
+            <button class="tog${p.show_checklist!==false?' on':''}" onclick="togPos(${p.id},'show_checklist',this)"></button>
+            Чек-ліст
+          </div>
+          <div class="tog-row">
+            <button class="tog${p.show_onboarding?' on':''}" onclick="togPos(${p.id},'show_onboarding',this)"></button>
+            Онбординг
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:12px;font-weight:600;color:var(--gray);margin-bottom:6px">Хто прописує задачі</div>
+          <select class="a-sel" onchange="updateTaskEditor(${p.id},this.value)">
+            <option value="manager" ${p.task_editor_role==='manager'?'selected':''}>Менеджер / Адмін</option>
+            <option value="admin" ${p.task_editor_role==='admin'?'selected':''}>Тільки Адмін</option>
+            <option value="specific_position" ${p.task_editor_role==='specific_position'?'selected':''}>Конкретна посада</option>
+          </select>
+          ${p.task_editor_role==='specific_position'?`<select class="a-sel" onchange="updateTaskEditorPos(${p.id},this.value)" style="margin-top:6px">
+            <option value="">Обери посаду-редактора</option>
+            ${(positions||[]).map(ep=>`<option value="${ep.id}" ${p.task_editor_position_id===ep.id?'selected':''}>${ep.name}</option>`).join('')}
+          </select>`:''}
+        </div>
+      </div>`;
+    });
+  }
+
+  else if(tab==='checklist'){
+    // Чек-лісти по закладах і посадах
+    html+=`<div class="section-title">Чек-лісти по закладах</div>`;
+    for(const store of (stores||[])){
+      html+=`<div style="margin-bottom:16px">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px">📍 ${store.display_name||store.name}</div>`;
+
+      // Загальні задачі (без посади)
+      const {data:generalTasks}=await sb.from('tasks').select('*').eq('store_id',store.id).eq('is_active',true).is('position_id',null).order('type,sort_order');
+      const types={open:'Відкриття',close:'Закриття',daily:'Щоденні'};
+      for(const [typeKey,typeLabel] of Object.entries(types)){
+        const typeTasks=(generalTasks||[]).filter(t=>t.type===typeKey);
+        if(!typeTasks.length) continue;
+        html+=`<div style="margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">${typeLabel} (загальні)</div>
+          <div class="set-sec">`;
+        typeTasks.forEach(t=>{
+          html+=`<div class="set-row" style="gap:8px">
+            <div style="flex:1;font-size:14px">${t.title}</div>
+            <button onclick="delTask(${t.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`;
+        });
+        html+=`</div></div>`;
+      }
+
+      // По посадах
+      for(const pos of (positions||[])){
+        const {data:posTasks}=await sb.from('tasks').select('*').eq('store_id',store.id).eq('is_active',true).eq('position_id',pos.id).order('type,sort_order');
+        if(!(posTasks||[]).length) continue;
+        html+=`<div style="margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;color:var(--terra);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">${pos.name}</div>
+          <div class="set-sec">`;
+        posTasks.forEach(t=>{
+          const tl={open:'Відкр.',close:'Закр.',daily:'Щодн.'}[t.type]||t.type;
+          html+=`<div class="set-row" style="gap:8px">
+            <span style="font-size:10px;background:var(--terra-light);color:var(--terra);padding:2px 6px;border-radius:6px;font-weight:700">${tl}</span>
+            <div style="flex:1;font-size:14px">${t.title}</div>
+            <button onclick="delTask(${t.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`;
+        });
+        html+=`</div></div>`;
+      }
+
+      html+=`</div>`;
+    }
+  }
+
+  else if(tab==='onboarding'){
+    const {data:obDaysAll}=await sb.from('onboarding_days').select('*,positions(name)').eq('network',NETWORK).order('sort_order');
+
+    // Загальний шаблон
+    const generalDays=(obDaysAll||[]).filter(d=>!d.position_id);
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:13px;font-weight:700">📋 Загальний шаблон</div>
+      <button class="section-btn" onclick="addObDay(null)">+ День</button>
+    </div>
+    <div class="set-sec" style="margin-bottom:16px">`;
+    if(!generalDays.length){
+      html+=`<div style="padding:12px 16px;font-size:13px;color:var(--gray)">Немає загальних днів</div>`;
+    } else {
+      generalDays.forEach(d=>{
+        html+=`<div class="set-row" style="gap:8px">
+          <div style="flex:1"><div style="font-size:14px;font-weight:600">${d.title}</div><div style="font-size:11px;color:var(--gray)">${d.time_range||''}</div></div>
+          <button onclick="editObDay(${d.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button onclick="delObDay(${d.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>`;
+      });
+    }
+    html+=`</div>`;
+
+    // По посадах
+    html+=`<div style="font-size:13px;font-weight:700;margin-bottom:8px">👤 Шаблони по посадах</div>`;
+    (positions||[]).forEach(p=>{
+      const posDays=(obDaysAll||[]).filter(d=>d.position_id===p.id);
+      html+=`<div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--terra-light);border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--terra-mid)">
+          <div style="font-size:13px;font-weight:700;color:var(--terra)">${p.name}</div>
+          <button class="section-btn" onclick="addObDay(${p.id})">+ День</button>
+        </div>
+        <div style="border:1px solid var(--terra-mid);border-top:none;border-radius:0 0 var(--radius) var(--radius);overflow:hidden;background:var(--white)">`;
+      if(!posDays.length){
+        html+=`<div style="padding:12px 16px;font-size:13px;color:var(--gray)">Шаблон не налаштований</div>`;
+      } else {
+        posDays.forEach(d=>{
+          html+=`<div style="display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border)">
+            <div style="flex:1"><div style="font-size:14px;font-weight:600">${d.title}</div><div style="font-size:11px;color:var(--gray)">${d.time_range||''}</div></div>
+            <button onclick="editObDay(${d.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button onclick="delObDay(${d.id})" style="border:none;background:none;cursor:pointer;color:var(--gray);padding:4px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>`;
+        });
+      }
+      html+=`</div></div>`;
+    });
+  }
+
+  else if(tab==='points'){
+    // Нарахування балів вручну
+    const {data:profiles}=await sb.from('profiles').select('id,full_name,total_points,stores(name,display_name)').not('role','eq','pending').order('full_name');
+    html+=`<div class="set-sec" style="padding:16px;margin-bottom:12px">
+      <span class="m-label">Працівник</span>
+      <select class="m-input" id="mp-user" style="margin-bottom:12px">
+        <option value="">Обери працівника...</option>
+        ${(profiles||[]).map(p=>`<option value="${p.id}">${p.full_name||'Без імені'} · ${p.stores?.display_name||p.stores?.name||'—'} (${p.total_points||0} балів)</option>`).join('')}
+      </select>
+      <span class="m-label">Кількість балів</span>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input class="m-input" id="mp-amount" type="number" min="1" max="9999" placeholder="50" style="flex:1">
+        <div style="display:flex;gap:6px">
+          <button onclick="quickPts(50)" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:13px;font-weight:700">+50</button>
+          <button onclick="quickPts(100)" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);cursor:pointer;font-size:13px;font-weight:700">+100</button>
+        </div>
+      </div>
+      <span class="m-label">Причина</span>
+      <input class="m-input" id="mp-reason" placeholder="Наприклад: за допомогу на зміні" style="margin-bottom:16px">
+      <button class="btn-primary" onclick="submitManualPoints()">Нарахувати бали ✓</button>
+    </div>`;
+
+    const {data:log}=await sb.from('points_log').select('*,profiles(full_name)').order('created_at',{ascending:false}).limit(15);
+    html+=`<div class="section-title">Останні нарахування</div>`;
+    if(!(log||[]).length){
+      html+=`<div class="empty"><div style="font-size:15px">Нарахувань ще не було</div></div>`;
+    } else {
+      (log||[]).forEach(l=>{
+        const date=new Date(l.created_at).toLocaleDateString('uk-UA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+        html+=`<div style="background:var(--white);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:6px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">${l.profiles?.full_name||'—'}</div>
+            <div style="font-size:11px;color:var(--gray)">${l.reason} · ${date}</div>
+          </div>
+          <div style="font-size:15px;font-weight:800;color:var(--green)">+${l.points}</div>
+        </div>`;
+      });
+    }
+  }
+
+  document.getElementById('set-body').innerHTML=html;
+}
+
+
+async function addObDay(positionId){
+  const title=prompt('Назва дня (напр. "День 1 — Кухня"):');if(!title)return;
+  const timeRange=prompt('Час (напр. "11:00–17:00"):','')||'';
+  const desc=prompt('Короткий опис дня:','')||'';
+  const dayNum=parseInt(prompt('Номер дня (0=ознайомчий, 1-5=стажування):','1')||'1');
+  await sb.from('onboarding_days').insert({
+    network:NETWORK,title,time_range:timeRange,description:desc,
+    day_number:dayNum,sort_order:dayNum,
+    position_id:positionId?parseInt(positionId):null
+  });
+  loadSettings();showToast('День додано!');
+}
+
+async function editObDay(id){
+  const {data:d}=await sb.from('onboarding_days').select('*').eq('id',id).single();
+  if(!d)return;
+  const title=prompt('Назва дня:',d.title);if(!title)return;
+  const timeRange=prompt('Час:',d.time_range||'');
+  const desc=prompt('Опис:',d.description||'');
+  await sb.from('onboarding_days').update({title,time_range:timeRange,description:desc}).eq('id',id);
+  loadSettings();showToast('Збережено');
+}
+
+async function delObDay(id){
+  if(!confirm('Видалити цей день онбордингу? Всі пункти також видаляться.'))return;
+  await sb.from('onboarding_days').delete().eq('id',id);
+  loadSettings();showToast('Видалено');
+}
+
+
+async function updateTaskEditor(posId, role) {
+  await sb.from('positions').update({task_editor_role:role}).eq('id',posId);
+  loadSettings();showToast('Збережено');
+}
+
+async function updateTaskEditorPos(posId, editorPosId) {
+  await sb.from('positions').update({task_editor_position_id:editorPosId?parseInt(editorPosId):null}).eq('id',posId);
+  showToast('Збережено');
+}
+
+// ── MANUAL POINTS ─────────────────────────────
+async function submitManualPoints() {
+  const userId = document.getElementById('mp-user')?.value;
+  const amount = parseInt(document.getElementById('mp-amount')?.value);
+  const reason = document.getElementById('mp-reason')?.value?.trim() || 'Нараховано адміном';
+  if(!userId){showToast('Обери працівника');return;}
+  if(!amount||amount<1){showToast('Вкажи кількість балів');return;}
+
+  // Нараховуємо через update (rpc може не мати доступу до чужих записів)
+  const {data:profile}=await sb.from('profiles').select('total_points').eq('id',userId).single();
+  await sb.from('profiles').update({total_points:(profile?.total_points||0)+amount}).eq('id',userId);
+  await sb.from('points_log').insert({user_id:userId,points:amount,reason:'[Адмін] '+reason});
+  
+  showToast(`+${amount} балів нараховано! 🎉`);
+  loadSettings('points');
+}
+
+async function saveStore(id,val){if(!val.trim())return;await sb.from('stores').update({display_name:val.trim()}).eq('id',id);showToast('Збережено');}
+async function addPos(){const name=prompt('Назва посади:');if(!name)return;await sb.from('positions').insert({name,network:NETWORK,show_checklist:true,show_onboarding:false});loadSettings();showToast('Посаду додано');}
+async function delPos(id){if(!confirm('Видалити?'))return;await sb.from('positions').delete().eq('id',id);loadSettings();showToast('Видалено');}
+async function togPos(id,field,btn){const on=btn.classList.contains('on');btn.classList.toggle('on');await sb.from('positions').update({[field]:!on}).eq('id',id);showToast(on?'Вимкнено':'Увімкнено');}
+
+// UI
+function setPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn,.nav-fab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='home') loadHome();
+  if(name==='about') loadAbout();
+  if(name==='shop') loadShop();
+  if(name==='overview') loadOverview();
+  if(name==='quiz') loadQuiz();
+  if(name==='team') loadTeam();
+  if(name==='settings') loadSettings();
+  if(name==='onboarding') loadOnboarding();
+}
+function closeMod(id,e){if(!e||e.target===document.getElementById(id)) document.getElementById(id).classList.remove('open');}
+
+// ── MORE DRAWER ───────────────────────────────
+const MORE_ITEMS = [
+  { icon: '🌸', label: 'Про нас', page: 'about', id: 'nav-about', always: true },
+  { icon: '🛍️', label: 'Магазин', page: 'shop', id: 'nav-shop', always: true },
+  { icon: '👥', label: 'Команда', page: 'team', id: 'nav-team', admin: true },
+  { icon: '📊', label: 'Огляд', page: 'overview', id: 'nav-overview', admin: true },
+  { icon: '⚙️', label: 'Керування', page: 'settings', id: 'nav-settings', admin: true },
+];
+
+function openMoreDrawer() {
+  const grid = document.getElementById('more-grid');
+  const items = MORE_ITEMS.filter(i => i.always || (i.admin && isPow()));
+  grid.innerHTML = items.map(i => `
+    <button class="more-item" onclick="closeMoreDrawer();setPage('${i.page}',document.getElementById('${i.id}'))">
+      <span class="more-item-icon">${i.icon}</span>
+      <span class="more-item-label">${i.label}</span>
+    </button>`).join('');
+  document.getElementById('more-overlay').classList.add('open');
+  const drawer = document.getElementById('more-drawer');
+  drawer.style.display = 'block';
+}
+
+function closeMoreDrawer() {
+  document.getElementById('more-overlay').classList.remove('open');
+  const drawer = document.getElementById('more-drawer');
+  drawer.style.display = 'none';
+}
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ══════════════════════════════════════════════
+// ABOUT PAGE
+// ══════════════════════════════════════════════
+async function loadAbout() {
+  const { data: heroMedia } = await sb.from('about_media').select('*').eq('network',NETWORK).eq('section','hero').order('sort_order');
+  const { data: placeMedia } = await sb.from('about_media').select('*').eq('network',NETWORK).eq('section','place').order('sort_order');
+  const { data: teamMedia } = await sb.from('about_media').select('*').eq('network',NETWORK).eq('section','team').order('sort_order');
+  const admin = isPow();
+
+  // HERO секція
+  let heroHtml = '';
+  if ((heroMedia||[]).length > 0) {
+    const main = heroMedia[0];
+    heroHtml = `<div class="about-hero-media">
+      ${main.media_type==='video'
+        ? `<video src="${main.url}" autoplay muted loop playsinline class="about-hero-img"></video>`
+        : `<img src="${main.url}" class="about-hero-img" loading="lazy">`}
+      <div class="about-hero-overlay">
+        <div class="about-hero-title">KVITKOVA</div>
+        <div class="about-hero-sub">Квіткова Мафія — наша історія</div>
+      </div>
+      ${admin ? `<button onclick="delAboutMedia(${main.id},'hero')" style="position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);border:none;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center">×</button>` : ''}
+    </div>`;
+  } else {
+    heroHtml = `<div class="about-hero-media">
+      <div class="about-media-placeholder">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div style="font-size:14px;font-weight:600">Головне фото</div>
+        <div style="font-size:12px;opacity:.7">Додай фото або відео закладу</div>
+      </div>
+      <div class="about-hero-overlay">
+        <div class="about-hero-title">KVITKOVA</div>
+        <div class="about-hero-sub">Квіткова Мафія — наша історія</div>
+      </div>
+    </div>`;
+  }
+  if (admin) {
+    heroHtml += `<label class="about-upload-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      ${(heroMedia||[]).length ? 'Замінити головне фото/відео' : 'Додати головне фото/відео'}
+      <input type="file" accept="image/*,video/*" onchange="uploadAboutMedia(this,'hero')">
+    </label>`;
+  }
+
+  // Галерея закладу
+  let placeHtml = '';
+  if ((placeMedia||[]).length > 0 || admin) {
+    placeHtml = `<div class="about-section-card">
+      <div class="about-section-label">Наш заклад</div>
+      <div class="media-gallery">
+        ${(placeMedia||[]).map(m => `
+          <div class="media-gallery-item">
+            ${m.media_type==='video'
+              ? `<video src="${m.url}" muted loop playsinline onclick="this.paused?this.play():this.pause()"></video>`
+              : `<img src="${m.url}" loading="lazy">`}
+            ${admin ? `<button class="del-media" onclick="delAboutMedia(${m.id},'place')">×</button>` : ''}
+          </div>`).join('')}
+        ${admin ? `<label style="display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:var(--radius-sm);border:2px dashed var(--terra-mid);cursor:pointer;color:var(--terra);font-size:12px;font-weight:600;gap:4px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Фото
+          <input type="file" accept="image/*,video/*" style="display:none" onchange="uploadAboutMedia(this,'place')">
+        </label>` : ''}
+      </div>
+    </div>`;
+  }
+
+  // Команда фото
+  let teamHtml = '';
+  if ((teamMedia||[]).length > 0 || admin) {
+    teamHtml = `<div class="about-section-card">
+      <div class="about-section-label">Наша команда</div>
+      <div class="media-gallery">
+        ${(teamMedia||[]).map(m => `
+          <div class="media-gallery-item">
+            <img src="${m.url}" loading="lazy">
+            ${admin ? `<button class="del-media" onclick="delAboutMedia(${m.id},'team')">×</button>` : ''}
+          </div>`).join('')}
+        ${admin ? `<label style="display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;border-radius:var(--radius-sm);border:2px dashed var(--terra-mid);cursor:pointer;color:var(--terra);font-size:12px;font-weight:600;gap:4px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Фото
+          <input type="file" accept="image/*" style="display:none" onchange="uploadAboutMedia(this,'team')">
+        </label>` : ''}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('about-body').innerHTML = `
+    ${heroHtml}
+
+    <div class="about-section-card">
+      <div class="about-section-label">Хто ми?</div>
+      <div style="font-size:14px;line-height:1.7;color:var(--dark-2)">
+        Ми — Квіткова Мафія. Наша історія бере свій початок з 2016 року, коли зародилась ідея
+        <strong>"не продавати квіти, а дарувати радість"</strong>.<br><br>
+        Aperol Spritz, квіти та гарний настрій — це і є Квіткова Мафія.
+      </div>
+    </div>
+
+    ${placeHtml}
+    ${teamHtml}
+
+    <div class="about-section-card">
+      <div class="about-section-label">Цінності</div>
+      <div class="about-value-item">
+        <div class="about-value-icon">⚡</div>
+        <div class="about-value-text"><div class="about-value-title">Якість</div><div class="about-value-desc">В першу чергу ми робимо, щоб сподобалось нам.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">✅</div>
+        <div class="about-value-text"><div class="about-value-title">Завжди ТАК</div><div class="about-value-desc">Ми завжди говоримо ТАК. Навіть якщо Ні.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">❤️</div>
+        <div class="about-value-text"><div class="about-value-title">Турбота</div><div class="about-value-desc">На роботі ми знаходимось велику частину життя — це наш другий дім.</div></div>
+      </div>
+      <div class="about-value-item">
+        <div class="about-value-icon">🚀</div>
+        <div class="about-value-text"><div class="about-value-title">Швидкість</div><div class="about-value-desc">Швидко вчитись, змінюватись, відповідати запитам.</div></div>
+      </div>
+      <div class="about-value-item" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
+        <div class="about-value-icon">📈</div>
+        <div class="about-value-text"><div class="about-value-title">Розвиток</div><div class="about-value-desc">Per aspera ad astra — крізь терни до зірок.</div></div>
+      </div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Система карток</div>
+      <div class="about-card-system">
+        <div class="about-card-item" style="background:#FFFBEB;color:#92400E">
+          <div class="about-card-emoji">🟡</div>
+          <div class="about-card-name">Жовта</div>
+          <div class="about-card-desc">Попередження. Макс 6 за 6 міс.</div>
+        </div>
+        <div class="about-card-item" style="background:#FEF2F2;color:#991B1B">
+          <div class="about-card-emoji">🔴</div>
+          <div class="about-card-name">Червона</div>
+          <div class="about-card-desc">Звільнення. 6 жовтих = 1 червона.</div>
+        </div>
+        <div class="about-card-item" style="background:#ECFDF5;color:#065F46">
+          <div class="about-card-emoji">🟢</div>
+          <div class="about-card-name">Зелена</div>
+          <div class="about-card-desc">Заохочення! Кава, кіно, СПА...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Правила зміни</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--terra)"></div>Прихід за <strong>20 хвилин</strong> до початку</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--terra)"></div>Переодягнутись у робочу форму</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не стояти спиною до гостей</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не їсти/пити/жувати за баром</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--red)"></div>Не розголошувати фінансові показники</div>
+      <div class="about-rule-item"><div class="about-rule-dot" style="background:var(--green)"></div>Перебувати обличчям до гостя</div>
+      <div class="about-rule-item" style="border-bottom:none"><div class="about-rule-dot" style="background:var(--green)"></div>Стежити за появою брудного посуду</div>
+    </div>
+
+    <div class="about-section-card">
+      <div class="about-section-label">Оплата праці</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--dark-2)">
+        📅 <strong>Аванс</strong> — ставка за 1–14 числа. Виплата 20–25 числа.<br>
+        📅 <strong>Зарплата</strong> — ставка за 15–31. Виплата 5–10 числа.
+      </div>
+    </div>
+
+    <div class="about-section-card" style="margin-bottom:0">
+      <div class="about-section-label">Заохочення</div>
+      <div style="font-size:14px;line-height:1.9;color:var(--dark-2)">
+        🎁 Знижка 50% (не діє на алкоголь)<br>
+        💰 Премії за виконання КПД<br>
+        🎂 Привітання з Днем Народження<br>
+        📈 Відкрите кар'єрне зростання
+      </div>
+    </div>`;
+}
+
+async function uploadAboutMedia(input, section) {
+  const file = input.files[0];
+  if (!file) return;
+  const isVideo = file.type.startsWith('video/');
+  const ext = file.name.split('.').pop();
+  const fn = `${section}/${Date.now()}.${ext}`;
+  showToast('Завантаження...');
+  const { data: up, error } = await sb.storage.from('about-media').upload(fn, file, { upsert: true });
+  if (error) { showToast('Помилка завантаження'); return; }
+  const { data: url } = sb.storage.from('about-media').getPublicUrl(fn);
+  await sb.from('about_media').insert({
+    network: NETWORK, section, media_type: isVideo ? 'video' : 'image',
+    url: url.publicUrl, sort_order: Date.now()
+  });
+  showToast('Додано! ✅');
+  loadAbout();
+}
+
+async function delAboutMedia(id, section) {
+  if (!confirm('Видалити?')) return;
+  await sb.from('about_media').delete().eq('id', id);
+  showToast('Видалено');
+  loadAbout();
+}
+
+// ══════════════════════════════════════════════
+// GAMIFICATION + SHOP
+// ══════════════════════════════════════════════
+const POINTS = {
+  task_done: 5,
+  full_checklist: 20,
+  streak_3: 30,
+  streak_7: 100,
+  streak_30: 300,
+  quiz_60: 30,
+  quiz_80: 80,
+  onboarding_day: 50
+};
+
+const SHOP_CATEGORIES = {
+  theme: 'Теми інтерфейсу',
+  name_color: 'Колір імені',
+  name_anim: 'Анімація імені',
+  avatar_frame: 'Рамка аватару',
+  status: 'Статус'
+};
+
+// ── AWARD POINTS ──────────────────────────────
+async function awardPoints(points, reason) {
+  if (!U || !P) return;
+  try {
+    await sb.rpc('award_points', { p_user_id: U.id, p_points: points, p_reason: reason });
+    P.total_points = (P.total_points || 0) + points;
+    showPtsPopup('+' + points);
+    await checkBadges();
+  } catch (e) { console.log('Points error:', e); }
+}
+
+function showPtsPopup(text) {
+  const el = document.createElement('div');
+  el.className = 'pts-popup';
+  el.textContent = text + ' балів';
+  el.style.cssText = 'left:50%;top:50%;transform:translateX(-50%)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+function launchConfetti() {
+  const colors = ['#E8547A','#F59E0B','#10B981','#3B82F6','#8B5CF6'];
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `left:${Math.random()*100}vw;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;animation-duration:${0.8+Math.random()*0.8}s;border-radius:${Math.random()>0.5?'50%':'2px'}`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1500);
+    }, i * 30);
+  }
+}
+
+// ── CHECK BADGES ──────────────────────────────
+async function checkBadges() {
+  if (!P) return;
+  const { data: allBadges } = await sb.from('badges').select('*');
+  const { data: earned } = await sb.from('user_badges').select('badge_id').eq('user_id', U.id);
+  const earnedIds = new Set((earned || []).map(b => b.badge_id));
+
+  for (const badge of (allBadges || [])) {
+    if (earnedIds.has(badge.id)) continue;
+    let shouldEarn = false;
+    if (badge.condition_type === 'points') shouldEarn = (P.total_points || 0) >= badge.condition_value;
+    else if (badge.condition_type === 'streak') shouldEarn = (P.current_streak || 0) >= badge.condition_value;
+    if (shouldEarn) {
+      await sb.from('user_badges').insert({ user_id: U.id, badge_id: badge.id }).catch(() => {});
+      showToast(badge.icon + ' Новий бейдж: ' + badge.name);
+      launchConfetti();
+    }
+  }
+}
+
+// ── HOME PAGE ─────────────────────────────────
+async function loadHome() {
+  if (!P) return;
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', U.id).single();
+  if (profile) P = { ...P, ...profile };
+
+  const { data: badges } = await sb.from('user_badges').select('*, badges(*)').eq('user_id', U.id).order('earned_at', { ascending: false }).limit(5);
+  const { data: recentSessions } = await sb.from('quiz_sessions').select('score_pct,topic_name').eq('user_id', U.id).eq('status', 'finished').order('finished_at', { ascending: false }).limit(1);
+
+  const today = new Date();
+  const hour = today.getHours();
+  const greeting = hour < 12 ? 'Доброго ранку' : hour < 18 ? 'Привіт' : 'Добрий вечір';
+  const firstName = (P?.full_name || '').split(' ')[0] || 'друже';
+  const streak = P?.current_streak || 0;
+  const points = P?.total_points || 0;
+  const nameColor = P?.equipped_name_color || null;
+  const nameAnim = P?.equipped_name_anim || null;
+  const avatarFrame = P?.equipped_avatar_frame || null;
+
+  // Оновлюємо аватар з рамкою
+  const iniEl = document.getElementById('user-ini');
+  if (iniEl && avatarFrame) iniEl.className = 'user-av av-frame-' + avatarFrame;
+
+  const nameStyle = nameColor ? `color:${nameColor}` : '';
+  const nameClass = nameAnim ? `name-anim-${nameAnim}` : '';
+
+  let badgesHtml = '';
+  if ((badges || []).length > 0) {
+    badgesHtml = `<div class="section-title">Мої бейджі</div>
+    <div class="badges-wrap">
+      ${(badges || []).map(b => `<div class="badge-pill earned"><span class="badge-icon">${b.badges?.icon || '🏅'}</span>${b.badges?.name || ''}</div>`).join('')}
+    </div>`;
+  }
+
+  // Підказка сьогоднішніх задач
+  const storeId = P?.store_id;
+  let todayTasksHtml = '';
+  if (storeId) {
+    const dow = today.getDay();
+    const ds = today.toISOString().split('T')[0];
+    const { data: allTasks } = await sb.from('tasks').select('*').eq('store_id', storeId).eq('is_active', true);
+    const todayTasks = (allTasks || []).filter(t => {
+      if (t.scheduled_date) return t.scheduled_date === ds;
+      if (t.day_of_week && t.day_of_week.length > 0) return t.day_of_week.includes(dow);
+      return true;
+    });
+    const { data: comps } = await sb.from('completions').select('task_id').in('task_id', todayTasks.map(t => t.id)).gte('completed_at', ds).lt('completed_at', ds + 'T23:59:59');
+    const doneToday = new Set((comps || []).map(c => c.task_id)).size;
+    const totalToday = todayTasks.length;
+    const pct = totalToday ? Math.round(doneToday / totalToday * 100) : 0;
+
+    todayTasksHtml = `<div style="background:var(--white);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow);cursor:pointer" onclick="setPage('checklist',document.getElementById('nav-checklist'))">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:14px;font-weight:600">Сьогоднішні задачі</div>
+        <div style="font-size:14px;font-weight:700;color:${pct===100?'var(--green)':'var(--terra)'}">${doneToday}/${totalToday}</div>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${pct===100?'var(--green)':'linear-gradient(90deg,var(--terra),var(--terra-dark))'};border-radius:3px;transition:width .5s"></div>
+      </div>
+      ${pct===100?'<div style="font-size:12px;color:var(--green);margin-top:6px;font-weight:600">✓ Всі виконано!</div>':''}
+    </div>`;
+  }
+
+  // Швидкий доступ
+  const quickLinks = [
+    { icon: '✅', label: 'Чек-ліст', page: 'checklist', nav: 'nav-checklist' },
+    { icon: '🎓', label: 'Онбординг', page: 'onboarding', nav: 'nav-onboarding', hide: !canOb() },
+    { icon: '❓', label: 'Тест', page: 'quiz', nav: 'nav-quiz' },
+    { icon: '🛍️', label: 'Магазин', page: 'shop', nav: 'nav-shop' },
+  ].filter(l => !l.hide);
+
+  document.getElementById('home-body').innerHTML = `
+    <div class="home-hero" style="background:#1C1410;min-height:160px">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(200,132,90,.35) 0%,transparent 60%),radial-gradient(ellipse at 85% 20%,rgba(160,90,40,.2) 0%,transparent 50%),linear-gradient(180deg,#1C1410 0%,#2d1a0e 100%)"></div>
+      <div style="position:absolute;top:8px;right:16px;width:70px;height:90px;border-radius:35px 35px 0 0;border:1.5px solid rgba(200,132,90,.2)"></div>
+      <div style="position:absolute;top:18px;right:26px;width:50px;height:70px;border-radius:25px 25px 0 0;border:1px solid rgba(200,132,90,.12)"></div>
+      <div class="home-greeting">${greeting},</div>
+      <div class="home-name ${nameClass}" style="${nameStyle}">${firstName} ${P?.custom_status ? '<span style="font-size:13px;opacity:.8;font-weight:400">· ' + P.custom_status + '</span>' : ''}</div>
+      <div class="home-stats">
+        <div class="home-stat">
+          <div class="home-stat-n">${streak > 0 ? '🔥' : ''}${streak}</div>
+          <div class="home-stat-l">стрік днів</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-n">${points}</div>
+          <div class="home-stat-l">балів</div>
+        </div>
+        ${recentSessions?.[0] ? `<div class="home-stat">
+          <div class="home-stat-n">${recentSessions[0].score_pct}%</div>
+          <div class="home-stat-l">останній тест</div>
+        </div>` : ''}
+      </div>
+    </div>
+
+    ${todayTasksHtml}
+
+    <div class="section-title">Швидкий доступ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      ${quickLinks.map(l => `<div style="background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);cursor:pointer;display:flex;align-items:center;gap:10px" onclick="setPage('${l.page}',document.getElementById('${l.nav}'))">
+        <div style="font-size:24px">${l.icon}</div>
+        <div style="font-size:14px;font-weight:600">${l.label}</div>
+      </div>`).join('')}
+    </div>
+
+    ${badgesHtml}
+
+    <button class="add-btn" onclick="setPage('shop',document.getElementById('nav-shop'))" style="margin-top:4px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Відкрити магазин · ${points} балів
+    </button>`;
+}
+
+// ── SHOP ─────────────────────────────────────
+async function loadShop() {
+  const { data: items } = await sb.from('shop_items').select('*').eq('is_active', true).order('sort_order');
+  const { data: owned } = await sb.from('user_shop_items').select('*').eq('user_id', U.id);
+  const { data: profile } = await sb.from('profiles').select('total_points,equipped_theme,equipped_name_color,equipped_name_anim,equipped_avatar_frame,custom_status').eq('id', U.id).single();
+  if (profile) P = { ...P, ...profile };
+
+  const ownedIds = new Set((owned || []).map(i => i.item_id));
+  const points = P?.total_points || 0;
+
+  let html = `<div style="background:linear-gradient(135deg,var(--terra),var(--terra-dark));border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;color:white;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:13px;opacity:.85">Твої бали</div>
+      <div style="font-size:24px;font-weight:800">${points}</div>
+    </div>
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" opacity=".7"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+  </div>`;
+
+  const categories = ['theme', 'name_color', 'name_anim', 'avatar_frame', 'status'];
+  for (const cat of categories) {
+    const catItems = (items || []).filter(i => i.category === cat);
+    if (!catItems.length) continue;
+    html += `<div class="shop-cat-title">${SHOP_CATEGORIES[cat] || cat}</div><div class="shop-grid">`;
+    catItems.forEach(item => {
+      const isOwned = ownedIds.has(item.id);
+      const canAfford = points >= item.price;
+      const isEquipped = checkEquipped(item, profile);
+      html += `<div class="shop-item${isOwned ? ' owned' : ''}${isEquipped ? ' equipped' : ''}">
+        ${isOwned ? '<div class="shop-owned-badge">Є</div>' : ''}
+        <div class="shop-icon">${item.icon || '🎁'}</div>
+        <div class="shop-name">${item.name}</div>
+        <div class="shop-desc">${item.description || ''}</div>
+        <div class="shop-price${!isOwned && !canAfford ? ' cant-afford' : ''}">
+          ${isOwned ? (isEquipped ? '✓ Одягнено' : '') : '🪙 ' + item.price}
+        </div>
+        ${isOwned
+          ? `<button class="shop-btn ${isEquipped ? 'equipped' : 'equip'}" onclick="equipItem(${item.id},'${item.category}','${item.preview}')">${isEquipped ? 'Зняти' : 'Одягнути'}</button>`
+          : `<button class="shop-btn ${canAfford ? 'buy' : 'locked'}" onclick="${canAfford ? 'buyItem(' + item.id + ',' + item.price + ',"' + item.category + '","' + item.preview + '")' : ''}">${canAfford ? 'Купити' : 'Не вистачає'}</button>`
+        }
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('shop-body').innerHTML = html;
+}
+
+function checkEquipped(item, profile) {
+  if (!profile) return false;
+  if (item.category === 'theme') return profile.equipped_theme === item.preview;
+  if (item.category === 'name_color') return profile.equipped_name_color === item.preview;
+  if (item.category === 'name_anim') return profile.equipped_name_anim === item.preview;
+  if (item.category === 'avatar_frame') return profile.equipped_avatar_frame === item.preview;
+  if (item.category === 'status') return profile.custom_status === item.preview;
+  return false;
+}
+
+async function buyItem(itemId, price, category, preview) {
+  if ((P?.total_points || 0) < price) { showToast('Не вистачає балів'); return; }
+  await sb.from('user_shop_items').insert({ user_id: U.id, item_id: itemId });
+  await sb.from('profiles').update({ total_points: (P.total_points || 0) - price }).eq('id', U.id);
+  P.total_points = (P.total_points || 0) - price;
+  await equipItem(itemId, category, preview);
+  showToast('Куплено! 🎉');
+  launchConfetti();
+  loadShop();
+}
+
+async function equipItem(itemId, category, preview) {
+  const field = {
+    theme: 'equipped_theme',
+    name_color: 'equipped_name_color',
+    name_anim: 'equipped_name_anim',
+    avatar_frame: 'equipped_avatar_frame',
+    status: 'custom_status'
+  }[category];
+  if (!field) return;
+
+  // toggle off if already equipped
+  const current = P?.[field];
+  const newVal = current === preview ? null : preview;
+
+  await sb.from('profiles').update({ [field]: newVal }).eq('id', U.id);
+  P[field] = newVal;
+
+  // apply immediately
+  applyCustomization();
+  loadShop();
+  showToast(newVal ? '✓ Застосовано!' : 'Знято');
+}
+
+function applyCustomization() {
+  // theme
+  if (P?.equipped_theme === 'dark') document.body.classList.add('dark');
+  else document.body.classList.remove('dark');
+
+  // avatar frame
+  const iniEl = document.getElementById('user-ini');
+  if (iniEl) {
+    iniEl.className = 'user-av';
+    if (P?.equipped_avatar_frame) iniEl.classList.add('av-frame-' + P.equipped_avatar_frame);
+  }
+}
+
+// ── LEADERBOARD ───────────────────────────────
+async function loadLeaderboard() {
+  const { data: leaders } = await sb.from('profiles')
+    .select('full_name,total_points,current_streak,stores(display_name,name)')
+    .not('total_points', 'is', null)
+    .order('total_points', { ascending: false })
+    .limit(20);
+
+  const ranks = ['🥇','🥈','🥉'];
+  let html = `<div class="section-title">Лідери закладу</div>`;
+  (leaders || []).forEach((l, i) => {
+    const ini = (l.full_name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const isMe = l.full_name === P?.full_name;
+    html += `<div class="leaderboard-row" style="${isMe ? 'border:1.5px solid var(--terra)' : ''}">
+      <div class="lb-rank ${i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : ''}">${ranks[i] || (i + 1)}</div>
+      <div class="lb-av">${ini}</div>
+      <div style="flex:1">
+        <div class="lb-name">${l.full_name || '—'}${isMe ? ' (ти)' : ''}</div>
+        <div class="lb-sub">${l.stores?.display_name || l.stores?.name || ''}${l.current_streak > 0 ? ' · 🔥' + l.current_streak : ''}</div>
+      </div>
+      <div class="lb-pts">${l.total_points || 0}</div>
+    </div>`;
+  });
+  return html;
+}
+
+// ══════════════════════════════════════════════
+// QUIZ MODULE
+// ══════════════════════════════════════════════
+let quizState = null; // null | 'topics' | 'setup' | 'active' | 'result'
+let quizTopics = [];
+let quizSession = null;
+let quizQuestions = [];
+let quizCurrent = 0;
+let quizTimer = null;
+let quizTimeLeft = 0;
+let quizAnswers = {};
+let quizShown = false; // чи показано відповідь
+let quizSetup = { topicId: null, topicName: '', count: 10, timeSec: null, color: '#E8547A' };
+let quizAdminTab = 'questions';
+let quizSelectedTopic = null;
+let visibilityHandler = null;
+
+async function loadQuiz() {
+  if (isPow()) {
+    renderQuizAdmin();
+  } else {
+    renderQuizTopics();
+  }
+}
+
+// ── TOPICS LIST ──────────────────────────────
+async function renderQuizTopics() {
+  const { data: topics } = await sb.from('quiz_topics').select('*, quiz_questions(count)').eq('network', NETWORK).order('sort_order');
+  quizTopics = topics || [];
+  let html = '<div class="section-title">Оберіть тему</div>';
+  if (!quizTopics.length) {
+    html += '<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:15px">Тем поки немає</div></div>';
+  } else {
+    quizTopics.forEach(t => {
+      const cnt = t.quiz_questions?.[0]?.count || 0;
+      html += `<div class="quiz-topic-card" onclick="startQuizSetup(${t.id},'${t.name.replace(/'/g,"\'")}','${t.color||"#E8547A"}')">
+        <div class="quiz-topic-dot" style="background:${t.color||'#E8547A'}"></div>
+        <div style="flex:1">
+          <div class="quiz-topic-name">${t.name}</div>
+          ${t.description ? `<div style="font-size:12px;color:var(--gray);margin-top:2px">${t.description}</div>` : ''}
+        </div>
+        <div class="quiz-topic-count">${cnt} пит.</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>`;
+    });
+  }
+  // кнопка переглянути результати
+  html += `<button class="add-btn" onclick="renderQuizHistory()" style="margin-top:8px">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg>
+    Мої результати
+  </button>`;
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+// ── SETUP ─────────────────────────────────────
+async function startQuizSetup(topicId, topicName, color) {
+  quizSetup = { topicId, topicName, count: 10, timeSec: null, color };
+  const { data: questions } = await sb.from('quiz_questions').select('id').eq('topic_id', topicId).eq('is_active', true);
+  const maxQ = questions?.length || 0;
+  document.getElementById('quiz-body').innerHTML = `
+    <button onclick="renderQuizTopics()" style="border:none;background:none;color:var(--gray);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Назад
+    </button>
+    <div class="quiz-setup">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:12px;height:12px;border-radius:50%;background:${color}"></div>
+        <div class="quiz-setup-title">${topicName}</div>
+      </div>
+      <div class="quiz-setup-row">
+        <div>
+          <div class="quiz-setup-label">Кількість питань</div>
+          <div class="quiz-setup-sub2">Доступно: ${maxQ}</div>
+        </div>
+        <div class="quiz-num">
+          <button class="quiz-num-btn" onclick="changeCount(-5)">−</button>
+          <div class="quiz-num-val" id="q-count">${Math.min(10, maxQ)}</div>
+          <button class="quiz-num-btn" onclick="changeCount(5)">+</button>
+        </div>
+      </div>
+      <div class="quiz-setup-row">
+        <div>
+          <div class="quiz-setup-label">Час (хвилини)</div>
+          <div class="quiz-setup-sub2">0 = без ліміту</div>
+        </div>
+        <input class="quiz-time-input" type="number" id="q-time" min="0" max="60" value="0" placeholder="хв">
+      </div>
+      <button class="btn-primary" onclick="beginQuiz(${maxQ})" style="margin-top:20px">Почати тест →</button>
+    </div>`;
+  quizSetup.count = Math.min(10, maxQ);
+}
+
+function changeCount(delta) {
+  const el = document.getElementById('q-count');
+  if (!el) return;
+  let val = parseInt(el.textContent) + delta;
+  val = Math.max(1, val);
+  el.textContent = val;
+  quizSetup.count = val;
+}
+
+async function beginQuiz(maxQ) {
+  const countEl = document.getElementById('q-count');
+  const timeEl = document.getElementById('q-time');
+  const count = Math.min(parseInt(countEl?.textContent || 10), maxQ);
+  const timeMins = parseInt(timeEl?.value || 0);
+  quizSetup.count = count;
+  quizSetup.timeSec = timeMins > 0 ? timeMins * 60 : null;
+
+  // завантажуємо питання з відповідями
+  const { data: qs } = await sb.from('quiz_questions')
+    .select('*, quiz_answers(*), quiz_pairs(*)')
+    .eq('topic_id', quizSetup.topicId)
+    .eq('is_active', true);
+
+  if (!qs || !qs.length) { showToast('Немає питань у цій темі'); return; }
+
+  // перемішуємо і беремо потрібну кількість
+  const shuffled = [...qs].sort(() => Math.random() - 0.5).slice(0, count);
+  quizQuestions = shuffled;
+  quizCurrent = 0;
+  quizAnswers = {};
+  quizShown = false;
+
+  // створюємо сесію
+  const { data: session } = await sb.from('quiz_sessions').insert({
+    user_id: U.id,
+    topic_id: quizSetup.topicId,
+    topic_name: quizSetup.topicName,
+    total_questions: count,
+    time_limit_sec: quizSetup.timeSec,
+    status: 'active'
+  }).select().single();
+  quizSession = session;
+
+  // таймер
+  if (quizSetup.timeSec) {
+    quizTimeLeft = quizSetup.timeSec;
+    startTimer();
+  }
+
+  // пауза при згортанні
+  if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+  visibilityHandler = () => {
+    if (document.hidden) pauseTimer();
+    else if (quizSetup.timeSec) resumeTimer();
+  };
+  document.addEventListener('visibilitychange', visibilityHandler);
+
+  renderQuizQuestion();
+}
+
+// ── TIMER ──────────────────────────────────────
+function startTimer() {
+  clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    quizTimeLeft--;
+    updateTimerUI();
+    if (quizTimeLeft <= 0) {
+      clearInterval(quizTimer);
+      finishQuiz(true);
+    }
+  }, 1000);
+}
+
+function pauseTimer() { clearInterval(quizTimer); }
+
+function resumeTimer() {
+  if (quizTimeLeft > 0) startTimer();
+}
+
+function updateTimerUI() {
+  const el = document.getElementById('quiz-timer-val');
+  if (!el) return;
+  const mins = Math.floor(quizTimeLeft / 60);
+  const secs = quizTimeLeft % 60;
+  el.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  const wrap = document.getElementById('quiz-timer-wrap');
+  if (wrap) wrap.className = 'quiz-timer' + (quizTimeLeft < 60 ? ' urgent' : '');
+}
+
+// ── QUESTION ──────────────────────────────────
+function renderQuizQuestion() {
+  const q = quizQuestions[quizCurrent];
+  if (!q) { finishQuiz(false); return; }
+
+  const typeLabel = { single: 'Одна відповідь', multiple: 'Кілька відповідей', match: 'Знайди відповідності', text: 'Вільна відповідь' }[q.question_type];
+  const pct = Math.round((quizCurrent / quizQuestions.length) * 100);
+
+  let timerHtml = '';
+  if (quizSetup.timeSec) {
+    const mins = Math.floor(quizTimeLeft / 60);
+    const secs = quizTimeLeft % 60;
+    timerHtml = `<div class="quiz-timer${quizTimeLeft < 60 ? ' urgent' : ''}" id="quiz-timer-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="quiz-timer-val">${mins}:${secs.toString().padStart(2, '0')}</span>
+    </div>`;
+  }
+
+  let optionsHtml = '';
+  if (q.question_type === 'single' || q.question_type === 'multiple') {
+    const answers = [...(q.quiz_answers || [])].sort(() => Math.random() - 0.5);
+    optionsHtml = answers.map(a => `
+      <div class="quiz-option" id="opt-${a.id}" onclick="selectOption(${a.id}, '${q.question_type}', ${a.is_correct})">
+        <div class="quiz-option-circle" id="circle-${a.id}">
+          ${q.question_type === 'multiple' ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+        </div>
+        <div class="quiz-option-text">${a.answer_text}</div>
+      </div>`).join('');
+  } else if (q.question_type === 'match') {
+    const pairs = q.quiz_pairs || [];
+    const rights = [...pairs].map(p => p.right_text).sort(() => Math.random() - 0.5);
+    optionsHtml = `<div class="quiz-match">` + pairs.map((p, i) => `
+      <div class="quiz-match-row">
+        <div class="quiz-match-left">${p.left_text}</div>
+        <select class="quiz-match-select" id="match-${p.id}">
+          <option value="">Обери...</option>
+          ${rights.map(r => `<option value="${r}">${r}</option>`).join('')}
+        </select>
+      </div>`).join('') + `</div>`;
+  } else if (q.question_type === 'text') {
+    optionsHtml = `<textarea class="quiz-text-input" id="text-answer" rows="3" placeholder="Введи відповідь..."></textarea>`;
+  }
+
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="quiz-header">
+      <div class="quiz-header-top">
+        <div class="quiz-topic-pill" style="background:${quizSetup.color}">${quizSetup.topicName}</div>
+        ${timerHtml}
+      </div>
+      <div class="quiz-prog-row">
+        <span class="quiz-prog-txt">${quizCurrent + 1} / ${quizQuestions.length}</span>
+        <div class="quiz-q-bar"><div class="quiz-q-fill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <div class="quiz-question">
+      <div class="quiz-q-type">${typeLabel}</div>
+      <div class="quiz-q-text">${q.question_text}</div>
+      ${optionsHtml}
+      <div id="quiz-explanation" style="display:none"></div>
+    </div>
+    <button class="quiz-btn-next" id="quiz-next-btn" onclick="checkAnswer()" style="${quizShown ? '' : ''}">
+      ${quizShown ? (quizCurrent < quizQuestions.length - 1 ? 'Наступне питання →' : 'Завершити тест') : 'Перевірити'}
+    </button>`;
+
+  quizShown = false;
+}
+
+function selectOption(answerId, type, isCorrect) {
+  if (quizShown) return;
+  const opt = document.getElementById('opt-' + answerId);
+  if (!opt) return;
+  if (type === 'single') {
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    quizAnswers[quizQuestions[quizCurrent].id] = [answerId];
+  } else {
+    opt.classList.toggle('selected');
+    const selected = [...document.querySelectorAll('.quiz-option.selected')].map(o => parseInt(o.id.replace('opt-', '')));
+    quizAnswers[quizQuestions[quizCurrent].id] = selected;
+  }
+}
+
+async function checkAnswer() {
+  const q = quizQuestions[quizCurrent];
+  if (quizShown) {
+    // переходимо до наступного
+    quizCurrent++;
+    quizShown = false;
+    if (quizCurrent >= quizQuestions.length) finishQuiz(false);
+    else renderQuizQuestion();
+    return;
+  }
+
+  let isCorrect = false;
+  let userAnswer = null;
+
+  if (q.question_type === 'single' || q.question_type === 'multiple') {
+    const selected = quizAnswers[q.id] || [];
+    const correctIds = (q.quiz_answers || []).filter(a => a.is_correct).map(a => a.id);
+    isCorrect = selected.length === correctIds.length && correctIds.every(id => selected.includes(id));
+    userAnswer = selected;
+    // підсвічуємо
+    (q.quiz_answers || []).forEach(a => {
+      const opt = document.getElementById('opt-' + a.id);
+      if (!opt) return;
+      if (a.is_correct) opt.classList.add('correct');
+      else if (selected.includes(a.id)) opt.classList.add('wrong');
+    });
+  } else if (q.question_type === 'match') {
+    const pairs = q.quiz_pairs || [];
+    let allCorrect = true;
+    const ans = {};
+    pairs.forEach(p => {
+      const sel = document.getElementById('match-' + p.id)?.value;
+      ans[p.id] = sel;
+      if (sel !== p.right_text) allCorrect = false;
+    });
+    isCorrect = allCorrect;
+    userAnswer = ans;
+    // підсвічуємо селекти
+    pairs.forEach(p => {
+      const sel = document.getElementById('match-' + p.id);
+      if (!sel) return;
+      sel.style.borderColor = ans[p.id] === p.right_text ? 'var(--green)' : 'var(--red)';
+      sel.style.background = ans[p.id] === p.right_text ? 'var(--green-light)' : 'var(--red-light)';
+      if (ans[p.id] !== p.right_text) {
+        sel.value = p.right_text;
+        sel.style.fontWeight = '600';
+      }
+    });
+  } else if (q.question_type === 'text') {
+    userAnswer = document.getElementById('text-answer')?.value || '';
+    isCorrect = null; // ручна перевірка
+  }
+
+  // зберігаємо відповідь
+  if (quizSession) {
+    await sb.from('quiz_session_answers').insert({
+      session_id: quizSession.id,
+      question_id: q.id,
+      user_answer: userAnswer,
+      is_correct: isCorrect
+    });
+  }
+
+  // показуємо пояснення
+  if (q.explanation) {
+    const expEl = document.getElementById('quiz-explanation');
+    if (expEl) { expEl.innerHTML = q.explanation; expEl.style.display = 'block'; }
+  }
+
+  const btn = document.getElementById('quiz-next-btn');
+  if (btn) btn.textContent = quizCurrent < quizQuestions.length - 1 ? 'Наступне питання →' : 'Завершити тест';
+  quizShown = true;
+}
+
+async function finishQuiz(isTimeout) {
+  clearInterval(quizTimer);
+  if (visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
+
+  // рахуємо результат
+  const { data: answers } = await sb.from('quiz_session_answers').select('is_correct').eq('session_id', quizSession?.id || 0);
+  const correct = (answers || []).filter(a => a.is_correct === true).length;
+  const total = quizQuestions.length;
+  const pct = Math.round((correct / total) * 100);
+
+  if (quizSession) {
+    await sb.from('quiz_sessions').update({
+      finished_at: new Date().toISOString(),
+      score: correct,
+      score_pct: pct,
+      status: isTimeout ? 'timeout' : 'finished'
+    }).eq('id', quizSession.id);
+  }
+  if (!isTimeout) {
+    if (pct >= 80) await awardPoints(POINTS.quiz_80, 'Тест ' + pct + '%');
+    else if (pct >= 60) await awardPoints(POINTS.quiz_60, 'Тест ' + pct + '%');
+  }
+
+  // помилки
+  const { data: wrongAnswers } = await sb.from('quiz_session_answers')
+    .select('*, quiz_questions(question_text, quiz_answers(answer_text,is_correct))')
+    .eq('session_id', quizSession?.id || 0)
+    .eq('is_correct', false);
+
+  const scoreColor = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--amber)' : 'var(--red)';
+  const scoreEmoji = pct >= 80 ? '🏆' : pct >= 50 ? '📚' : '💪';
+
+  let mistakesHtml = '';
+  if ((wrongAnswers || []).length > 0) {
+    mistakesHtml = `<div class="section-title">Де є прогалини</div>
+    <div class="quiz-mistakes">`;
+    (wrongAnswers || []).slice(0, 5).forEach(w => {
+      const correctAns = (w.quiz_questions?.quiz_answers || []).find(a => a.is_correct)?.answer_text || '';
+      mistakesHtml += `<div class="quiz-mistake-item">
+        <div class="quiz-mistake-q">${w.quiz_questions?.question_text || ''}</div>
+        ${correctAns ? `<div class="quiz-mistake-correct">✓ ${correctAns}</div>` : ''}
+      </div>`;
+    });
+    mistakesHtml += '</div>';
+  }
+
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-result-circle" style="background:${scoreColor}20;color:${scoreColor}">${scoreEmoji}</div>
+      <div class="quiz-result-title">${isTimeout ? 'Час вийшов!' : pct >= 80 ? 'Відмінний результат!' : pct >= 50 ? 'Непоганий старт!' : 'Є над чим попрацювати!'}</div>
+      <div class="quiz-result-sub">${quizSetup.topicName}</div>
+      <div class="quiz-result-stats">
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:${scoreColor}">${pct}%</div><div class="quiz-stat-l">результат</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:var(--green)">${correct}</div><div class="quiz-stat-l">правильних</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n" style="color:var(--red)">${total - correct}</div><div class="quiz-stat-l">помилок</div></div>
+        <div class="quiz-stat-card"><div class="quiz-stat-n">${total}</div><div class="quiz-stat-l">всього</div></div>
+      </div>
+    </div>
+    ${mistakesHtml}
+    <button class="btn-primary" onclick="renderQuizTopics()" style="margin-bottom:8px">Пройти ще раз</button>
+    <button class="add-btn" onclick="renderQuizTopics()">← Всі теми</button>`;
+}
+
+// ── HISTORY ───────────────────────────────────
+async function renderQuizHistory() {
+  const { data: sessions } = await sb.from('quiz_sessions')
+    .select('*').eq('user_id', U.id).eq('status', 'finished')
+    .order('finished_at', { ascending: false }).limit(20);
+
+  let html = `<button onclick="renderQuizTopics()" style="border:none;background:none;color:var(--gray);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Назад</button>
+    <div class="section-title">Мої результати</div>`;
+
+  if (!(sessions || []).length) {
+    html += '<div class="empty"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg><div style="font-size:15px">Тестів ще не проходив</div></div>';
+  } else {
+    sessions.forEach(s => {
+      const col = (s.score_pct || 0) >= 80 ? 'var(--green)' : (s.score_pct || 0) >= 50 ? 'var(--amber)' : 'var(--red)';
+      const date = new Date(s.finished_at).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' });
+      html += `<div class="history-row">
+        <div>
+          <div class="history-name">${s.topic_name || 'Тест'}</div>
+          <div class="history-sub">${s.total_questions} питань · ${date}</div>
+        </div>
+        <div class="history-score" style="color:${col}">${s.score_pct}%</div>
+      </div>`;
+    });
+  }
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+// ── ADMIN ─────────────────────────────────────
+async function renderQuizAdmin() {
+  const { data: topics } = await sb.from('quiz_topics').select('*').eq('network', NETWORK).order('sort_order');
+  quizTopics = topics || [];
+
+  let html = `<div class="quiz-admin-tabs">
+    <div class="quiz-admin-tab${quizAdminTab === 'questions' ? ' active' : ''}" onclick="switchQuizTab('questions')">Питання</div>
+    <div class="quiz-admin-tab${quizAdminTab === 'history' ? ' active' : ''}" onclick="switchQuizTab('history')">Результати</div>
+    <div class="quiz-admin-tab${quizAdminTab === 'test' ? ' active' : ''}" onclick="renderQuizTopics()">Пройти тест</div>
+  </div>`;
+
+  if (quizAdminTab === 'questions') {
+    // вибір теми
+    html += `<div class="section-title">Тема <button class="section-btn" onclick="addQuizTopic()">+ Тема</button></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:2px">`;
+    quizTopics.forEach(t => {
+      const isSelected = quizSelectedTopic?.id === t.id;
+      html += `<div style="padding:7px 14px;border-radius:20px;border:1.5px solid ${isSelected ? t.color || 'var(--terra)' : 'var(--border)'};background:${isSelected ? (t.color || 'var(--terra)') + '20' : 'var(--white)'};font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;color:${isSelected ? t.color || 'var(--terra)' : 'var(--gray)'}" onclick="selectQuizTopic(${t.id})">${t.name}</div>`;
+    });
+    html += '</div>';
+
+    if (quizSelectedTopic) {
+      const { data: questions } = await sb.from('quiz_questions')
+        .select('*, quiz_answers(count), quiz_pairs(count)')
+        .eq('topic_id', quizSelectedTopic.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      html += `<div class="section-title">${quizSelectedTopic.name} (${(questions || []).length}) <button class="section-btn" onclick="openAddQuestion()">+ Питання</button></div>`;
+      (questions || []).forEach(q => {
+        const typeLabel = { single: 'Одна', multiple: 'Кілька', match: 'Відповідн.', text: 'Текст' }[q.question_type];
+        html += `<div class="q-card">
+          <div class="q-card-top">
+            <div class="q-type-badge">${typeLabel}</div>
+            <div class="q-text">${q.question_text}</div>
+            <button class="q-del" onclick="delQuestion(${q.id})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>`;
+      });
+      html += `<button class="add-btn" onclick="openAddQuestion()" style="margin-top:4px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Додати питання
+      </button>`;
+    } else {
+      html += '<div class="empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div style="font-size:14px">Обери тему щоб побачити питання</div></div>';
+    }
+  } else if (quizAdminTab === 'history') {
+    const { data: sessions } = await sb.from('quiz_sessions')
+      .select('*, profiles(full_name)')
+      .eq('status', 'finished')
+      .order('finished_at', { ascending: false }).limit(50);
+    html += `<div class="section-title">Всі результати</div>`;
+    (sessions || []).forEach(s => {
+      const ini = (s.profiles?.full_name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      const col = (s.score_pct || 0) >= 80 ? 'var(--green)' : (s.score_pct || 0) >= 50 ? 'var(--amber)' : 'var(--red)';
+      const date = new Date(s.finished_at).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      html += `<div class="history-row">
+        <div class="history-ini">${ini}</div>
+        <div style="flex:1">
+          <div class="history-name">${s.profiles?.full_name || '—'}</div>
+          <div class="history-sub">${s.topic_name} · ${s.total_questions} пит. · ${date}</div>
+        </div>
+        <div class="history-score" style="color:${col}">${s.score_pct}%</div>
+      </div>`;
+    });
+    if (!(sessions || []).length) html += '<div class="empty"><div style="font-size:15px">Результатів поки немає</div></div>';
+  }
+
+  document.getElementById('quiz-body').innerHTML = html;
+}
+
+function switchQuizTab(tab) {
+  quizAdminTab = tab;
+  renderQuizAdmin();
+}
+
+async function selectQuizTopic(topicId) {
+  quizSelectedTopic = quizTopics.find(t => t.id === topicId);
+  renderQuizAdmin();
+}
+
+async function addQuizTopic() {
+  const name = prompt('Назва теми:');
+  if (!name) return;
+  const desc = prompt('Короткий опис (необов\'язково):') || '';
+  await sb.from('quiz_topics').insert({ name, description: desc, network: NETWORK, sort_order: 99 });
+  quizSelectedTopic = null;
+  renderQuizAdmin();
+  showToast('Тему додано');
+}
+
+async function openAddQuestion() {
+  if (!quizSelectedTopic) return;
+  const types = ['single — одна правильна відповідь', 'multiple — кілька правильних', 'match — знайди відповідності', 'text — вільна відповідь'];
+  const typeStr = prompt('Тип питання:\n' + types.map((t, i) => `${i + 1}. ${t}`).join('\n') + '\n\nВведи номер (1-4):');
+  if (!typeStr) return;
+  const typeMap = { '1': 'single', '2': 'multiple', '3': 'match', '4': 'text' };
+  const qType = typeMap[typeStr.trim()];
+  if (!qType) return;
+
+  const qText = prompt('Текст питання:');
+  if (!qText) return;
+  const explanation = prompt('Пояснення після відповіді (необов\'язково):') || null;
+
+  const { data: q } = await sb.from('quiz_questions').insert({
+    topic_id: quizSelectedTopic.id,
+    question_text: qText,
+    question_type: qType,
+    explanation
+  }).select().single();
+
+  if (qType === 'single' || qType === 'multiple') {
+    const count = parseInt(prompt('Скільки варіантів відповіді?') || '4');
+    for (let i = 0; i < count; i++) {
+      const ans = prompt(`Варіант ${i + 1}:`);
+      if (!ans) continue;
+      const isCorrect = confirm(`"${ans}" — правильна відповідь?`);
+      await sb.from('quiz_answers').insert({ question_id: q.id, answer_text: ans, is_correct: isCorrect, sort_order: i });
+    }
+  } else if (qType === 'match') {
+    const count = parseInt(prompt('Скільки пар?') || '3');
+    for (let i = 0; i < count; i++) {
+      const left = prompt(`Пара ${i + 1} — ліва частина:`);
+      const right = prompt(`Пара ${i + 1} — права частина:`);
+      if (!left || !right) continue;
+      await sb.from('quiz_pairs').insert({ question_id: q.id, left_text: left, right_text: right, sort_order: i });
+    }
+  }
+
+  renderQuizAdmin();
+  showToast('Питання додано!');
+}
+
+async function delQuestion(id) {
+  if (!confirm('Видалити питання?')) return;
+  await sb.from('quiz_questions').update({ is_active: false }).eq('id', id);
+  renderQuizAdmin();
+  showToast('Видалено');
+}
+
+sb.auth.getSession().then(({data:{session}})=>{if(session?.user)loadUser(session.user);});
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')signIn();});
+</script>
+</body>
+</html>
